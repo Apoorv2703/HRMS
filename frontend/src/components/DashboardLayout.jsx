@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { LogOut, Home, Users, Network, User } from 'lucide-react';
+import { LogOut, Home, Users, Network, User, Calendar } from 'lucide-react';
 import { logout } from '../store/authSlice';
 import api from '../services/api';
 
@@ -28,6 +28,10 @@ const DashboardLayout = () => {
     { name: 'Org Chart', path: '/org-chart', icon: <Network className="h-4 w-4" /> },
     { name: 'My Profile', path: '/profile', icon: <User className="h-4 w-4" /> },
   ];
+
+  if (['HR_ADMIN', 'LEADERSHIP', 'MANAGER'].includes(user?.role)) {
+    navItems.splice(3, 0, { name: 'Muster Register', path: '/muster', icon: <Calendar className="h-4 w-4" /> });
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">

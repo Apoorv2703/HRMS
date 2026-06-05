@@ -5,6 +5,8 @@ import authRoutes from './routes/authRoutes.js';
 import roleRoutes from './routes/roleRoutes.js';
 import employeeRoutes from './routes/employeeRoutes.js';
 import orgRoutes from './routes/orgRoutes.js';
+import attendanceConfigRoutes from './routes/attendanceConfigRoutes.js';
+import attendanceRoutes from './routes/attendanceRoutes.js';
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/roles', roleRoutes);
 app.use('/api/v1/employees', employeeRoutes);
 app.use('/api/v1/organization', orgRoutes);
+app.use('/api/v1/attendance-config', attendanceConfigRoutes);
+app.use('/api/v1/attendance', attendanceRoutes);
 
 // Root path diagnostic endpoint
 app.get('/health', (req, res) => {

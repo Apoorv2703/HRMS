@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Shield, ShieldAlert, LogOut, Monitor, ShieldCheck, History, Clock, Key, QrCode } from 'lucide-react';
 import { logout, enableMfaSuccess } from '../store/authSlice';
 import api from '../services/api';
+import AttendanceWidget from '../components/AttendanceWidget';
 
 const Dashboard = () => {
   const [sessions, setSessions] = useState([]);
@@ -19,13 +20,21 @@ const Dashboard = () => {
   const [mfaSuccess, setMfaSuccess] = useState('');
   const [mfaLoading, setMfaLoading] = useState(false);
 
+  // Attendance Regularization states
+  const [pendingRegularizations, setPendingRegularizations] = useState([]);
+  const [regLoading, setRegLoading] = useState(false);
+  const [reviewComments, setReviewComments] = useState({});
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     fetchSessions();
-  }, []);
+    if (user?.role === 'MANAGER' || user?.role === 'HR_ADMIN') {
+      fetchPendingRegularizations();
+    }
+  }, [user]);
 
   const fetchSessions = async () => {
     setSessionLoading(true);
@@ -37,6 +46,29 @@ const Dashboard = () => {
       setSessionError('Failed to fetch active session history.');
     } finally {
       setSessionLoading(false);
+    }
+  };
+
+  const fetchPendingRegularizations = async () => {
+    setRegLoading(true);
+    try {
+      const response = await api.get('/attendance/regularize/pending');
+      setPendingRegularizations(response.data);
+    } catch (err) {
+      console.error('Failed to load pending regularizations:', err);
+    } finally {
+      setRegLoading(false);
+    }
+  };
+
+  const handleReviewRegularization = async (recordId, action) => {
+    const comment = reviewComments[recordId] || '';
+    try {
+      const response = await api.post(`/attendance/regularize/${recordId}/review`, { action, comment });
+      alert(response.data.message);
+      fetchPendingRegularizations();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to submit review action.');
     }
   };
 
@@ -220,8 +252,105 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Sessions & Security Auditing Card */}
-          <div className="md:col-span-2 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl shadow-xl">
+          {/* Right Column Content */}
+          <div className="md:col-span-2 space-y-8">
+            <AttendanceWidget />
+
+            {/* Team Regularization Approvals Card (Managers & Admins only) */}
+            {(user?.role === 'MANAGER' || user?.role === 'HR_ADMIN') && (
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl shadow-xl space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                  <div className="flex items-center gap-2.5">
+                    <History className="h-5 w-5 text-teal-400" />
+                    <h3 className="text-lg font-bold text-white">Team Attendance Regularizations</h3>
+                  </div>
+                  <button
+                    onClick={fetchPendingRegularizations}
+                    className="text-xs font-medium text-teal-400 hover:text-teal-300 hover:underline cursor-pointer"
+                  >
+                    Refresh List
+                  </button>
+                </div>
+
+                {regLoading ? (
+                  <div className="flex h-32 items-center justify-center">
+                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-teal-500 border-t-transparent"></div>
+                  </div>
+                ) : pendingRegularizations.length === 0 ? (
+                  <p className="text-sm text-slate-400 italic text-center py-4 bg-slate-950/20 rounded-xl border border-slate-850/50">
+                    No pending attendance corrections to review.
+                  </p>
+                ) : (
+                  <div className="space-y-4 max-h-72 overflow-y-auto pr-1">
+                    {pendingRegularizations.map((rec) => (
+                      <div key={rec._id} className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 space-y-3 text-sm">
+                        <div className="flex justify-between border-b border-slate-850 pb-2">
+                          <div>
+                            <strong className="text-slate-200 block">
+                              {rec.employeeId?.personal?.firstName} {rec.employeeId?.personal?.lastName}
+                            </strong>
+                            <span className="text-[10px] text-slate-500 font-mono uppercase">Date: {rec.date}</span>
+                          </div>
+                          <span className="rounded bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-400 uppercase tracking-wide h-fit font-mono">
+                            Pending Correction
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-slate-900/40 p-2.5 rounded-lg border border-slate-850">
+                          <div>
+                            <span className="text-[9px] text-slate-500 block font-sans">PROPOSED IN</span>
+                            <span className="text-slate-300">
+                              {new Date(rec.regularization.requestedTimeIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-slate-500 block font-sans">PROPOSED OUT</span>
+                            <span className="text-slate-300">
+                              {new Date(rec.regularization.requestedTimeOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="text-xs text-slate-400 bg-slate-900/20 p-2 rounded-lg border border-slate-850/30">
+                          <strong className="text-slate-300 block text-[10px] uppercase font-sans mb-1">Reason:</strong>
+                          {rec.regularization.reason}
+                        </div>
+
+                        <div className="space-y-2 pt-1">
+                          <input
+                            type="text"
+                            placeholder="Add review feedback/comments (optional)..."
+                            value={reviewComments[rec._id] || ''}
+                            onChange={(e) => setReviewComments({
+                              ...reviewComments,
+                              [rec._id]: e.target.value
+                            })}
+                            className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2 text-xs text-slate-200 outline-none focus:border-teal-500/50"
+                          />
+                          <div className="flex justify-end gap-2 text-xs font-bold">
+                            <button
+                              onClick={() => handleReviewRegularization(rec._id, 'REJECT')}
+                              className="rounded-lg bg-rose-500/10 hover:bg-rose-500 border border-rose-500/20 hover:border-rose-500 hover:text-black px-3 py-1.5 text-rose-400 transition cursor-pointer"
+                            >
+                              Reject
+                            </button>
+                            <button
+                              onClick={() => handleReviewRegularization(rec._id, 'APPROVE')}
+                              className="rounded-lg bg-teal-500/10 hover:bg-teal-500 border border-teal-500/20 hover:border-teal-500 px-3 py-1.5 text-teal-400 transition cursor-pointer"
+                            >
+                              Approve
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Sessions & Security Auditing Card */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-4">
               <div className="flex items-center gap-2.5">
                 <History className="h-5 w-5 text-brand-400" />
@@ -275,6 +404,7 @@ const Dashboard = () => {
                 ))}
               </div>
             )}
+          </div>
           </div>
         </div>
       </main>

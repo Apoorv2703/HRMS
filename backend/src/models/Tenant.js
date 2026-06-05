@@ -26,6 +26,20 @@ const tenantSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
+      attendance: {
+        ipWhitelist: {
+          type: [String],
+          default: [],
+        },
+        biometricApiKey: {
+          type: String,
+          trim: true,
+        },
+        geofencingEnabled: {
+          type: Boolean,
+          default: false,
+        },
+      },
       passwordPolicy: {
         minLength: {
           type: Number,

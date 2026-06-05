@@ -13,6 +13,9 @@ const organizationSchema = new mongoose.Schema(
         name: { type: String, required: true, trim: true },
         address: { type: String, trim: true },
         code: { type: String, trim: true },
+        latitude: { type: Number },
+        longitude: { type: Number },
+        radiusMeters: { type: Number, default: 200 },
       },
     ],
     departments: [
@@ -32,8 +35,5 @@ const organizationSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Index on tenantId for quick configuration retrieval
-organizationSchema.index({ tenantId: 1 });
 
 export default mongoose.model('Organization', organizationSchema);

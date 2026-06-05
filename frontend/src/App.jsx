@@ -11,6 +11,7 @@ import OnboardingWizard from './pages/OnboardingWizard';
 import OnboardingVerification from './pages/OnboardingVerification';
 import ESSProfilePage from './pages/ESSProfilePage';
 import OrgChartPage from './pages/OrgChartPage';
+import MusterPage from './pages/MusterPage';
 
 function App() {
   return (
@@ -29,6 +30,11 @@ function App() {
           <Route path="/directory" element={<DirectoryPage />} />
           <Route path="/org-chart" element={<OrgChartPage />} />
           <Route path="/profile" element={<ESSProfilePage />} />
+          
+          {/* Reports Management Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['HR_ADMIN', 'LEADERSHIP', 'MANAGER']} />}>
+            <Route path="/muster" element={<MusterPage />} />
+          </Route>
           
           {/* Admin Protected Layout Routes */}
           <Route element={<ProtectedRoute allowedRoles={['HR_ADMIN']} />}>

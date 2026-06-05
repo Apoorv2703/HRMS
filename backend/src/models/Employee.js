@@ -89,6 +89,11 @@ const employeeSchema = new mongoose.Schema(
       location: { type: String, trim: true },
       grade: { type: String, trim: true },
       assignedShift: { type: String, trim: true, default: '' },
+      shiftId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Shift',
+        default: null,
+      },
       employmentType: {
         type: String,
         enum: ['FULL_TIME', 'PART_TIME', 'CONTRACT', 'INTERN'],
