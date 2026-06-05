@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const Tenant = require('../models/Tenant');
+import jwt from 'jsonwebtoken';
+import Tenant from '../models/Tenant.js';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Access token required. Please authenticate.' });

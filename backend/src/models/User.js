@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const sessionSchema = new mongoose.Schema({
   token: { type: String, required: true },
@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema(
       enum: ['EMPLOYEE', 'MANAGER', 'HR_ADMIN', 'LEADERSHIP'],
       default: 'EMPLOYEE',
     },
+    customRole: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Role',
+      default: null,
+    },
     failedLoginAttempts: {
       type: Number,
       default: 0,
@@ -38,6 +43,18 @@ const userSchema = new mongoose.Schema(
     lockoutUntil: {
       type: Date,
       default: null,
+    },
+    passwordChangedAt: {
+      type: Date,
+      default: Date.now,
+    },
+    mfaSecret: {
+      type: String,
+      default: null,
+    },
+    mfaEnabled: {
+      type: Boolean,
+      default: false,
     },
     sessions: [sessionSchema],
   },
@@ -55,6 +72,7 @@ userSchema.pre('save', async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
     this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+    this.passwordChangedAt = Date.now();
     next();
   } catch (err) {
     next(err);
@@ -71,4 +89,4 @@ userSchema.methods.isLocked = function () {
   return !!(this.lockoutUntil && this.lockoutUntil > Date.now());
 };
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);

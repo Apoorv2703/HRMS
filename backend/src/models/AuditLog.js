@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const auditLogSchema = new mongoose.Schema(
   {
@@ -64,4 +64,4 @@ auditLogSchema.pre('findOneAndDelete', blockMutation);
 auditLogSchema.pre('findOneAndRemove', blockMutation);
 auditLogSchema.pre('remove', blockMutation);
 
-module.exports = mongoose.model('AuditLog', auditLogSchema);
+export default mongoose.model('AuditLog', auditLogSchema);

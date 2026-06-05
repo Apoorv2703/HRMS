@@ -1,4 +1,4 @@
-module.exports = (allowedRoles) => {
+const rbac = (allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ error: 'User context missing. Authentication required.' });
@@ -11,3 +11,5 @@ module.exports = (allowedRoles) => {
     next();
   };
 };
+
+export default rbac;

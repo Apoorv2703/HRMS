@@ -1,7 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const authRoutes = require('./routes/authRoutes');
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import authRoutes from './routes/authRoutes.js';
+import roleRoutes from './routes/roleRoutes.js';
+import employeeRoutes from './routes/employeeRoutes.js';
+import orgRoutes from './routes/orgRoutes.js';
 
 const app = express();
 
@@ -9,8 +12,6 @@ const app = express();
 app.use(
   cors({
     origin: (origin, callback) => {
-      // In development, allow localhost or undefined (e.g. tools, postman)
-      // In production, configure whitelist or subdomain wildcard match
       callback(null, true);
     },
     credentials: true,
@@ -19,9 +20,13 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static('uploads'));
 
 // Route Registrations
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/roles', roleRoutes);
+app.use('/api/v1/employees', employeeRoutes);
+app.use('/api/v1/organization', orgRoutes);
 
 // Root path diagnostic endpoint
 app.get('/health', (req, res) => {
@@ -32,12 +37,10 @@ app.get('/health', (req, res) => {
 app.use((err, req, res, next) => {
   console.error('Unhandled Error Exception:', err);
   
-  // Format target Mongoose validation or MongoDB cast errors
   if (err.name === 'ValidationError') {
     return res.status(400).json({ error: err.message });
   }
 
-  // Handle unique validation index duplicate error
   if (err.code === 11000) {
     return res.status(400).json({ error: 'Duplicate record exists in system.' });
   }
@@ -47,4 +50,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-module.exports = app;
+export default app;

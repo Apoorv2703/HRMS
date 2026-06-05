@@ -43,6 +43,11 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       setAccessToken(action.payload);
     },
+    enableMfaSuccess: (state) => {
+      if (state.user) {
+        state.user.mfaEnabled = true;
+      }
+    },
     clearError: (state) => {
       state.error = null;
     }
@@ -55,6 +60,7 @@ export const {
   loginFailure,
   logout,
   refreshTokenSuccess,
+  enableMfaSuccess,
   clearError
 } = authSlice.actions;
 

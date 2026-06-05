@@ -5,6 +5,12 @@ import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
 import Unauthorized from './pages/Unauthorized';
 import ProtectedRoute from './components/ProtectedRoute';
+import DashboardLayout from './components/DashboardLayout';
+import DirectoryPage from './pages/DirectoryPage';
+import OnboardingWizard from './pages/OnboardingWizard';
+import OnboardingVerification from './pages/OnboardingVerification';
+import ESSProfilePage from './pages/ESSProfilePage';
+import OrgChartPage from './pages/OrgChartPage';
 
 function App() {
   return (
@@ -13,10 +19,22 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register-tenant" element={<RegisterPage />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/onboard" element={<OnboardingVerification />} />
 
-      {/* Protected Routes (Available to all authenticated roles) */}
+      {/* Protected Routes (Authenticated Access Only) */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Core Layout Routes */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/directory" element={<DirectoryPage />} />
+          <Route path="/org-chart" element={<OrgChartPage />} />
+          <Route path="/profile" element={<ESSProfilePage />} />
+          
+          {/* Admin Protected Layout Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['HR_ADMIN']} />}>
+            <Route path="/onboard-staff" element={<OnboardingWizard />} />
+          </Route>
+        </Route>
       </Route>
 
       {/* Wildcard Fallbacks */}

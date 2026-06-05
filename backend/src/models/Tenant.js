@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const tenantSchema = new mongoose.Schema(
   {
@@ -51,6 +51,10 @@ const tenantSchema = new mongoose.Schema(
           type: Number,
           default: 15,
         },
+        passwordExpiryDays: {
+          type: Number,
+          default: 90,
+        },
       },
     },
     isActive: {
@@ -63,4 +67,4 @@ const tenantSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Tenant', tenantSchema);
+export default mongoose.model('Tenant', tenantSchema);

@@ -1,25 +1,25 @@
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
+import connectDB from './config/config.js';
+import app from './app.js';
 
-// Load environment configurations
-dotenv.config();
-
-const app = require('./app');
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hrms_db';
 
-// Connect to MongoDB Database
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => {
-    console.log('Connected to MongoDB database successfully.');
-    
-    // Start HTTP Server
-    app.listen(PORT, () => {
-      console.log(`HRMS API Server is running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Database connection failed. Exiting process...', err);
-    process.exit(1);
+const startServer = async () => {
+  // Connect to database
+  await connectDB();
+
+  // Start HTTP Server with port collision handling
+  const server = app.listen(PORT, () => {
+    console.log(`HRMS API Server is running on port ${PORT}`);
   });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n[Server Error]: Port ${PORT} is already occupied. Please free this port or configure another PORT in your .env file.\n`);
+      process.exit(1);
+    } else {
+      throw err;
+    }
+  });
+};
+
+startServer();
