@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: hrms-backend
+    env: node
+    plan: starter # You can change this to 'free' if using the free tier
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # User must enter their MongoDB connection URI in the Render dashboard
+      - key: JWT_SECRET
+        sync: false # User must enter a secure JWT signing key in the Render dashboard
+      - key: NODE_VERSION
+        value: 20.11.0 # Ensures Render uses a modern Node version compatible with native --env-file
