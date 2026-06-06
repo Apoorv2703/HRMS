@@ -177,8 +177,8 @@ const OnboardingWizard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-radial from-slate-900 via-slate-950 to-black p-6 text-slate-100 flex items-center justify-center">
-      <div className="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-950/70 p-6 md:p-8 backdrop-blur-xl shadow-2xl">
+    <div className="min-h-screen bg-slate-50 p-6 text-slate-900 flex items-center justify-center">
+      <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-2xl text-slate-850">
         {/* Back button */}
         {step < 3 && (
           <button
@@ -581,7 +581,7 @@ const OnboardingWizard = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 px-6 py-3 font-bold text-black disabled:opacity-50 transition cursor-pointer"
+                className="flex items-center gap-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 px-6 py-3 font-bold text-white disabled:opacity-50 transition cursor-pointer shadow-md"
               >
                 {loading ? 'Creating Invitation...' : 'Complete & Generate Link'}
               </button>
@@ -591,33 +591,33 @@ const OnboardingWizard = () => {
 
         {step === 3 && inviteResult && (
           <div className="space-y-6 text-center animate-in zoom-in-95 duration-200">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
               <CheckCircle2 className="h-10 w-10" />
             </div>
 
             <div>
-              <h3 className="text-xl font-bold text-emerald-400">Onboarding Invitation Created!</h3>
-              <p className="text-slate-400 text-sm mt-1">
+              <h3 className="text-xl font-bold text-emerald-700">Onboarding Invitation Created!</h3>
+              <p className="text-slate-500 text-sm mt-1">
                 Profile shell initialized for {firstName} {lastName} (ID: {inviteResult.employee?.employeeId || employeeId}).
               </p>
             </div>
 
             {/* Invite link card */}
-            <div className="rounded-xl border border-slate-800/80 bg-slate-900/40 p-5 mt-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-5 mt-4 shadow-sm">
               <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Onboarding Setup Link</span>
               
-              <div className="flex gap-2 items-center bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs select-all text-slate-300 break-all text-left">
+              <div className="flex gap-2 items-center bg-slate-50 p-3 rounded-lg border border-slate-250 font-mono text-xs select-all text-slate-800 break-all text-left">
                 <span className="flex-1">{inviteResult.inviteLink}</span>
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="rounded bg-slate-900 hover:bg-slate-850 p-1.5 border border-slate-800 text-slate-400 hover:text-slate-200 cursor-pointer transition flex-shrink-0"
+                  className="rounded bg-white hover:bg-slate-50 p-1.5 border border-slate-200 text-slate-600 hover:text-slate-900 cursor-pointer transition flex-shrink-0 shadow-sm"
                 >
-                  {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
+                  {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
                 </button>
               </div>
 
-              <p className="text-xs text-slate-400 mt-3 text-left">
+              <p className="text-xs text-slate-500 mt-3 text-left">
                 Provide this setup link to the employee. They will be directed to set their login password. Setup links expire in 7 days.
               </p>
             </div>
@@ -625,15 +625,15 @@ const OnboardingWizard = () => {
             <div className="pt-8 flex justify-center gap-4">
               <button
                 onClick={resetForm}
-                className="flex items-center gap-1.5 rounded-xl bg-slate-850 hover:bg-slate-800 px-5 py-3 font-semibold transition cursor-pointer"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-5 py-3 font-semibold text-slate-700 hover:text-slate-900 transition cursor-pointer shadow-sm"
               >
-                <UserPlus className="h-4 w-4 text-teal-400" />
+                <UserPlus className="h-4 w-4 text-slate-900" />
                 Invite Another
               </button>
 
               <button
                 onClick={() => navigate('/directory')}
-                className="rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 text-black px-6 py-3 font-bold cursor-pointer transition hover:opacity-95"
+                className="rounded-xl bg-slate-950 hover:bg-slate-900 text-white px-6 py-3 font-bold cursor-pointer transition shadow-md"
               >
                 Back to Directory
               </button>

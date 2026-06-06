@@ -95,46 +95,46 @@ const DelegationSettings = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 md:p-8 backdrop-blur-md shadow-lg space-y-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-lg space-y-6 text-slate-850">
         <div>
-          <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
-            <ShieldCheck className="h-6 w-6 text-teal-400" />
+          <h2 className="text-xl font-extrabold text-slate-950 flex items-center gap-2">
+            <ShieldCheck className="h-6 w-6 text-slate-950" />
             Approval Delegation Settings
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Delegate your approval authority to a colleague during a planned vacation or absence. Pending requests will automatically route to them.
           </p>
         </div>
 
         {message && (
-          <div className="rounded-xl border border-teal-500/20 bg-teal-500/10 p-4 text-sm text-teal-300">
+          <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-sm text-teal-700">
             {message}
           </div>
         )}
 
         {error && (
-          <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-300">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
             {error}
           </div>
         )}
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Create Delegation Rule */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4">
-            <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 space-y-4">
+            <h3 className="text-sm font-bold text-slate-950 border-b border-slate-100 pb-2 flex items-center gap-2">
               <UserPlus className="h-4.5 w-4.5" /> Setup Delegation
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
                   Select Delegate Colleagues
                 </label>
                 <select
                   value={delegateeId}
                   onChange={(e) => setDelegateeId(e.target.value)}
                   required
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-white text-slate-800 text-sm p-3 outline-none focus:border-slate-950 cursor-pointer"
                 >
                   <option value="">-- Choose a Colleague --</option>
                   {colleagues.map((col) => (
@@ -147,7 +147,7 @@ const DelegationSettings = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
                     Start Date
                   </label>
                   <input
@@ -155,19 +155,19 @@ const DelegationSettings = () => {
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50"
+                    className="w-full rounded-xl border border-slate-200 bg-white text-slate-800 text-sm p-3 outline-none focus:border-slate-950"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
                     End Date
                   </label>
                   <input
                     type="date"
                     value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    onChange={(e) => setPageLoading ? setEndDate(e.target.value) : setEndDate(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50"
+                    className="w-full rounded-xl border border-slate-200 bg-white text-slate-800 text-sm p-3 outline-none focus:border-slate-950"
                   />
                 </div>
               </div>
@@ -175,7 +175,7 @@ const DelegationSettings = () => {
               <button
                 type="submit"
                 disabled={submitLoading}
-                className="w-full rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 disabled:opacity-50 text-sm font-bold text-black py-3 shadow-lg shadow-teal-500/10 transition cursor-pointer"
+                className="w-full rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 text-sm font-bold text-white py-3 shadow transition cursor-pointer"
               >
                 {submitLoading ? 'Registering...' : 'Delegate Approval Authority'}
               </button>
@@ -183,21 +183,21 @@ const DelegationSettings = () => {
           </div>
 
           {/* Active Delegation Rule Status */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4 flex flex-col justify-between">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 space-y-4 flex flex-col justify-between">
             <div className="space-y-4">
-              <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-950 border-b border-slate-100 pb-2 flex items-center gap-2">
                 <UserCheck className="h-4.5 w-4.5" /> Active Delegation Status
               </h3>
 
               {loading ? (
                 <div className="flex h-32 items-center justify-center">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-teal-500 border-t-transparent"></div>
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-950 border-t-transparent"></div>
                 </div>
               ) : delegations.length === 0 ? (
-                <div className="rounded-xl border border-slate-850 bg-slate-900/10 p-6 text-center text-slate-400">
-                  <AlertCircle className="mx-auto mb-2 h-8 w-8 text-slate-500" />
-                  <p className="font-semibold text-sm">No Active Delegations</p>
-                  <p className="text-xs text-slate-500 mt-1">
+                <div className="rounded-xl border border-slate-250 bg-white p-6 text-center text-slate-500">
+                  <AlertCircle className="mx-auto mb-2 h-8 w-8 text-slate-400" />
+                  <p className="font-semibold text-sm text-slate-850">No Active Delegations</p>
+                  <p className="text-xs text-slate-450 mt-1">
                     Your approval tasks will route normally to you.
                   </p>
                 </div>
@@ -206,28 +206,28 @@ const DelegationSettings = () => {
                   {delegations.map((d) => (
                     <div
                       key={d._id}
-                      className="rounded-xl border border-teal-500/20 bg-teal-500/5 p-4 space-y-2 border-l-4 border-l-teal-500"
+                      className="rounded-xl border border-slate-250 bg-white p-4 space-y-2 border-l-4 border-l-slate-950 text-slate-850"
                     >
                       <div className="flex justify-between items-start">
                         <div>
                           <span className="block text-[10px] uppercase font-bold tracking-wider text-slate-400">
                             DELEGATED TO
                           </span>
-                          <span className="text-sm font-bold text-slate-200">
+                          <span className="text-sm font-bold text-slate-800">
                             {d.delegateeId?.email || 'Colleague'}
                           </span>
                         </div>
-                        <span className="text-[10px] text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded font-bold uppercase">
+                        <span className="text-[10px] text-slate-950 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded font-bold uppercase">
                           Active
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 pt-2 text-xs text-slate-450">
+                      <div className="flex items-center gap-2 pt-2 text-xs text-slate-500">
                         <Calendar className="h-4 w-4 text-slate-400" />
-                        <span className="font-mono text-slate-300">
+                        <span className="font-mono">
                           {new Date(d.startDate).toLocaleDateString()}
                         </span>
-                        <span className="text-slate-500">to</span>
-                        <span className="font-mono text-slate-300">
+                        <span className="text-slate-400">to</span>
+                        <span className="font-mono">
                           {new Date(d.endDate).toLocaleDateString()}
                         </span>
                       </div>
@@ -241,7 +241,7 @@ const DelegationSettings = () => {
               <button
                 type="button"
                 onClick={handleDeactivate}
-                className="w-full mt-4 flex items-center justify-center gap-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500 border border-rose-500/20 hover:border-rose-500 hover:text-black py-3 text-xs font-bold text-rose-455 text-rose-400 transition cursor-pointer"
+                className="w-full mt-4 flex items-center justify-center gap-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 py-3 text-xs font-bold text-rose-600 transition cursor-pointer"
               >
                 <Trash2 className="h-4 w-4" /> Deactivate Delegation Settings
               </button>

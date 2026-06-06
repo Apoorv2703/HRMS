@@ -184,72 +184,72 @@ const ReportsPage = () => {
       case 'headcount':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Emp ID</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Name</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Department</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Designation</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Location</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Status</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Joining Date</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Designation</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Location</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Status</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Joining Date</th>
           </>
         );
       case 'attendance':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Emp ID</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Name</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Department</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Location</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Present</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Late</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Half Day</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Absent</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Worked Hours</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Location</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Present</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Late</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Half Day</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Absent</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Worked Hours</th>
           </>
         );
       case 'leaves':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Emp ID</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Name</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Department</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Leave Type</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Allocated</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Used</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Pending</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Remaining</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Leave Type</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Allocated</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Used</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Pending</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Remaining</th>
           </>
         );
       case 'late-absent':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Emp ID</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Name</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Department</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Location</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Date</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Violation</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Clock In</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Location</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Date</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Violation</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Clock In</th>
           </>
         );
       case 'overtime':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Emp ID</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Name</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Department</th>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Location</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">OT Hours</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Location</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">OT Hours</th>
           </>
         );
       case 'attrition':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-400">Department</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Joined Count</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Left Count</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Net Change</th>
-            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">Attrition Rate</th>
+            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Joined Count</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Left Count</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Net Change</th>
+            <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Attrition Rate</th>
           </>
         );
       default:
@@ -272,85 +272,85 @@ const ReportsPage = () => {
       switch (activeReportTab) {
         case 'headcount':
           return (
-            <tr key={idx} className="border-b border-slate-850 hover:bg-slate-900/20">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-200">{row.employeeId}</td>
-              <td className="px-6 py-4 text-sm font-bold text-teal-400">{row.name}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.department}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.designation}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.location}</td>
+            <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
+              <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.designation}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.location}</td>
               <td className="px-6 py-4 text-sm">
                 <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                  row.status === 'ACTIVE' ? 'bg-teal-500/10 text-teal-350 border border-teal-500/20' : 'bg-slate-800 text-slate-400 border border-slate-700'
+                  row.status === 'ACTIVE' ? 'bg-teal-50 text-teal-700 border border-teal-200' : 'bg-slate-100 text-slate-600 border border-slate-200'
                 }`}>
                   {row.status}
                 </span>
               </td>
-              <td className="px-6 py-4 text-sm text-slate-400">{row.joiningDate}</td>
+              <td className="px-6 py-4 text-sm text-slate-500">{row.joiningDate}</td>
             </tr>
           );
         case 'attendance':
           return (
-            <tr key={idx} className="border-b border-slate-850 hover:bg-slate-900/20">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-200">{row.employeeId}</td>
-              <td className="px-6 py-4 text-sm font-bold text-teal-400">{row.name}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.department}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.location}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-slate-350">{row.presentDays}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-amber-400">{row.lateDays}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-orange-400">{row.halfDays}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-rose-400">{row.absentDays}</td>
-              <td className="px-6 py-4 text-center text-sm font-bold text-white">{row.workedHours} hrs</td>
+            <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
+              <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.location}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-slate-700">{row.presentDays}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-amber-600">{row.lateDays}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-orange-600">{row.halfDays}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-rose-600">{row.absentDays}</td>
+              <td className="px-6 py-4 text-center text-sm font-bold text-slate-900">{row.workedHours} hrs</td>
             </tr>
           );
         case 'leaves':
           return (
-            <tr key={idx} className="border-b border-slate-850 hover:bg-slate-900/20">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-200">{row.employeeId}</td>
-              <td className="px-6 py-4 text-sm font-bold text-teal-400">{row.name}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.department}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.leaveType}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-slate-350">{row.allocated}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-teal-350">{row.used}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-amber-400">{row.pending}</td>
-              <td className="px-6 py-4 text-center text-sm font-bold text-white">{row.remaining}</td>
+            <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
+              <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.leaveType}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-slate-700">{row.allocated}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-teal-600">{row.used}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-amber-600">{row.pending}</td>
+              <td className="px-6 py-4 text-center text-sm font-bold text-slate-900">{row.remaining}</td>
             </tr>
           );
         case 'late-absent':
           return (
-            <tr key={idx} className="border-b border-slate-850 hover:bg-slate-900/20">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-200">{row.employeeId}</td>
-              <td className="px-6 py-4 text-sm font-bold text-teal-400">{row.name}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.department}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.location}</td>
-              <td className="px-6 py-4 text-center text-sm text-slate-400">{row.date}</td>
+            <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
+              <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.location}</td>
+              <td className="px-6 py-4 text-center text-sm text-slate-500">{row.date}</td>
               <td className="px-6 py-4 text-center text-sm">
                 <span className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${
-                  row.status === 'LATE' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/25' : 'bg-rose-500/10 text-rose-400 border border-rose-500/25'
+                  row.status === 'LATE' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-rose-50 text-rose-700 border border-rose-200'
                 }`}>
                   {row.status}
                 </span>
               </td>
-              <td className="px-6 py-4 text-center text-sm font-mono text-slate-300">{row.timeIn}</td>
+              <td className="px-6 py-4 text-center text-sm font-mono text-slate-700">{row.timeIn}</td>
             </tr>
           );
         case 'overtime':
           return (
-            <tr key={idx} className="border-b border-slate-850 hover:bg-slate-900/20">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-200">{row.employeeId}</td>
-              <td className="px-6 py-4 text-sm font-bold text-teal-400">{row.name}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.department}</td>
-              <td className="px-6 py-4 text-sm text-slate-300">{row.location}</td>
-              <td className="px-6 py-4 text-center text-sm font-bold text-emerald-400">{row.overtimeHours} hrs</td>
+            <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
+              <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
+              <td className="px-6 py-4 text-sm text-slate-600">{row.location}</td>
+              <td className="px-6 py-4 text-center text-sm font-bold text-emerald-600">{row.overtimeHours} hrs</td>
             </tr>
           );
         case 'attrition':
           return (
-            <tr key={idx} className="border-b border-slate-850 hover:bg-slate-900/20">
-              <td className="px-6 py-4 text-sm font-bold text-slate-200">{row.department}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-emerald-450 text-emerald-400">+{row.joinedCount}</td>
-              <td className="px-6 py-4 text-center text-sm font-medium text-rose-455 text-rose-400">-{row.leftCount}</td>
-              <td className="px-6 py-4 text-center text-sm font-semibold text-slate-350">{row.netChange}</td>
-              <td className="px-6 py-4 text-center text-sm font-bold text-amber-400">{row.attritionRate}</td>
+            <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+              <td className="px-6 py-4 text-sm font-bold text-slate-800">{row.department}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-emerald-600">+{row.joinedCount}</td>
+              <td className="px-6 py-4 text-center text-sm font-medium text-rose-600">-{row.leftCount}</td>
+              <td className="px-6 py-4 text-center text-sm font-semibold text-slate-700">{row.netChange}</td>
+              <td className="px-6 py-4 text-center text-sm font-bold text-amber-600">{row.attritionRate}</td>
             </tr>
           );
         default:
@@ -360,15 +360,15 @@ const ReportsPage = () => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-slate-900">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
-            <FileText className="h-8 w-8 text-teal-400" />
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
+            <FileText className="h-8 w-8 text-slate-900" />
             {user?.role === 'EMPLOYEE' ? 'My Personal Dashboard' : 'Reporting & Dashboards Center'}
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             {user?.role === 'EMPLOYEE'
               ? 'View your personal attendance stats and leave balance for the current month.'
               : 'Access role-scoped directory, attendance, leaves, overtime registers, and attrition rates.'}
@@ -378,7 +378,7 @@ const ReportsPage = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setShowScheduleModal(true)}
-              className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-300 hover:text-white transition duration-200 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:text-slate-900 transition duration-200 cursor-pointer shadow-sm"
             >
               <Mail className="h-4 w-4" />
               Schedule Delivery
@@ -386,7 +386,7 @@ const ReportsPage = () => {
             <button
               onClick={handleExportCSV}
               disabled={reportData.length === 0}
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 disabled:opacity-50 px-5 py-2.5 text-sm font-bold text-black shadow-lg shadow-teal-500/10 hover:shadow-teal-500/20 transition duration-200 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 px-5 py-2.5 text-sm font-bold text-white shadow-md transition duration-200 cursor-pointer"
             >
               <Download className="h-4 w-4" />
               Export CSV
@@ -399,91 +399,91 @@ const ReportsPage = () => {
       {metricsLoading ? (
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-28 animate-pulse rounded-2xl border border-slate-850 bg-slate-900/30"></div>
+            <div key={i} className="h-28 animate-pulse rounded-2xl border border-slate-200 bg-slate-100"></div>
           ))}
         </div>
       ) : metrics ? (
         user?.role === 'EMPLOYEE' ? (
           // Employee personal KPI cards
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex justify-between items-start">
-                <span className="text-xs font-bold uppercase text-slate-400">Present Days</span>
-                <CheckCircle className="h-5 w-5 text-teal-400" />
+                <span className="text-xs font-semibold uppercase text-slate-500">Present Days</span>
+                <CheckCircle className="h-5 w-5 text-slate-900" />
               </div>
-              <div className="text-2xl font-extrabold text-white mt-2">{metrics.presentDays ?? 0}</div>
+              <div className="text-2xl font-extrabold text-slate-900 mt-2">{metrics.presentDays ?? 0}</div>
               <div className="text-[10px] text-slate-500 mt-1">This month</div>
             </div>
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex justify-between items-start">
-                <span className="text-xs font-bold uppercase text-slate-400">Late Days</span>
-                <Clock className="h-5 w-5 text-amber-400" />
+                <span className="text-xs font-semibold uppercase text-slate-500">Late Days</span>
+                <Clock className="h-5 w-5 text-amber-600" />
               </div>
-              <div className="text-2xl font-extrabold text-amber-400 mt-2">{metrics.lateDays ?? 0}</div>
+              <div className="text-2xl font-extrabold text-amber-600 mt-2">{metrics.lateDays ?? 0}</div>
               <div className="text-[10px] text-slate-500 mt-1">This month</div>
             </div>
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex justify-between items-start">
-                <span className="text-xs font-bold uppercase text-slate-400">Absent Days</span>
-                <AlertCircle className="h-5 w-5 text-rose-400" />
+                <span className="text-xs font-semibold uppercase text-slate-500">Absent Days</span>
+                <AlertCircle className="h-5 w-5 text-rose-600" />
               </div>
-              <div className="text-2xl font-extrabold text-rose-400 mt-2">{metrics.absentDays ?? 0}</div>
+              <div className="text-2xl font-extrabold text-rose-600 mt-2">{metrics.absentDays ?? 0}</div>
               <div className="text-[10px] text-slate-500 mt-1">This month</div>
             </div>
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex justify-between items-start">
-                <span className="text-xs font-bold uppercase text-slate-400">Leave Balance</span>
-                <Calendar className="h-5 w-5 text-teal-400" />
+                <span className="text-xs font-semibold uppercase text-slate-500">Leave Balance</span>
+                <Calendar className="h-5 w-5 text-slate-900" />
               </div>
-              <div className="text-2xl font-extrabold text-white mt-2">{metrics.remainingLeaves ?? 0}</div>
+              <div className="text-2xl font-extrabold text-slate-900 mt-2">{metrics.remainingLeaves ?? 0}</div>
               <div className="text-[10px] text-slate-500 mt-1">Days remaining</div>
             </div>
           </div>
         ) : (
           // Manager / HR Admin / Leadership KPI cards
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
-              <div className="flex justify-between items-start text-slate-450">
-                <span className="text-xs font-bold uppercase text-slate-400">Total Headcount</span>
-                <Users className="h-5 w-5 text-teal-400" />
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex justify-between items-start text-slate-500">
+                <span className="text-xs font-semibold uppercase text-slate-500">Total Headcount</span>
+                <Users className="h-5 w-5 text-slate-900" />
               </div>
-              <div className="text-2xl font-extrabold text-white mt-2">{metrics.headcount ?? 'N/A'}</div>
+              <div className="text-2xl font-extrabold text-slate-900 mt-2">{metrics.headcount ?? 'N/A'}</div>
               <div className="text-[10px] text-slate-500 mt-1">Active staff records</div>
             </div>
 
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
-              <div className="flex justify-between items-start text-slate-450">
-                <span className="text-xs font-bold uppercase text-slate-400">Avg Work Hours</span>
-                <Clock className="h-5 w-5 text-teal-400" />
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex justify-between items-start text-slate-500">
+                <span className="text-xs font-semibold uppercase text-slate-500">Avg Work Hours</span>
+                <Clock className="h-5 w-5 text-slate-900" />
               </div>
-              <div className="text-2xl font-extrabold text-white mt-2">{metrics.avgWorkHours ?? '0.00'} hrs</div>
+              <div className="text-2xl font-extrabold text-slate-900 mt-2">{metrics.avgWorkHours ?? '0.00'} hrs</div>
               <div className="text-[10px] text-slate-500 mt-1">Per active day (current month)</div>
             </div>
 
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
-              <div className="flex justify-between items-start text-slate-450">
-                <span className="text-xs font-bold uppercase text-slate-400">Total Overtime</span>
-                <Briefcase className="h-5 w-5 text-teal-400" />
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex justify-between items-start text-slate-500">
+                <span className="text-xs font-semibold uppercase text-slate-500">Total Overtime</span>
+                <Briefcase className="h-5 w-5 text-slate-900" />
               </div>
-              <div className="text-2xl font-extrabold text-white mt-2">{metrics.totalOvertimeHours ?? '0.00'} hrs</div>
+              <div className="text-2xl font-extrabold text-slate-900 mt-2">{metrics.totalOvertimeHours ?? '0.00'} hrs</div>
               <div className="text-[10px] text-slate-500 mt-1">Accumulated current month</div>
             </div>
 
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
-              <div className="flex justify-between items-start text-slate-450">
-                <span className="text-xs font-bold uppercase text-slate-400">Leaves Today</span>
-                <Calendar className="h-5 w-5 text-teal-400" />
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex justify-between items-start text-slate-500">
+                <span className="text-xs font-semibold uppercase text-slate-500">Leaves Today</span>
+                <Calendar className="h-5 w-5 text-slate-900" />
               </div>
-              <div className="text-2xl font-extrabold text-white mt-2">{metrics.activeLeavesToday ?? 0}</div>
+              <div className="text-2xl font-extrabold text-slate-900 mt-2">{metrics.activeLeavesToday ?? 0}</div>
               <div className="text-[10px] text-slate-500 mt-1">Approved active requests</div>
             </div>
 
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 p-5 backdrop-blur shadow-md">
-              <div className="flex justify-between items-start text-slate-450">
-                <span className="text-xs font-bold uppercase text-slate-400">Attrition Rate</span>
-                <Percent className="h-5 w-5 text-teal-400" />
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex justify-between items-start text-slate-500">
+                <span className="text-xs font-semibold uppercase text-slate-500">Attrition Rate</span>
+                <Percent className="h-5 w-5 text-slate-900" />
               </div>
-              <div className="text-2xl font-extrabold text-white mt-2">{metrics.attritionRate ?? '0.0%'}</div>
+              <div className="text-2xl font-extrabold text-slate-900 mt-2">{metrics.attritionRate ?? '0.0%'}</div>
               <div className="text-[10px] text-slate-500 mt-1">Annualized turnover metric</div>
             </div>
           </div>
@@ -496,41 +496,41 @@ const ReportsPage = () => {
           {/* Left Column: Report categories selector & Filters */}
           <div className="lg:col-span-1 space-y-5">
             {/* Filters Card */}
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/40 p-5 backdrop-blur space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-1.5 border-b border-slate-850 pb-2.5">
-                <Filter className="h-4 w-4 text-teal-400" />
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5 border-b border-slate-200 pb-2.5">
+                <Filter className="h-4 w-4 text-slate-900" />
                 Filter Query Options
               </h3>
 
               {/* Date Range Start */}
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Start Date</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Start Date</label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2 text-sm text-white focus:border-teal-500 focus:outline-none"
+                  className="block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 focus:border-slate-950 focus:outline-none"
                 />
               </div>
 
               {/* Date Range End */}
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">End Date</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">End Date</label>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2 text-sm text-white focus:border-teal-500 focus:outline-none"
+                  className="block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 focus:border-slate-950 focus:outline-none"
                 />
               </div>
 
               {/* Department */}
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Department</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Department</label>
                 <select
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-200 focus:border-teal-500 focus:outline-none cursor-pointer"
+                  className="block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-slate-950 focus:outline-none cursor-pointer"
                 >
                   <option value="">All Departments</option>
                   {departments.map((dept) => (
@@ -543,11 +543,11 @@ const ReportsPage = () => {
 
               {/* Location */}
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Location</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Location</label>
                 <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-200 focus:border-teal-500 focus:outline-none cursor-pointer"
+                  className="block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-slate-950 focus:outline-none cursor-pointer"
                 >
                   <option value="">All Locations</option>
                   {locations.map((loc) => (
@@ -560,15 +560,15 @@ const ReportsPage = () => {
             </div>
 
             {/* Report Tab lists */}
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/40 p-3.5 backdrop-blur flex flex-col gap-1">
+            <div className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm flex flex-col gap-1">
               {reportTabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveReportTab(tab.id)}
                   className={`w-full text-left rounded-xl px-4 py-3 text-xs font-bold transition duration-200 flex items-center justify-between cursor-pointer ${
                     activeReportTab === tab.id
-                      ? 'bg-teal-500/10 text-teal-400 border border-teal-500/25 shadow-sm'
-                      : 'text-slate-400 hover:bg-slate-900/50 hover:text-slate-200'
+                      ? 'bg-slate-950 text-white shadow-sm'
+                      : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
                   <span>{tab.name}</span>
@@ -579,13 +579,13 @@ const ReportsPage = () => {
 
           {/* Right Column: Tabular Preview Sheet */}
           <div className="lg:col-span-3 space-y-4">
-            <div className="rounded-2xl border border-slate-850 bg-slate-950/45 backdrop-blur-md shadow-xl overflow-hidden flex flex-col">
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col">
               {/* Tab header title */}
-              <div className="border-b border-slate-850 bg-slate-900/20 px-6 py-4.5 flex justify-between items-center">
-                <h2 className="text-base font-bold text-white tracking-wide">
+              <div className="border-b border-slate-200 bg-slate-50 px-6 py-4.5 flex justify-between items-center">
+                <h2 className="text-base font-bold text-slate-900 tracking-wide">
                   {reportTabs.find((t) => t.id === activeReportTab)?.name} Preview
                 </h2>
-                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest bg-slate-900 border border-slate-850 px-2.5 py-0.5 rounded">
+                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded">
                   Live Data Fetch
                 </span>
               </div>
@@ -593,22 +593,22 @@ const ReportsPage = () => {
               {/* Table Container */}
               <div className="overflow-x-auto">
                 <table className="w-full min-w-max border-collapse">
-                  <thead className="bg-slate-900/60 border-b border-slate-850">
+                  <thead className="bg-slate-50 border-b border-slate-200">
                     <tr>{renderTableHeaders()}</tr>
                   </thead>
                   <tbody>
                     {reportLoading ? (
                       <tr>
-                        <td colSpan={10} className="px-6 py-12 text-center text-slate-400 text-sm">
+                        <td colSpan={10} className="px-6 py-12 text-center text-slate-500 text-sm">
                           <div className="flex justify-center items-center gap-2">
-                            <Loader2 className="h-4 w-4 animate-spin text-teal-400" />
+                            <Loader2 className="h-4 w-4 animate-spin text-slate-900" />
                             <span>Aggregating ledger data from system...</span>
                           </div>
                         </td>
                       </tr>
                     ) : reportError ? (
                       <tr>
-                        <td colSpan={10} className="px-6 py-10 text-center text-rose-400 text-sm font-semibold">
+                        <td colSpan={10} className="px-6 py-10 text-center text-rose-600 text-sm font-semibold">
                           {reportError}
                         </td>
                       </tr>
@@ -625,28 +625,28 @@ const ReportsPage = () => {
 
       {/* Scheduling report modal */}
       {showScheduleModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="relative w-full max-w-md rounded-2xl border border-slate-800 bg-slate-950 p-6 md:p-8 shadow-2xl space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="relative w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-2xl space-y-6">
             <div>
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <Mail className="h-5 w-5 text-teal-400" />
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Mail className="h-5 w-5 text-slate-900" />
                 Schedule Email Summary Reports
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 Configure automatic email delivery of the current report tab at regular frequencies.
               </p>
             </div>
 
             {schedSuccessMsg && (
-              <div className="rounded-xl border border-teal-500/20 bg-teal-500/10 p-3.5 text-xs text-teal-350 flex items-center gap-2">
-                <CheckCircle className="h-4 w-4" />
+              <div className="rounded-xl border border-teal-200 bg-teal-50 p-3.5 text-xs text-teal-850 flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-teal-650" />
                 {schedSuccessMsg}
               </div>
             )}
 
             {schedErrorMsg && (
-              <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-3.5 text-xs text-rose-350 flex items-center gap-2">
-                <AlertCircle className="h-4 w-4" />
+              <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-xs text-rose-850 flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-rose-650" />
                 {schedErrorMsg}
               </div>
             )}
@@ -654,19 +654,19 @@ const ReportsPage = () => {
             <form onSubmit={handleScheduleSubmit} className="space-y-4">
               {/* Report selection display */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Active Report Tab</label>
-                <div className="block w-full rounded-xl bg-slate-900 border border-slate-850 px-4 py-3 text-xs font-bold text-white">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Active Report Tab</label>
+                <div className="block w-full rounded-xl bg-slate-100 border border-slate-200 px-4 py-3 text-xs font-bold text-slate-800">
                   {reportTabs.find((t) => t.id === activeReportTab)?.name}
                 </div>
               </div>
 
               {/* Frequency selection */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Frequency</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Frequency</label>
                 <select
                   value={schedFrequency}
                   onChange={(e) => setSchedFrequency(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-200 focus:border-teal-500 focus:outline-none cursor-pointer"
+                  className="block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-slate-950 focus:outline-none cursor-pointer"
                 >
                   <option value="DAILY">Daily Summary</option>
                   <option value="WEEKLY">Weekly Digest Summary</option>
@@ -676,14 +676,14 @@ const ReportsPage = () => {
 
               {/* Email recipients */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Email Recipients</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Email Recipients</label>
                 <textarea
                   rows={2}
                   required
                   placeholder="manager@company.com, leadership@company.com"
                   value={schedRecipients}
                   onChange={(e) => setSchedRecipients(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2 text-sm text-white focus:border-teal-500 focus:outline-none placeholder-slate-600"
+                  className="block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 focus:border-slate-950 focus:outline-none placeholder-slate-400"
                 />
                 <span className="block text-[9px] text-slate-500">Separate multiple emails using commas.</span>
               </div>
@@ -693,14 +693,14 @@ const ReportsPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowScheduleModal(false)}
-                  className="flex-1 justify-center rounded-xl border border-slate-800 bg-slate-900 py-2.5 text-center text-xs font-semibold text-slate-450 hover:bg-slate-850 hover:text-slate-200 focus:outline-none cursor-pointer"
+                  className="flex-1 justify-center rounded-xl border border-slate-200 bg-white py-2.5 text-center text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 focus:outline-none cursor-pointer shadow-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={schedLoading}
-                  className="flex-1 justify-center rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-xs font-bold text-black shadow-lg disabled:opacity-50 py-2.5 cursor-pointer"
+                  className="flex-1 justify-center rounded-xl bg-slate-950 hover:bg-slate-900 text-xs font-bold text-white shadow-md disabled:opacity-50 py-2.5 cursor-pointer"
                 >
                   {schedLoading ? 'Configuring...' : 'Activate Delivery'}
                 </button>

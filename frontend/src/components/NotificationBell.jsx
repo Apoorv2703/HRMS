@@ -71,16 +71,16 @@ const NotificationBell = () => {
     switch (type) {
       case 'LEAVE_SUBMITTED':
       case 'REGULARIZATION_SUBMITTED':
-        return <Calendar className="h-4 w-4 text-amber-400" />;
+        return <Calendar className="h-4 w-4 text-amber-600" />;
       case 'LEAVE_APPROVED':
       case 'REGULARIZATION_APPROVED':
-        return <Calendar className="h-4 w-4 text-emerald-400" />;
+        return <Calendar className="h-4 w-4 text-emerald-600" />;
       case 'SLA_BREACH':
-        return <ShieldAlert className="h-4 w-4 text-rose-400" />;
+        return <ShieldAlert className="h-4 w-4 text-rose-600" />;
       case 'CRITICAL_SECURITY':
-        return <ShieldAlert className="h-4 w-4 text-red-500 animate-pulse" />;
+        return <ShieldAlert className="h-4 w-4 text-red-600 animate-pulse" />;
       default:
-        return <AlertCircle className="h-4 w-4 text-teal-400" />;
+        return <AlertCircle className="h-4 w-4 text-slate-700" />;
     }
   };
 
@@ -89,11 +89,11 @@ const NotificationBell = () => {
       {/* Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white transition duration-200 cursor-pointer"
+        className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition duration-200 cursor-pointer"
       >
         <Bell className="h-4.5 w-4.5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-rose-500 text-[9px] font-black text-white shadow shadow-rose-500/30 animate-in zoom-in-50">
+          <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-slate-950 text-[9px] font-black text-white shadow shadow-slate-950/20 animate-in zoom-in-50">
             {unreadCount}
           </span>
         )}
@@ -101,12 +101,12 @@ const NotificationBell = () => {
 
       {/* Notification Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl border border-slate-800 bg-slate-900/95 p-4 shadow-2xl backdrop-blur-xl z-50 animate-in fade-in slide-in-from-top-3 duration-250">
-          <div className="flex items-center justify-between border-b border-slate-850 pb-2.5">
-            <span className="text-sm font-bold text-white flex items-center gap-1.5">
+        <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl border border-slate-250 bg-white p-4 shadow-2xl z-50 animate-in fade-in slide-in-from-top-3 duration-250">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+            <span className="text-sm font-bold text-slate-950 flex items-center gap-1.5">
               Notifications
               {unreadCount > 0 && (
-                <span className="rounded bg-teal-500/10 border border-teal-500/20 px-1.5 py-0.5 text-[10px] font-black text-teal-400">
+                <span className="rounded bg-slate-100 border border-slate-200 px-1.5 py-0.5 text-[10px] font-black text-slate-800">
                   {unreadCount} new
                 </span>
               )}
@@ -114,14 +114,14 @@ const NotificationBell = () => {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-[10px] font-bold text-teal-400 hover:text-teal-300 flex items-center gap-1 cursor-pointer"
+                className="text-[10px] font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1 cursor-pointer"
               >
                 <MailOpen className="h-3 w-3" /> Mark all read
               </button>
             )}
           </div>
 
-          <div className="max-h-80 overflow-y-auto divide-y divide-slate-850/60 mt-1 scrollbar-thin">
+          <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 mt-1 scrollbar-thin">
             {notifications.length === 0 ? (
               <div className="py-12 text-center text-slate-500 text-xs italic">
                 You have no notifications at this time.
@@ -131,27 +131,27 @@ const NotificationBell = () => {
                 <div
                   key={notif._id}
                   onClick={() => handleNotificationClick(notif)}
-                  className={`flex items-start gap-3 p-3 transition duration-150 cursor-pointer hover:bg-slate-850/40 rounded-xl ${
-                    !notif.isRead ? 'bg-teal-500/5' : ''
+                  className={`flex items-start gap-3 p-3 transition duration-150 cursor-pointer hover:bg-slate-50 rounded-xl ${
+                    !notif.isRead ? 'bg-slate-50/60' : ''
                   }`}
                 >
-                  <div className="mt-0.5 rounded bg-slate-950 p-1.5 border border-slate-850">
+                  <div className="mt-0.5 rounded bg-slate-50 p-1.5 border border-slate-100">
                     {getIcon(notif.type)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-1">
-                      <h4 className={`text-xs text-slate-200 truncate ${!notif.isRead ? 'font-bold text-white' : ''}`}>
+                      <h4 className={`text-xs text-slate-700 truncate ${!notif.isRead ? 'font-bold text-slate-950' : ''}`}>
                         {notif.title}
                       </h4>
-                      <span className="text-[9px] text-slate-500 whitespace-nowrap font-mono">
+                      <span className="text-[9px] text-slate-400 whitespace-nowrap font-mono">
                         {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed break-words line-clamp-2">
+                    <p className="text-[11px] text-slate-500 mt-1 leading-relaxed break-words line-clamp-2">
                       {notif.message}
                     </p>
                     {notif.link && (
-                      <span className="inline-flex items-center gap-0.5 text-[9px] text-teal-400 font-bold mt-1.5 hover:underline">
+                      <span className="inline-flex items-center gap-0.5 text-[9px] text-slate-950 font-bold mt-1.5 hover:underline">
                         View Details <ArrowRight className="h-2 w-2" />
                       </span>
                     )}

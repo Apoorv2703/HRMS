@@ -7,8 +7,8 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-900 text-slate-200">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent"></div>
+      <div className="flex h-screen w-screen items-center justify-center bg-slate-50 text-slate-900">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-950 border-t-transparent"></div>
         <span className="ml-3 font-medium">Validating security context...</span>
       </div>
     );

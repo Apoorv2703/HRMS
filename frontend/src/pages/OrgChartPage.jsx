@@ -50,25 +50,25 @@ const OrgChartPage = () => {
         <div className="h-4 w-0.5 bg-slate-700/60"></div>
         
         {/* Node box */}
-        <div className={`relative flex flex-col items-center rounded-2xl border bg-slate-950 p-4 min-w-[200px] text-center shadow-lg transition duration-200 ${
+        <div className={`relative flex flex-col items-center rounded-2xl border p-4 min-w-[200px] text-center shadow-lg transition duration-200 ${
           isSelf 
-            ? 'border-teal-400 bg-teal-500/5 ring-1 ring-teal-500/20' 
-            : 'border-slate-800/80 bg-slate-900/30 hover:border-slate-700'
+            ? 'border-slate-950 bg-slate-100 font-bold ring-1 ring-slate-950/10' 
+            : 'border-slate-200 bg-white hover:border-slate-350 text-slate-800'
         }`}>
           {/* Initials badge */}
           <div className={`mb-2 flex h-10 w-10 items-center justify-center rounded-xl font-bold text-xs border ${
             isSelf 
-              ? 'bg-teal-500/20 text-teal-300 border-teal-500/30' 
-              : 'bg-slate-800/50 text-slate-300 border-slate-700/50'
+              ? 'bg-slate-950 text-white border-slate-950' 
+              : 'bg-slate-50 text-slate-700 border-slate-200'
           }`}>
             {`${node.personal?.firstName?.[0] || 'E'}${node.personal?.lastName?.[0] || ''}`}
           </div>
 
-          <h4 className="text-sm font-bold text-slate-100">
+          <h4 className="text-sm font-bold text-slate-950">
             {node.personal?.firstName} {node.personal?.lastName}
           </h4>
-          <p className="text-[11px] text-slate-400 font-medium mt-0.5">{node.employment?.designation || 'Staff Member'}</p>
-          <span className="text-[10px] text-slate-500 mt-1 uppercase font-semibold tracking-wider font-sans">
+          <p className="text-[11px] text-slate-500 font-medium mt-0.5">{node.employment?.designation || 'Staff Member'}</p>
+          <span className="text-[10px] text-slate-400 mt-1 uppercase font-semibold tracking-wider font-sans">
             {node.employment?.department || 'N/A'}
           </span>
 
@@ -76,7 +76,7 @@ const OrgChartPage = () => {
           {hasChildren && (
             <button
               onClick={() => toggleCollapse(node._id)}
-              className="absolute -bottom-3 rounded-full bg-slate-800 border border-slate-700 p-0.5 text-slate-400 hover:text-slate-200 transition cursor-pointer"
+              className="absolute -bottom-3 rounded-full bg-white border border-slate-200 p-0.5 text-slate-500 hover:text-slate-950 hover:bg-slate-50 transition cursor-pointer"
             >
               {isCollapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
             </button>
@@ -132,28 +132,28 @@ const OrgChartPage = () => {
   const hierarchyRoots = buildHierarchy();
 
   return (
-    <div className="min-h-screen bg-radial from-slate-900 via-slate-950 to-black p-6 text-slate-100">
+    <div className="min-h-screen bg-slate-50 p-6 text-slate-900">
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 text-center md:text-left">
-          <h1 className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent">
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-950">
             Organizational Structure Chart
           </h1>
-          <p className="mt-1 text-slate-400 text-sm">
+          <p className="mt-1 text-slate-500 text-sm">
             View the corporate reporting connections and organizational reporting trees.
           </p>
         </div>
 
         {loading ? (
           <div className="flex h-96 items-center justify-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-t-transparent"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-950 border-t-transparent"></div>
           </div>
         ) : error ? (
-          <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-6 text-center max-w-md mx-auto mt-12">
-            <ShieldAlert className="mx-auto mb-2 h-10 w-10 text-rose-400" />
-            <p className="font-semibold text-rose-300">{error}</p>
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center max-w-md mx-auto mt-12">
+            <ShieldAlert className="mx-auto mb-2 h-10 w-10 text-rose-600" />
+            <p className="font-semibold text-rose-700">{error}</p>
           </div>
         ) : hierarchyRoots.length === 0 ? (
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/20 p-12 text-center text-slate-400 max-w-md mx-auto mt-12">
+          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center text-slate-500 max-w-md mx-auto mt-12">
             <p className="font-medium text-lg">No active employee nodes registered in hierarchy.</p>
           </div>
         ) : (
@@ -165,26 +165,26 @@ const OrgChartPage = () => {
                   {/* Root box */}
                   <div className={`relative flex flex-col items-center rounded-2xl border p-5 min-w-[210px] text-center shadow-xl transition duration-200 ${
                     rootNode.userId?._id === user?.id || rootNode.userId === user?.id
-                      ? 'border-teal-400 bg-teal-500/5 ring-1 ring-teal-500/20' 
-                      : 'border-slate-800/80 bg-slate-900/30'
+                      ? 'border-slate-950 bg-slate-100 font-bold ring-1 ring-slate-950/10' 
+                      : 'border-slate-200 bg-white text-slate-800'
                   }`}>
                     {/* Initials badge */}
-                    <div className="mb-2.5 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20 text-teal-300 font-extrabold text-sm border border-teal-500/20">
+                    <div className="mb-2.5 flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950 text-white font-extrabold text-sm border border-slate-950">
                       {`${rootNode.personal?.firstName?.[0] || 'E'}${rootNode.personal?.lastName?.[0] || ''}`}
                     </div>
 
-                    <h4 className="font-extrabold text-slate-100">
+                    <h4 className="font-extrabold text-slate-950">
                       {rootNode.personal?.firstName} {rootNode.personal?.lastName}
                     </h4>
-                    <p className="text-xs text-slate-400 font-medium mt-0.5">{rootNode.employment?.designation || 'Staff Member'}</p>
-                    <span className="text-[10px] text-slate-500 mt-1 uppercase font-semibold tracking-wider">
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">{rootNode.employment?.designation || 'Staff Member'}</p>
+                    <span className="text-[10px] text-slate-400 mt-1 uppercase font-semibold tracking-wider">
                       {rootNode.employment?.department || 'N/A'}
                     </span>
                     
                     {rootNode.children?.length > 0 && (
                       <button
                         onClick={() => toggleCollapse(rootNode._id)}
-                        className="absolute -bottom-3 rounded-full bg-slate-850 border border-slate-700 p-0.5 text-slate-400 hover:text-slate-200 transition cursor-pointer"
+                        className="absolute -bottom-3 rounded-full bg-white border border-slate-200 p-0.5 text-slate-500 hover:text-slate-950 hover:bg-slate-50 transition cursor-pointer"
                       >
                         {collapsedNodes[rootNode._id] ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                       </button>

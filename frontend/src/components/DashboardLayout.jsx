@@ -44,71 +44,53 @@ const DashboardLayout = () => {
 
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      {/* Premium Top Navbar */}
-      <nav className="border-b border-slate-800/80 bg-slate-900/40 backdrop-blur-md sticky top-0 z-40">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 font-bold text-black shadow shadow-teal-500/20">
-                  HR
-                </div>
-                <span className="text-lg font-bold tracking-tight text-white">
-                  HRMS <span className="text-teal-400">Platform</span>
-                </span>
-              </div>
-
-              {/* Navigation Items */}
-              <div className="hidden md:flex items-center gap-1">
-                {navItems.map((item) => {
-                  const isActive = location.pathname === item.path;
-                  return (
-                    <button
-                      key={item.path}
-                      onClick={() => navigate(item.path)}
-                      className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 cursor-pointer ${
-                        isActive
-                          ? 'bg-teal-500/10 text-teal-400 font-bold'
-                          : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-                      }`}
-                    >
-                      {item.icon}
-                      {item.name}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <span className="hidden text-xs text-slate-500 sm:inline-block font-mono bg-slate-900 border border-slate-850 px-2.5 py-1 rounded-lg">
-                Workspace: <span className="text-slate-300 font-semibold">{user?.tenantId}</span>
-              </span>
-              
-              <NotificationBell />
-              
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold text-slate-400 hover:text-slate-200 transition duration-200 cursor-pointer"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                Sign Out
-              </button>
-            </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row">
+      {/* Mobile Top Header */}
+      <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 md:hidden sticky top-0 z-40 select-none">
+        <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/dashboard')}>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-950 font-bold text-white shadow shadow-slate-950/10 text-sm">
+            HR
           </div>
+          <span className="text-base font-bold tracking-tight text-slate-950">
+            HRMS <span className="text-slate-500 font-medium">Platform</span>
+          </span>
         </div>
 
-        {/* Mobile Navigation Bar */}
-        <div className="flex md:hidden items-center justify-around border-t border-slate-850/60 bg-slate-950/80 backdrop-blur py-2">
+        <div className="flex items-center gap-3">
+          <NotificationBell />
+          <button
+            onClick={handleLogout}
+            className="flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 text-xs text-slate-600 hover:text-slate-900 transition cursor-pointer"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </header>
+
+      {/* Desktop Left Sidebar */}
+      <aside className="hidden md:flex flex-col w-64 border-r border-slate-200 bg-white h-screen sticky top-0 p-5 space-y-6 z-40 select-none text-slate-800">
+        {/* Logo */}
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-950 font-bold text-white shadow shadow-slate-950/10">
+            HR
+          </div>
+          <span className="text-lg font-bold tracking-tight text-slate-950">
+            HRMS <span className="text-slate-500 font-medium">Platform</span>
+          </span>
+        </div>
+
+        {/* Sidebar Nav Items */}
+        <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`flex flex-col items-center gap-1 text-[10px] font-medium transition cursor-pointer ${
-                  isActive ? 'text-teal-400' : 'text-slate-500 hover:text-slate-300'
+                className={`flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer border-l-4 ${
+                  isActive
+                    ? 'bg-slate-100 text-slate-950 border-slate-950 font-bold'
+                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-950 border-transparent'
                 }`}
               >
                 {item.icon}
@@ -117,14 +99,60 @@ const DashboardLayout = () => {
             );
           })}
         </div>
-      </nav>
+
+        {/* Sidebar Footer */}
+        <div className="border-t border-slate-200 pt-4 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 text-xs font-mono uppercase">
+              {user?.email?.slice(0, 2)}
+            </div>
+            <div className="overflow-hidden">
+              <span className="block text-[11px] font-bold text-slate-800 truncate leading-none mb-1">{user?.email}</span>
+              <span className="block text-[9px] font-semibold text-slate-400 uppercase tracking-wider leading-none">{user?.role}</span>
+            </div>
+            <div className="ml-auto">
+              <NotificationBell />
+            </div>
+          </div>
+          
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-950 transition duration-200 cursor-pointer"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            Sign Out
+          </button>
+        </div>
+      </aside>
 
       {/* Main Outlet Container */}
-      <main className="flex-1">
-        <Outlet />
-      </main>
+      <div className="flex-1 flex flex-col min-h-screen min-w-0">
+        <main className="flex-1 pb-16 md:pb-0 overflow-y-auto overflow-x-hidden">
+          <Outlet />
+        </main>
+      </div>
+
+      {/* Mobile Bottom Navigation Bar (Fixed bottom) */}
+      <div className="flex md:hidden items-center justify-around border-t border-slate-200 bg-white py-2.5 fixed bottom-0 left-0 right-0 z-40">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={`flex flex-col items-center gap-1 text-[9px] font-medium transition cursor-pointer ${
+                isActive ? 'text-slate-950 font-bold' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              {item.icon}
+              <span>{item.name}</span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 export default DashboardLayout;
+

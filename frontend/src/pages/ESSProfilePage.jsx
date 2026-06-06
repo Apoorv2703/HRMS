@@ -370,8 +370,8 @@ const ESSProfilePage = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-950 text-slate-200">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-t-transparent"></div>
+      <div className="flex h-screen w-screen items-center justify-center bg-slate-50 text-slate-850">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-950 border-t-transparent"></div>
         <span className="ml-3 font-medium">Loading profile context...</span>
       </div>
     );
@@ -379,29 +379,29 @@ const ESSProfilePage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-200 p-6 flex items-center justify-center">
-        <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-6 text-center max-w-md">
-          <ShieldAlert className="mx-auto mb-2 h-10 w-10 text-rose-400" />
-          <p className="font-semibold text-rose-300">{error}</p>
+      <div className="min-h-screen bg-slate-50 text-slate-900 p-6 flex items-center justify-center">
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center max-w-md">
+          <ShieldAlert className="mx-auto mb-2 h-10 w-10 text-rose-600" />
+          <p className="font-semibold text-rose-700">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-radial from-slate-900 via-slate-950 to-black p-6 text-slate-100">
+    <div className="min-h-screen bg-slate-50 p-6 text-slate-900">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent">
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-950">
               {profileId === 'me' ? 'My Profile Self-Service' : `${employee?.personal?.firstName}'s Profile`}
             </h1>
-            <p className="mt-1 text-slate-400 text-sm">
+            <p className="mt-1 text-slate-500 text-sm">
               Manage personal details, verify banking accounts, and check statutory parameters.
             </p>
           </div>
 
-          <div className="rounded-xl bg-slate-900 px-4 py-2 border border-slate-800 font-mono text-xs flex flex-col items-end">
+          <div className="rounded-xl bg-white px-4 py-2 border border-slate-200 font-mono text-xs flex flex-col items-end shadow-sm">
             <span className="text-slate-500">Employee ID</span>
             <span className="text-teal-400 font-semibold tracking-wider">{employee?.employeeId}</span>
           </div>
@@ -409,11 +409,11 @@ const ESSProfilePage = () => {
 
         {/* Pending Approval Banner */}
         {employee?.pendingChanges?.status === 'PENDING' && (
-          <div className="mb-6 rounded-xl border border-amber-500/20 bg-amber-500/10 p-4 flex items-start gap-3 text-amber-300">
+          <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 flex items-start gap-3 text-amber-800">
             <AlertCircle className="h-5 w-5 text-amber-400 mt-0.5 flex-shrink-0" />
             <div>
               <p className="font-semibold text-sm">Profile Updates Pending Review</p>
-              <p className="text-xs text-amber-400/80 mt-1">
+              <p className="text-xs text-amber-600 mt-1">
                 You have updated sensitive details. These adjustments are buffered and will apply as soon as an HR Administrator reviews and approves them.
               </p>
             </div>
@@ -421,11 +421,11 @@ const ESSProfilePage = () => {
         )}
 
         {/* Tab Controls */}
-        <div className="mb-6 border-b border-slate-800 flex flex-wrap gap-2">
+        <div className="mb-6 border-b border-slate-200 flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('personal')}
             className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-              activeTab === 'personal' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+              activeTab === 'personal' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
             }`}
           >
             <User className="h-4 w-4" /> Personal Info
@@ -434,7 +434,7 @@ const ESSProfilePage = () => {
           <button
             onClick={() => setActiveTab('employment')}
             className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-              activeTab === 'employment' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+              activeTab === 'employment' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
             }`}
           >
             <Briefcase className="h-4 w-4" /> Job Details
@@ -443,7 +443,7 @@ const ESSProfilePage = () => {
           <button
             onClick={() => setActiveTab('professional')}
             className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-              activeTab === 'professional' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+              activeTab === 'professional' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
             }`}
           >
             <GraduationCap className="h-4 w-4" /> Professional History
@@ -453,7 +453,7 @@ const ESSProfilePage = () => {
             <button
               onClick={() => setActiveTab('finance')}
               className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-                activeTab === 'finance' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'finance' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               <Landmark className="h-4 w-4" /> Bank & Statutory
@@ -464,7 +464,7 @@ const ESSProfilePage = () => {
             <button
               onClick={() => setActiveTab('documents')}
               className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-                activeTab === 'documents' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'documents' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               <FileText className="h-4 w-4" /> Documents & Files
@@ -475,7 +475,7 @@ const ESSProfilePage = () => {
             <button
               onClick={() => setActiveTab('payslips')}
               className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-                activeTab === 'payslips' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'payslips' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               <DollarSign className="h-4 w-4" /> Payslips & Salary
@@ -486,7 +486,7 @@ const ESSProfilePage = () => {
             <button
               onClick={() => { setActiveTab('review'); fetchPendingRequests(); }}
               className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-                activeTab === 'review' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'review' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               <ClipboardList className="h-4 w-4" /> Review Requests ({pendingRequests.length})
@@ -497,7 +497,7 @@ const ESSProfilePage = () => {
             <button
               onClick={() => setActiveTab('delegation')}
               className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-                activeTab === 'delegation' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'delegation' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               <UserCheck className="h-4 w-4" /> Delegation Settings
@@ -508,7 +508,7 @@ const ESSProfilePage = () => {
             <button
               onClick={() => setActiveTab('notifications')}
               className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
-                activeTab === 'notifications' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'notifications' ? 'border-slate-950 text-slate-950 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               <Bell className="h-4 w-4" /> Notification Preferences
@@ -518,60 +518,60 @@ const ESSProfilePage = () => {
 
         {/* Form Container */}
         {activeTab !== 'review' && activeTab !== 'documents' && activeTab !== 'payslips' && activeTab !== 'delegation' && activeTab !== 'notifications' && (
-          <form onSubmit={handleProfileSubmit} className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 md:p-8 backdrop-blur-md shadow-lg space-y-6">
+          <form onSubmit={handleProfileSubmit} className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xl space-y-6 text-slate-900">
             {activeTab === 'personal' && (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">First Name</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">First Name</label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Last Name</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Last Name</label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Phone Contact</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Phone Contact</label>
                     <input
                       type="text"
                       value={contactNumber}
                       onChange={(e) => setContactNumber(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Personal Email</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Personal Email</label>
                     <input
                       type="email"
                       value={personalEmail}
                       onChange={(e) => setPersonalEmail(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Gender</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Gender</label>
                     <select
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 cursor-pointer"
                     >
                       <option value="">Select</option>
                       <option value="Male">Male</option>
@@ -581,34 +581,34 @@ const ESSProfilePage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Date of Birth</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Date of Birth</label>
                     <input
                       type="date"
                       value={dob}
                       onChange={(e) => setDob(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Avatar URL</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Avatar URL</label>
                     <input
                       type="text"
                       placeholder="https://image-url"
                       value={avatarUrl}
                       onChange={(e) => setAvatarUrl(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Marital Status</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Marital Status</label>
                     <select
                       value={maritalStatus}
                       onChange={(e) => setMaritalStatus(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 cursor-pointer"
                     >
                       <option value="">Select Marital Status</option>
                       <option value="Single">Single</option>
@@ -619,42 +619,42 @@ const ESSProfilePage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nationality</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Nationality</label>
                     <input
                       type="text"
                       placeholder="e.g. Indian, American"
                       value={nationality}
                       onChange={(e) => setNationality(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Current Address</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Current Address</label>
                     <input
                       type="text"
                       placeholder="Street, Apt, City, Country"
                       value={currentAddress}
                       onChange={(e) => setCurrentAddress(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Permanent Address</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Permanent Address</label>
                     <input
                       type="text"
                       placeholder="Street, Apt, City, Country"
                       value={permanentAddress}
                       onChange={(e) => setPermanentAddress(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-4 space-y-4">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-4">
                   <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Emergency Contact Details</span>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <div>
@@ -664,7 +664,7 @@ const ESSProfilePage = () => {
                         placeholder="e.g. Jane Doe"
                         value={emergencyName}
                         onChange={(e) => setEmergencyName(e.target.value)}
-                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 text-xs"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 text-xs"
                       />
                     </div>
                     <div>
@@ -674,7 +674,7 @@ const ESSProfilePage = () => {
                         placeholder="e.g. Spouse, Parent"
                         value={emergencyRelationship}
                         onChange={(e) => setEmergencyRelationship(e.target.value)}
-                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 text-xs"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 text-xs"
                       />
                     </div>
                     <div>
@@ -684,7 +684,7 @@ const ESSProfilePage = () => {
                         placeholder="e.g. +1 555-0155"
                         value={emergencyPhone}
                         onChange={(e) => setEmergencyPhone(e.target.value)}
-                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 text-xs"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 text-xs"
                       />
                     </div>
                   </div>
@@ -695,22 +695,22 @@ const ESSProfilePage = () => {
             {activeTab === 'professional' && (
               <div className="space-y-6 animate-in fade-in duration-200">
                 {/* SKILLS SECTION */}
-                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4">
-                  <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-4">
+                  <h3 className="text-sm font-bold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
                     <Award className="h-4 w-4 text-teal-400" /> Core Skills & Technologies
                   </h3>
                   
-                  <div className="flex flex-wrap gap-2 min-h-[40px] p-2 rounded-xl bg-slate-900/40 border border-slate-800/80">
+                  <div className="flex flex-wrap gap-2 min-h-[40px] p-2 rounded-xl bg-white border border-slate-200">
                     {skillsList.length === 0 ? (
                       <span className="text-slate-500 text-xs italic self-center">No skills added yet. Add some below!</span>
                     ) : (
                       skillsList.map((skill, idx) => (
-                        <span key={idx} className="inline-flex items-center gap-1 rounded-lg bg-teal-500/10 border border-teal-500/20 px-2.5 py-1 text-xs font-medium text-teal-400 animate-in zoom-in-95 duration-100">
+                        <span key={idx} className="inline-flex items-center gap-1 rounded-lg bg-teal-500/10 border border-slate-200 px-2.5 py-1 text-xs font-medium text-teal-400 animate-in zoom-in-95 duration-100">
                           {skill}
                           <button
                             type="button"
                             onClick={() => setSkillsList(skillsList.filter((_, i) => i !== idx))}
-                            className="text-teal-500 hover:text-teal-300 font-bold ml-1 cursor-pointer"
+                            className="text-teal-500 hover:text-slate-800 font-bold ml-1 cursor-pointer"
                           >
                             ×
                           </button>
@@ -734,7 +734,7 @@ const ESSProfilePage = () => {
                           }
                         }
                       }}
-                      className="flex-1 rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                      className="flex-1 rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                     <button
                       type="button"
@@ -744,7 +744,7 @@ const ESSProfilePage = () => {
                           setSkillInput('');
                         }
                       }}
-                      className="rounded-xl bg-slate-800 hover:bg-slate-700 px-4 py-2 border border-slate-700 text-slate-200 text-xs font-semibold cursor-pointer flex items-center gap-1"
+                      className="rounded-xl bg-slate-950 hover:bg-slate-900 px-4 py-2 text-white text-xs font-semibold cursor-pointer flex items-center gap-1 shadow-sm"
                     >
                       <Plus className="h-3.5 w-3.5" /> Add
                     </button>
@@ -752,15 +752,15 @@ const ESSProfilePage = () => {
                 </div>
 
                 {/* EDUCATION SECTION */}
-                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4">
-                  <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-4">
+                  <h3 className="text-sm font-bold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
                     <GraduationCap className="h-4.5 w-4.5 text-teal-400" /> Education History
                   </h3>
 
                   {educationList.length > 0 && (
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {educationList.map((edu, idx) => (
-                        <div key={idx} className="group relative rounded-xl border border-slate-850 bg-slate-900/40 p-4 hover:border-slate-800 transition duration-200 animate-in zoom-in-95">
+                        <div key={idx} className="group relative rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 transition duration-200 animate-in zoom-in-95 shadow-sm">
                           <button
                             type="button"
                             onClick={() => setEducationList(educationList.filter((_, i) => i !== idx))}
@@ -768,7 +768,7 @@ const ESSProfilePage = () => {
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
-                          <h4 className="font-bold text-sm text-slate-200">{edu.degree} in {edu.fieldOfStudy}</h4>
+                          <h4 className="font-bold text-sm text-slate-900">{edu.degree} in {edu.fieldOfStudy}</h4>
                           <p className="text-xs text-teal-400 mt-0.5">{edu.institution}</p>
                           <p className="text-[10px] text-slate-500 font-mono mt-2">{edu.startYear} — {edu.endYear || 'Present'}</p>
                         </div>
@@ -777,7 +777,7 @@ const ESSProfilePage = () => {
                   )}
 
                   {/* Add Education Subform */}
-                  <div className="rounded-xl border border-slate-850/60 bg-slate-950/20 p-4 space-y-3">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-3">
                     <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Add New Education</span>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                       <input
@@ -785,21 +785,21 @@ const ESSProfilePage = () => {
                         placeholder="Institution (e.g. Stanford University)"
                         value={newInst}
                         onChange={(e) => setNewInst(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                       <input
                         type="text"
                         placeholder="Degree (e.g. Bachelor of Science)"
                         value={newDegree}
                         onChange={(e) => setNewDegree(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                       <input
                         type="text"
                         placeholder="Field of Study (e.g. Computer Science)"
                         value={newField}
                         onChange={(e) => setNewField(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                     </div>
                     <div className="flex gap-3 items-center">
@@ -808,14 +808,14 @@ const ESSProfilePage = () => {
                         placeholder="Start Year (e.g. 2018)"
                         value={newStartYr}
                         onChange={(e) => setNewStartYr(e.target.value)}
-                        className="w-1/3 rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="w-1/3 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                       <input
                         type="text"
                         placeholder="End Year (e.g. 2022)"
                         value={newEndYr}
                         onChange={(e) => setNewEndYr(e.target.value)}
-                        className="w-1/3 rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="w-1/3 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                       <button
                         type="button"
@@ -831,7 +831,7 @@ const ESSProfilePage = () => {
                             alert('Please fill Institution, Degree, and Field of Study.');
                           }
                         }}
-                        className="w-1/3 rounded-xl bg-slate-800 hover:bg-slate-700 px-4 py-2.5 border border-slate-700 text-slate-200 text-xs font-bold cursor-pointer flex items-center justify-center gap-1"
+                        className="w-1/3 rounded-xl bg-slate-950 hover:bg-slate-900 px-4 py-2.5 text-white text-xs font-bold cursor-pointer flex items-center justify-center gap-1 shadow-sm"
                       >
                         <Plus className="h-4 w-4" /> Add Record
                       </button>
@@ -840,15 +840,15 @@ const ESSProfilePage = () => {
                 </div>
 
                 {/* EXPERIENCE SECTION */}
-                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4">
-                  <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-4">
+                  <h3 className="text-sm font-bold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
                     <Briefcase className="h-4 w-4 text-teal-400" /> Prior Experience
                   </h3>
 
                   {experienceList.length > 0 && (
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {experienceList.map((exp, idx) => (
-                        <div key={idx} className="group relative rounded-xl border border-slate-850 bg-slate-900/40 p-4 hover:border-slate-800 transition duration-200 animate-in zoom-in-95">
+                        <div key={idx} className="group relative rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 transition duration-200 animate-in zoom-in-95 shadow-sm">
                           <button
                             type="button"
                             onClick={() => setExperienceList(experienceList.filter((_, i) => i !== idx))}
@@ -856,7 +856,7 @@ const ESSProfilePage = () => {
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
-                          <h4 className="font-bold text-sm text-slate-200">{exp.designation}</h4>
+                          <h4 className="font-bold text-sm text-slate-900">{exp.designation}</h4>
                           <p className="text-xs text-teal-400 mt-0.5">{exp.company}</p>
                           {exp.description && <p className="text-xs text-slate-400 mt-2 line-clamp-2">{exp.description}</p>}
                           <p className="text-[10px] text-slate-500 font-mono mt-2">
@@ -868,7 +868,7 @@ const ESSProfilePage = () => {
                   )}
 
                   {/* Add Experience Subform */}
-                  <div className="rounded-xl border border-slate-850/60 bg-slate-950/20 p-4 space-y-3">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-3">
                     <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Add Prior Work Experience</span>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <input
@@ -876,14 +876,14 @@ const ESSProfilePage = () => {
                         placeholder="Company Name"
                         value={newCompany}
                         onChange={(e) => setNewCompany(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                       <input
                         type="text"
                         placeholder="Role / Designation"
                         value={newRole}
                         onChange={(e) => setNewRole(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                     </div>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -893,7 +893,7 @@ const ESSProfilePage = () => {
                           type="date"
                           value={newExpStart}
                           onChange={(e) => setNewExpStart(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         />
                       </div>
                       <div>
@@ -902,7 +902,7 @@ const ESSProfilePage = () => {
                           type="date"
                           value={newExpEnd}
                           onChange={(e) => setNewExpEnd(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         />
                       </div>
                     </div>
@@ -911,7 +911,7 @@ const ESSProfilePage = () => {
                       rows="2"
                       value={newDesc}
                       onChange={(e) => setNewDesc(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50 resize-none"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 resize-none"
                     />
                     <div className="flex justify-end">
                       <button
@@ -934,7 +934,7 @@ const ESSProfilePage = () => {
                             alert('Please fill Company and Designation.');
                           }
                         }}
-                        className="rounded-xl bg-slate-800 hover:bg-slate-700 px-5 py-2.5 border border-slate-700 text-slate-200 text-xs font-bold cursor-pointer flex items-center gap-1"
+                        className="rounded-xl bg-slate-950 hover:bg-slate-900 px-5 py-2.5 text-white text-xs font-bold cursor-pointer flex items-center gap-1 shadow-sm"
                       >
                         <Plus className="h-4 w-4" /> Add Experience
                       </button>
@@ -943,15 +943,15 @@ const ESSProfilePage = () => {
                 </div>
 
                 {/* CERTIFICATIONS SECTION */}
-                <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4">
-                  <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-4">
+                  <h3 className="text-sm font-bold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
                     <Award className="h-4.5 w-4.5 text-teal-400" /> Certifications
                   </h3>
 
                   {certificationsList.length > 0 && (
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {certificationsList.map((cert, idx) => (
-                        <div key={idx} className="group relative rounded-xl border border-slate-850 bg-slate-900/40 p-4 hover:border-slate-800 transition duration-200 animate-in zoom-in-95">
+                        <div key={idx} className="group relative rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 transition duration-200 animate-in zoom-in-95 shadow-sm">
                           <button
                             type="button"
                             onClick={() => setCertificationsList(certificationsList.filter((_, i) => i !== idx))}
@@ -959,7 +959,7 @@ const ESSProfilePage = () => {
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
-                          <h4 className="font-bold text-sm text-slate-200">{cert.name}</h4>
+                          <h4 className="font-bold text-sm text-slate-900">{cert.name}</h4>
                           <p className="text-xs text-teal-400 mt-0.5">{cert.issuer}</p>
                           {cert.credentialId && <p className="text-[10px] text-slate-400 font-mono mt-1">ID: {cert.credentialId}</p>}
                           <p className="text-[10px] text-slate-500 font-mono mt-2">
@@ -972,7 +972,7 @@ const ESSProfilePage = () => {
                   )}
 
                   {/* Add Cert Subform */}
-                  <div className="rounded-xl border border-slate-850/60 bg-slate-950/20 p-4 space-y-3">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-3">
                     <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">Add New Certification</span>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                       <input
@@ -980,21 +980,21 @@ const ESSProfilePage = () => {
                         placeholder="Cert Name (e.g. AWS Solutions Architect)"
                         value={newCertName}
                         onChange={(e) => setNewCertName(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                       <input
                         type="text"
                         placeholder="Issuing Org (e.g. Amazon Web Services)"
                         value={newIssuer}
                         onChange={(e) => setNewIssuer(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                       <input
                         type="text"
                         placeholder="Credential ID (Optional)"
                         value={newCredId}
                         onChange={(e) => setNewCredId(e.target.value)}
-                        className="rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                     </div>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -1004,7 +1004,7 @@ const ESSProfilePage = () => {
                           type="date"
                           value={newIssueDate}
                           onChange={(e) => setNewIssueDate(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         />
                       </div>
                       <div>
@@ -1013,7 +1013,7 @@ const ESSProfilePage = () => {
                           type="date"
                           value={newExpiryDate}
                           onChange={(e) => setNewExpiryDate(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-2.5 text-slate-200 text-xs outline-none focus:border-teal-500/50"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-900 text-xs outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         />
                       </div>
                       <div className="flex items-end">
@@ -1037,7 +1037,7 @@ const ESSProfilePage = () => {
                               alert('Please fill Certification Name and Issuer.');
                             }
                           }}
-                          className="w-full rounded-xl bg-slate-800 hover:bg-slate-700 px-4 py-2.5 border border-slate-700 text-slate-200 text-xs font-bold cursor-pointer flex items-center justify-center gap-1"
+                          className="w-full rounded-xl bg-slate-950 hover:bg-slate-900 px-4 py-2.5 text-white text-xs font-bold cursor-pointer flex items-center justify-center gap-1 shadow-sm"
                         >
                           <Plus className="h-4 w-4" /> Add Cert
                         </button>
@@ -1052,53 +1052,53 @@ const ESSProfilePage = () => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Department</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Department</label>
                     <input
                       type="text"
                       disabled={!isAdmin}
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 disabled:opacity-50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 disabled:opacity-50"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Designation</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Designation</label>
                     <input
                       type="text"
                       disabled={!isAdmin}
                       value={designation}
                       onChange={(e) => setDesignation(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 disabled:opacity-50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 disabled:opacity-50"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Location</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Location</label>
                     <input
                       type="text"
                       disabled={!isAdmin}
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 disabled:opacity-50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 disabled:opacity-50"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Job Grade</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Job Grade</label>
                     <input
                       type="text"
                       disabled={!isAdmin}
                       value={grade}
                       onChange={(e) => setGrade(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 disabled:opacity-50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 disabled:opacity-50"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Status</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Status</label>
                     <span className="block w-full rounded-xl border border-slate-800 bg-slate-900/20 p-3 text-slate-400 select-none font-semibold">
                       {employee?.employment?.status}
                     </span>
@@ -1107,12 +1107,12 @@ const ESSProfilePage = () => {
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Employment Type</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Employment Type</label>
                     {isAdmin ? (
                       <select
                         value={employmentType}
                         onChange={(e) => setEmploymentType(e.target.value)}
-                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 cursor-pointer"
                       >
                         <option value="FULL_TIME">Full-time</option>
                         <option value="PART_TIME">Part-time</option>
@@ -1130,12 +1130,12 @@ const ESSProfilePage = () => {
                   </div>
  
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Assigned Shift</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Assigned Shift</label>
                     {isAdmin ? (
                       <select
                         value={assignedShift}
                         onChange={(e) => setAssignedShift(e.target.value)}
-                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 cursor-pointer"
                       >
                         <option value="">Select Shift</option>
                         <option value="Day Shift">Day Shift</option>
@@ -1152,12 +1152,12 @@ const ESSProfilePage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Reporting Manager</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Reporting Manager</label>
                   {isAdmin ? (
                     <select
                       value={reportingManagerId}
                       onChange={(e) => setReportingManagerId(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 cursor-pointer"
                     >
                       <option value="">None (Independent / Top Node)</option>
                       {managers
@@ -1181,116 +1181,116 @@ const ESSProfilePage = () => {
 
             {activeTab === 'finance' && (
               <div className="space-y-6">
-                <h4 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-1 flex items-center gap-1.5">
+                <h4 className="text-sm font-bold text-teal-400 border-b border-slate-200 pb-1 flex items-center gap-1.5">
                   Bank Details <span className="text-[10px] text-amber-400 font-normal normal-case">(Buffering approvals)</span>
                 </h4>
                 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Account Holder Name</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Account Holder Name</label>
                     <input
                       type="text"
                       value={accountHolderName}
                       onChange={(e) => setAccountHolderName(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Account Number</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Account Number</label>
                     <input
                       type="text"
                       value={accountNumber}
                       onChange={(e) => setAccountNumber(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Bank Name</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Bank Name</label>
                     <input
                       type="text"
                       value={bankName}
                       onChange={(e) => setBankName(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">IFSC / Routing Code</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">IFSC / Routing Code</label>
                     <input
                       type="text"
                       value={ifscCode}
                       onChange={(e) => setIfscCode(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">PAN Card Number</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">PAN Card Number</label>
                     <input
                       type="text"
                       value={pan}
                       onChange={(e) => setPan(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
-                <h4 className="text-sm font-bold text-teal-400 border-b border-slate-850 pt-4 pb-1 flex items-center gap-1.5">
+                <h4 className="text-sm font-bold text-teal-400 border-b border-slate-200 pt-4 pb-1 flex items-center gap-1.5">
                   Statutory Registrations <span className="text-[10px] text-amber-400 font-normal normal-case">(Buffering approvals)</span>
                 </h4>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">UAN (Provident Fund Number)</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">UAN (Provident Fund Number)</label>
                     <input
                       type="text"
                       value={uan}
                       onChange={(e) => setUan(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">PF Account Number</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">PF Account Number</label>
                     <input
                       type="text"
                       value={pfNumber}
                       onChange={(e) => setPfNumber(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">ESI Registration ID</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">ESI Registration ID</label>
                     <input
                       type="text"
                       value={esiNumber}
                       onChange={(e) => setEsiNumber(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">US SSN (Social Security Number)</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">US SSN (Social Security Number)</label>
                     <input
                       type="text"
                       placeholder="e.g. XXX-XX-XXXX"
                       value={ssn}
                       onChange={(e) => setSsn(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                     />
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="pt-6 border-t border-slate-850 flex justify-end">
+            <div className="pt-6 border-t border-slate-200 flex justify-end">
               <button
                 type="submit"
                 className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 px-6 py-3 font-bold text-black shadow-lg shadow-teal-500/10 transition cursor-pointer"
@@ -1304,32 +1304,32 @@ const ESSProfilePage = () => {
         {/* Documents Tab */}
         {activeTab === 'documents' && (
           <div className="space-y-6">
-            <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 md:p-8 backdrop-blur-md shadow-lg space-y-6">
-              <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xl space-y-6 text-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-4">
+                <h3 className="text-sm font-bold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
                   <UploadCloud className="h-4.5 w-4.5 text-teal-400" /> Upload New Document
                 </h3>
                 
                 <form onSubmit={handleDocumentUpload} className="space-y-4">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Document Name</label>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Document Name</label>
                       <input
                         type="text"
                         required
                         placeholder="e.g. Passport, Drivers License, Offer Letter 2026"
                         value={docName}
                         onChange={(e) => setDocName(e.target.value)}
-                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 text-sm"
+                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-900 outline-none focus:border-teal-500/50 text-sm"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Document Type</label>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Document Type</label>
                       <select
                         value={docType}
                         onChange={(e) => setDocType(e.target.value)}
-                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer text-sm"
+                        className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-900 outline-none focus:border-teal-500/50 cursor-pointer text-sm"
                       >
                         <option value="ID_PROOF">ID Proof</option>
                         <option value="OFFER_LETTER">Offer Letter</option>
@@ -1340,7 +1340,7 @@ const ESSProfilePage = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Select File</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Select File</label>
                     <div className="flex items-center justify-center w-full">
                       <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer hover:bg-slate-900/20 border-slate-800 hover:border-teal-500/50 transition">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -1383,8 +1383,8 @@ const ESSProfilePage = () => {
                 </form>
               </div>
               
-              <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+              <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-4">
+                <h3 className="text-sm font-bold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
                   <FileText className="h-4.5 w-4.5 text-teal-400" /> Uploaded Documents
                 </h3>
                 
@@ -1403,12 +1403,12 @@ const ESSProfilePage = () => {
                           <th className="py-3 px-4 text-right">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-850 text-slate-200">
+                      <tbody className="divide-y divide-slate-850 text-slate-900">
                         {employee.documents.map((doc) => (
                           <tr key={doc._id} className="hover:bg-slate-900/10">
                             <td className="py-3 px-4 font-semibold">{doc.name}</td>
                             <td className="py-3 px-4">
-                              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 border border-slate-700 text-slate-300">
+                              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 border border-slate-700 text-slate-700">
                                 {doc.type.replace('_', ' ')}
                               </span>
                             </td>
@@ -1420,7 +1420,7 @@ const ESSProfilePage = () => {
                                 href={getDocumentUrl(doc.fileUrl)}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg text-slate-200 font-medium transition cursor-pointer"
+                                className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg text-slate-900 font-medium transition cursor-pointer"
                               >
                                 <ExternalLink className="h-3.5 w-3.5" /> View
                               </a>
@@ -1496,11 +1496,11 @@ const ESSProfilePage = () => {
                   <form onSubmit={handleGeneratePayslip} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Month</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Month</label>
                         <select
                           value={genMonth}
                           onChange={(e) => setGenMonth(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         >
                           {Array.from({ length: 12 }, (_, i) => (
                             <option key={i + 1} value={i + 1}>
@@ -1510,47 +1510,47 @@ const ESSProfilePage = () => {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Year</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Year</label>
                         <input
                           type="number"
                           value={genYear}
                           onChange={(e) => setGenYear(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Basic Salary (monthly) *</label>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Basic Salary (monthly) *</label>
                       <input
                         type="number"
                         placeholder="e.g. 50000"
                         value={genBasic}
                         onChange={(e) => setGenBasic(e.target.value)}
                         required
-                        className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Allowances</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Allowances</label>
                         <input
                           type="number"
                           placeholder="0"
                           value={genAllowances}
                           onChange={(e) => setGenAllowances(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">General Deductions</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">General Deductions</label>
                         <input
                           type="number"
                           placeholder="0"
                           value={genDeductions}
                           onChange={(e) => setGenDeductions(e.target.value)}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20"
                         />
                       </div>
                     </div>
@@ -1568,7 +1568,7 @@ const ESSProfilePage = () => {
 
               {/* Payslips History List */}
               <div className={`${isAdmin ? 'lg:col-span-2' : 'lg:col-span-3'} rounded-2xl border border-slate-800 bg-slate-900/20 p-6 space-y-4`}>
-                <h3 className="text-base font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+                <h3 className="text-base font-bold text-teal-400 border-b border-slate-200 pb-2 flex items-center gap-2">
                   <Landmark className="h-5 w-5 text-teal-400" /> Compensation & Payslip History
                 </h3>
 
@@ -1593,7 +1593,7 @@ const ESSProfilePage = () => {
                           <th className="py-3 px-4 text-right">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-850 text-slate-200">
+                      <tbody className="divide-y divide-slate-850 text-slate-900">
                         {payslips.map((pay) => (
                           <tr key={pay._id} className="hover:bg-slate-900/10">
                             <td className="py-3 px-4 font-semibold font-mono">
@@ -1658,15 +1658,15 @@ const ESSProfilePage = () => {
               </div>
 
               {/* Employee Information */}
-              <div className="grid grid-cols-2 gap-4 text-xs bg-slate-950/40 border border-slate-850 p-4 rounded-xl text-slate-300">
+              <div className="grid grid-cols-2 gap-4 text-xs bg-slate-950/40 border border-slate-200 p-4 rounded-xl text-slate-700">
                 <div>
-                  <p className="mb-1"><span className="text-slate-500">Employee Name:</span> <strong className="text-slate-200">{employee?.personal?.firstName} {employee?.personal?.lastName}</strong></p>
-                  <p className="mb-1"><span className="text-slate-500">Employee ID:</span> <strong className="text-slate-200">{employee?.employeeId}</strong></p>
-                  <p><span className="text-slate-500">Department:</span> <strong className="text-slate-200">{employee?.employment?.department}</strong></p>
+                  <p className="mb-1"><span className="text-slate-500">Employee Name:</span> <strong className="text-slate-900">{employee?.personal?.firstName} {employee?.personal?.lastName}</strong></p>
+                  <p className="mb-1"><span className="text-slate-500">Employee ID:</span> <strong className="text-slate-900">{employee?.employeeId}</strong></p>
+                  <p><span className="text-slate-500">Department:</span> <strong className="text-slate-900">{employee?.employment?.department}</strong></p>
                 </div>
                 <div>
-                  <p className="mb-1"><span className="text-slate-500">Designation:</span> <strong className="text-slate-200">{employee?.employment?.designation}</strong></p>
-                  <p className="mb-1"><span className="text-slate-500">Location:</span> <strong className="text-slate-200">{employee?.employment?.location || 'HQ'}</strong></p>
+                  <p className="mb-1"><span className="text-slate-500">Designation:</span> <strong className="text-slate-900">{employee?.employment?.designation}</strong></p>
+                  <p className="mb-1"><span className="text-slate-500">Location:</span> <strong className="text-slate-900">{employee?.employment?.location || 'HQ'}</strong></p>
                   <p><span className="text-slate-500">Loss of Pay (LOP) Days:</span> <strong className="text-rose-400 font-mono">{selectedPayslip.lopDays > 0 ? `${selectedPayslip.lopDays} Days` : '0 Days'}</strong></p>
                 </div>
               </div>
@@ -1676,15 +1676,15 @@ const ESSProfilePage = () => {
                 {/* Earnings */}
                 <div className="divide-y divide-slate-850 border-r border-slate-800 bg-slate-900/10">
                   <div className="bg-slate-900 px-4 py-2.5 font-bold uppercase tracking-wider text-slate-400 text-[10px]">Earnings</div>
-                  <div className="flex justify-between px-4 py-3 text-slate-300">
+                  <div className="flex justify-between px-4 py-3 text-slate-700">
                     <span>Basic Salary</span>
                     <span className="font-mono">${selectedPayslip.basicSalary.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between px-4 py-3 text-slate-300">
+                  <div className="flex justify-between px-4 py-3 text-slate-700">
                     <span>Allowances / Bonuses</span>
                     <span className="font-mono">${selectedPayslip.allowances.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between px-4 py-3 font-semibold text-slate-100 bg-slate-950/20">
+                  <div className="flex justify-between px-4 py-3 font-semibold text-slate-900 bg-slate-100">
                     <span>Gross Earnings</span>
                     <span className="font-mono">${(selectedPayslip.basicSalary + selectedPayslip.allowances).toLocaleString()}</span>
                   </div>
@@ -1705,7 +1705,7 @@ const ESSProfilePage = () => {
                       ${(selectedPayslip.lopDays * (selectedPayslip.basicSalary / new Date(selectedPayslip.year, selectedPayslip.month, 0).getDate())).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                     </span>
                   </div>
-                  <div className="flex justify-between px-4 py-3 font-semibold text-rose-455 text-rose-400 bg-slate-950/20">
+                  <div className="flex justify-between px-4 py-3 font-semibold text-rose-700 bg-rose-50">
                     <span>Total Deductions</span>
                     <span className="font-mono">${selectedPayslip.deductions.toLocaleString()}</span>
                   </div>
@@ -1713,7 +1713,7 @@ const ESSProfilePage = () => {
               </div>
 
               {/* Net Payable Summary */}
-              <div className="flex justify-between items-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4.5 text-slate-100">
+              <div className="flex justify-between items-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4.5 text-slate-900">
                 <div>
                   <span className="text-xs text-slate-405 text-slate-400 uppercase tracking-wider font-bold">Net Payable Salary (Net Pay)</span>
                   <span className="block text-[10px] text-slate-500">Calculated after LOP deductions and statutory contributions</span>
@@ -1753,12 +1753,12 @@ const ESSProfilePage = () => {
                 {pendingRequests.map((req) => (
                   <div
                     key={req._id}
-                    className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 backdrop-blur-md shadow-md space-y-4"
+                    className="rounded-2xl border border-slate-200 bg-white p-6 shadow-md space-y-4 text-slate-900"
                   >
                     {/* Header */}
-                    <div className="flex justify-between items-center border-b border-slate-850 pb-3">
+                    <div className="flex justify-between items-center border-b border-slate-200 pb-3">
                       <div>
-                        <strong className="block text-slate-200 text-lg">
+                        <strong className="block text-slate-900 text-lg">
                           {req.personal?.firstName} {req.personal?.lastName}
                         </strong>
                         <span className="text-xs text-slate-500 font-mono">ID: {req.employeeId} | Email: {req.userId?.email}</span>
@@ -1773,7 +1773,7 @@ const ESSProfilePage = () => {
                       {req.pendingChanges?.data?.personal && (
                         <div>
                           <span className="block text-teal-400 font-sans font-bold text-xs mb-2">Personal Fields</span>
-                          <div className="grid grid-cols-2 gap-4 rounded-xl bg-slate-900/50 p-3 border border-slate-850">
+                          <div className="grid grid-cols-2 gap-4 rounded-xl bg-slate-900/50 p-3 border border-slate-200">
                             <div>
                               <span className="block text-[10px] text-slate-500 mb-1">CURRENT VALUES</span>
                               <p>First Name: {req.personal?.firstName}</p>
@@ -1781,8 +1781,8 @@ const ESSProfilePage = () => {
                             </div>
                             <div>
                               <span className="block text-[10px] text-teal-400 mb-1">PROPOSED VALUES</span>
-                              <p className="text-teal-300 font-bold">First Name: {req.pendingChanges.data.personal.firstName}</p>
-                              <p className="text-teal-300 font-bold">Last Name: {req.pendingChanges.data.personal.lastName}</p>
+                              <p className="text-slate-900 font-bold">First Name: {req.pendingChanges.data.personal.firstName}</p>
+                              <p className="text-slate-900 font-bold">Last Name: {req.pendingChanges.data.personal.lastName}</p>
                             </div>
                           </div>
                         </div>
@@ -1791,7 +1791,7 @@ const ESSProfilePage = () => {
                       {req.pendingChanges?.data?.bankDetails && (
                         <div>
                           <span className="block text-teal-400 font-sans font-bold text-xs mb-2">Bank Details</span>
-                          <div className="grid grid-cols-2 gap-4 rounded-xl bg-slate-900/50 p-3 border border-slate-850">
+                          <div className="grid grid-cols-2 gap-4 rounded-xl bg-slate-900/50 p-3 border border-slate-200">
                             <div>
                               <span className="block text-[10px] text-slate-500 mb-1">CURRENT VALUES</span>
                               <p>Holder: {req.bankDetails?.accountHolderName || 'N/A'}</p>
@@ -1802,11 +1802,11 @@ const ESSProfilePage = () => {
                             </div>
                             <div>
                               <span className="block text-[10px] text-teal-400 mb-1">PROPOSED VALUES</span>
-                              <p className="text-teal-300 font-bold">Holder: {req.pendingChanges.data.bankDetails.accountHolderName}</p>
-                              <p className="text-teal-300 font-bold">Account: {req.pendingChanges.data.bankDetails.accountNumber}</p>
-                              <p className="text-teal-300 font-bold">Bank: {req.pendingChanges.data.bankDetails.bankName}</p>
-                              <p className="text-teal-300 font-bold">IFSC: {req.pendingChanges.data.bankDetails.ifscCode}</p>
-                              <p className="text-teal-300 font-bold">PAN: {req.pendingChanges.data.bankDetails.pan}</p>
+                              <p className="text-slate-900 font-bold">Holder: {req.pendingChanges.data.bankDetails.accountHolderName}</p>
+                              <p className="text-slate-900 font-bold">Account: {req.pendingChanges.data.bankDetails.accountNumber}</p>
+                              <p className="text-slate-900 font-bold">Bank: {req.pendingChanges.data.bankDetails.bankName}</p>
+                              <p className="text-slate-900 font-bold">IFSC: {req.pendingChanges.data.bankDetails.ifscCode}</p>
+                              <p className="text-slate-900 font-bold">PAN: {req.pendingChanges.data.bankDetails.pan}</p>
                             </div>
                           </div>
                         </div>
@@ -1815,7 +1815,7 @@ const ESSProfilePage = () => {
                       {req.pendingChanges?.data?.statutory && (
                         <div>
                           <span className="block text-teal-400 font-sans font-bold text-xs mb-2">Statutory Registrations</span>
-                          <div className="grid grid-cols-2 gap-4 rounded-xl bg-slate-900/50 p-3 border border-slate-850">
+                          <div className="grid grid-cols-2 gap-4 rounded-xl bg-slate-900/50 p-3 border border-slate-200">
                             <div>
                               <span className="block text-[10px] text-slate-500 mb-1">CURRENT VALUES</span>
                               <p>UAN: {req.statutory?.uan || 'N/A'}</p>
@@ -1825,10 +1825,10 @@ const ESSProfilePage = () => {
                             </div>
                             <div>
                               <span className="block text-[10px] text-teal-400 mb-1">PROPOSED VALUES</span>
-                              <p className="text-teal-300 font-bold">UAN: {req.pendingChanges.data.statutory.uan}</p>
-                              <p className="text-teal-300 font-bold">PF Number: {req.pendingChanges.data.statutory.pfNumber}</p>
-                              <p className="text-teal-300 font-bold">ESI Number: {req.pendingChanges.data.statutory.esiNumber}</p>
-                              <p className="text-teal-300 font-bold">SSN: {req.pendingChanges.data.statutory.ssn}</p>
+                              <p className="text-slate-900 font-bold">UAN: {req.pendingChanges.data.statutory.uan}</p>
+                              <p className="text-slate-900 font-bold">PF Number: {req.pendingChanges.data.statutory.pfNumber}</p>
+                              <p className="text-slate-900 font-bold">ESI Number: {req.pendingChanges.data.statutory.esiNumber}</p>
+                              <p className="text-slate-900 font-bold">SSN: {req.pendingChanges.data.statutory.ssn}</p>
                             </div>
                           </div>
                         </div>
@@ -1846,7 +1846,7 @@ const ESSProfilePage = () => {
 
                       <button
                         onClick={() => handleReviewRequest(req._id, 'APPROVE')}
-                        className="flex items-center gap-1 px-4 py-2 bg-teal-500/10 hover:bg-teal-500 border border-teal-500/20 hover:border-teal-500 hover:text-black rounded-lg text-teal-400 text-xs font-bold transition cursor-pointer"
+                        className="flex items-center gap-1 px-4 py-2 bg-teal-500/10 hover:bg-teal-500 border border-slate-200 hover:border-teal-500 hover:text-black rounded-lg text-teal-400 text-xs font-bold transition cursor-pointer"
                       >
                         <Check className="h-3.5 w-3.5" /> Approve & Apply
                       </button>

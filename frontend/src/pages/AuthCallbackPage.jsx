@@ -71,30 +71,30 @@ const AuthCallbackPage = () => {
   }, [provider, searchParams, dispatch, navigate]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
-      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-xl shadow-2xl text-center space-y-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-white flex items-center justify-center gap-2">
-          <ShieldCheck className="h-7 w-7 text-brand-400" />
+    <div className="flex min-h-screen items-center justify-center bg-[#f8fafc] px-4">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl text-center space-y-6">
+        <h2 className="text-2xl font-extrabold tracking-tight text-[#101828] flex items-center justify-center gap-2">
+          <ShieldCheck className="h-7 w-7 text-slate-900" />
           SSO Authentication
         </h2>
 
         {loading ? (
           <div className="space-y-4 py-8 flex flex-col items-center">
-            <RefreshCw className="h-10 w-10 animate-spin text-brand-500" />
-            <p className="text-sm text-slate-400">
+            <RefreshCw className="h-10 w-10 animate-spin text-slate-900" />
+            <p className="text-sm text-slate-500">
               Validating token attributes with your workspace server...
             </p>
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-400 flex items-start gap-2.5 text-left">
-              <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+            <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 flex items-start gap-2.5 text-left">
+              <AlertCircle className="h-5 w-5 shrink-0 mt-0.5 text-rose-600" />
               <span>{error}</span>
             </div>
             
             <button
               onClick={() => navigate('/login')}
-              className="w-full rounded-lg bg-slate-850 hover:bg-slate-800 border border-slate-700 py-2.5 text-sm font-semibold text-white transition cursor-pointer"
+              className="w-full rounded-lg bg-slate-950 hover:bg-slate-900 py-2.5 text-sm font-semibold text-white shadow-md transition cursor-pointer"
             >
               Return to Login Screen
             </button>

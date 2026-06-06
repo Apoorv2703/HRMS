@@ -4,10 +4,10 @@ import { Calendar, Clock, UserCheck, UserX, AlertCircle, PlusCircle, CheckCircle
 import api from '../services/api';
 
 const STATUS_BADGES = {
-  PENDING: { label: 'Pending Review', color: 'bg-amber-500/10 border-amber-500/20 text-amber-400' },
-  APPROVED: { label: 'Approved', color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' },
-  REJECTED: { label: 'Rejected', color: 'bg-rose-500/10 border-rose-500/20 text-rose-400' },
-  CANCELLED: { label: 'Cancelled', color: 'bg-slate-800/40 border-slate-800 text-slate-500' },
+  PENDING: { label: 'Pending Review', color: 'bg-amber-50 border-amber-200 text-amber-700' },
+  APPROVED: { label: 'Approved', color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
+  REJECTED: { label: 'Rejected', color: 'bg-rose-50 border-rose-200 text-rose-700' },
+  CANCELLED: { label: 'Cancelled', color: 'bg-slate-100 border-slate-200 text-slate-600' },
 };
 
 const LeaveDashboardPage = () => {
@@ -281,7 +281,7 @@ const LeaveDashboardPage = () => {
   };
 
   return (
-    <div className="bg-slate-950 text-slate-100 min-h-[calc(100vh-4rem)] p-4 sm:p-6 lg:p-8">
+    <div className="bg-slate-50 text-slate-900 min-h-[calc(100vh-4rem)] p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-8">
         
         {/* Page Header */}
@@ -425,10 +425,10 @@ const LeaveDashboardPage = () => {
                         <th className="px-6 py-3 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-850 bg-slate-950/20">
+                    <tbody className="divide-y divide-slate-100 bg-white">
                       {myRequests.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="px-6 py-12 text-center text-slate-500 italic bg-slate-950/10">
+                          <td colSpan={7} className="px-6 py-12 text-center text-slate-500 italic bg-slate-50">
                             You have not submitted any leave requests yet.
                           </td>
                         </tr>
@@ -436,27 +436,27 @@ const LeaveDashboardPage = () => {
                         myRequests.map((req) => {
                           const badge = STATUS_BADGES[req.status] || STATUS_BADGES.PENDING;
                           return (
-                            <tr key={req._id} className="hover:bg-slate-900/40 transition">
-                              <td className="px-6 py-4 font-bold text-slate-200">
+                            <tr key={req._id} className="hover:bg-slate-50 transition">
+                              <td className="px-6 py-4 font-bold text-slate-950">
                                 {req.leaveTypeId?.name} ({req.leaveTypeId?.code})
                               </td>
-                              <td className="px-6 py-4 text-xs font-mono text-slate-350 text-slate-300">
+                              <td className="px-6 py-4 text-xs font-mono text-slate-700">
                                 {req.startDate} to {req.endDate}
-                                {req.halfDay && <span className="block text-[10px] text-teal-400 mt-0.5">Half-Day ({req.halfDaySession})</span>}
+                                {req.halfDay && <span className="block text-[10px] text-teal-700 font-semibold mt-0.5">Half-Day ({req.halfDaySession})</span>}
                               </td>
-                              <td className="px-6 py-4 text-center font-bold text-slate-100">
+                              <td className="px-6 py-4 text-center font-bold text-slate-900">
                                 {req.totalDays}
                               </td>
                               <td className="px-6 py-4 text-center">
                                 {req.lopDays > 0 ? (
-                                  <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20">
+                                  <span className="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
                                     {req.lopDays} LOP
                                   </span>
                                 ) : (
                                   <span className="text-xs text-slate-500">-</span>
                                 )}
                               </td>
-                              <td className="px-6 py-4 max-w-xs truncate text-xs text-slate-400" title={req.reason}>
+                              <td className="px-6 py-4 max-w-xs truncate text-xs text-slate-500" title={req.reason}>
                                 {req.reason}
                               </td>
                               <td className="px-6 py-4">
@@ -473,7 +473,7 @@ const LeaveDashboardPage = () => {
                                 {['PENDING', 'APPROVED'].includes(req.status) && (
                                   <button
                                     onClick={() => handleCancelLeave(req._id)}
-                                    className="rounded-lg bg-slate-900 hover:bg-rose-950/20 border border-slate-800 hover:border-rose-500/30 text-[10px] font-bold text-slate-400 hover:text-rose-400 px-3 py-1.5 transition cursor-pointer"
+                                    className="rounded-lg bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-300 text-[10px] font-bold text-slate-650 hover:text-rose-700 px-3 py-1.5 transition cursor-pointer shadow-sm"
                                   >
                                     Cancel
                                   </button>
@@ -495,11 +495,11 @@ const LeaveDashboardPage = () => {
              TAB 2: TEAM APPROVALS (MANAGER/ADMIN)
              ==================================================== */
           <div className="space-y-6">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-450 text-slate-400 flex items-center gap-1.5">
-              <ListTodo className="h-4 w-4 text-teal-400" /> Pending Leave Approvals
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <ListTodo className="h-4 w-4 text-slate-900" /> Pending Leave Approvals
             </h2>
             {pendingRequests.length === 0 ? (
-              <div className="rounded-2xl border border-slate-850 bg-slate-900/10 p-12 text-center text-slate-500 italic">
+              <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center text-slate-500 italic shadow-sm">
                 No leave requests pending your review.
               </div>
             ) : (
@@ -508,21 +508,21 @@ const LeaveDashboardPage = () => {
                   const empName = `${req.employeeId?.personal?.firstName} ${req.employeeId?.personal?.lastName}`;
                   const isLoad = reviewLoading[req._id] || false;
                   return (
-                    <div key={req._id} className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl p-6 space-y-4 shadow hover:border-slate-700 transition">
+                    <div key={req._id} className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4 shadow hover:border-slate-350 transition shadow-sm">
                       <div className="flex justify-between items-start">
                         <div>
-                          <strong className="text-base font-bold text-white block">{empName}</strong>
-                          <span className="text-[10px] text-slate-550 text-slate-500 uppercase tracking-wider">Employee ID: {req.employeeId?.employeeId}</span>
+                          <strong className="text-base font-bold text-slate-900 block">{empName}</strong>
+                          <span className="text-[10px] text-slate-500 uppercase tracking-wider">Employee ID: {req.employeeId?.employeeId}</span>
                         </div>
-                        <span className="text-xs font-mono font-bold text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">
+                        <span className="text-xs font-mono font-bold text-teal-800 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
                           {req.leaveTypeId?.code} - {req.totalDays} {req.totalDays === 1 ? 'day' : 'days'}
                         </span>
                       </div>
 
-                      <div className="rounded-xl bg-slate-950/40 border border-slate-850 p-3.5 space-y-2 text-xs text-slate-300">
+                      <div className="rounded-xl bg-slate-50 border border-slate-200 p-3.5 space-y-2 text-xs text-slate-700">
                         <p><strong>Timeline:</strong> <span className="font-mono">{req.startDate} to {req.endDate}</span> {req.halfDay && '(Half-Day)'}</p>
                         {req.lopDays > 0 && (
-                          <p className="text-rose-400 font-bold flex items-center gap-1">
+                          <p className="text-rose-700 font-bold flex items-center gap-1">
                             <BadgeAlert className="h-3.5 w-3.5" /> Includes {req.lopDays} Loss of Pay (LOP) days.
                           </p>
                         )}
@@ -534,21 +534,21 @@ const LeaveDashboardPage = () => {
                           placeholder="Add approver reply/comment (optional)..."
                           value={reviewComments[req._id] || ''}
                           onChange={(e) => setReviewComments(prev => ({ ...prev, [req._id]: e.target.value }))}
-                          className="w-full rounded-xl border border-slate-800 bg-slate-950/60 text-slate-200 text-xs p-3.5 outline-none focus:border-teal-500/40 transition-colors placeholder:text-slate-650"
+                          className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-xs p-3.5 outline-none focus:border-slate-950/20 transition-colors placeholder:text-slate-400"
                           rows="2"
                         />
                         <div className="flex gap-3">
                           <button
                             onClick={() => handleReviewRequest(req._id, 'APPROVE')}
                             disabled={isLoad}
-                            className="flex-1 flex justify-center items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white py-2.5 transition duration-150 cursor-pointer disabled:opacity-50"
+                            className="flex-1 flex justify-center items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white py-2.5 transition duration-150 cursor-pointer disabled:opacity-50 shadow-sm"
                           >
                             <UserCheck className="h-4 w-4" /> Approve
                           </button>
                           <button
                             onClick={() => handleReviewRequest(req._id, 'REJECT')}
                             disabled={isLoad}
-                            className="flex-1 flex justify-center items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white py-2.5 transition duration-150 cursor-pointer disabled:opacity-50"
+                            className="flex-1 flex justify-center items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white py-2.5 transition duration-150 cursor-pointer disabled:opacity-50 shadow-sm"
                           >
                             <UserX className="h-4 w-4" /> Reject
                           </button>
@@ -567,12 +567,12 @@ const LeaveDashboardPage = () => {
              ==================================================== */
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Policy Creator Panel */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl p-6 space-y-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-6 shadow-sm">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-teal-400" /> Configure Leave Policy
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-slate-900" /> Configure Leave Policy
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                   Define new leave rules and dynamically allocate initial balances to active staff.
                 </p>
               </div>
@@ -580,19 +580,19 @@ const LeaveDashboardPage = () => {
               <form onSubmit={handleCreatePolicy} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Leave Name *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Leave Name *</label>
                     <input
                       type="text"
                       placeholder="e.g. Annual Leave"
                       value={newTypeName}
                       onChange={(e) => setNewTypeName(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Leave Code *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Leave Code *</label>
                     <input
                       type="text"
                       placeholder="e.g. AL"
@@ -600,52 +600,52 @@ const LeaveDashboardPage = () => {
                       onChange={(e) => setNewTypeCode(e.target.value)}
                       required
                       maxLength="5"
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Annual Entitlement (Days)</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Annual Entitlement (Days)</label>
                     <input
                       type="number"
                       value={newTypeEntitled}
                       onChange={(e) => setNewTypeEntitled(Number(e.target.value))}
                       min="0"
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Max Carry Forward (Days)</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Max Carry Forward (Days)</label>
                     <input
                       type="number"
                       value={newTypeCarry}
                       onChange={(e) => setNewTypeCarry(Number(e.target.value))}
                       min="0"
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-slate-800/60 pt-3">
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-350 text-slate-300 cursor-pointer select-none">
+                <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-slate-200 pt-3">
+                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={newTypeHalfDay}
                       onChange={(e) => setNewTypeHalfDay(e.target.checked)}
-                      className="rounded border-slate-800 text-teal-600 focus:ring-teal-500 bg-slate-900"
+                      className="rounded border-slate-300 text-slate-950 focus:ring-slate-955 focus:ring-slate-950 bg-white"
                     />
                     Allow Half-Day Requests
                   </label>
 
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-350 text-slate-300 cursor-pointer select-none">
+                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={newTypeNegative}
                       onChange={(e) => setNewTypeNegative(e.target.checked)}
-                      className="rounded border-slate-800 text-teal-600 focus:ring-teal-500 bg-slate-900"
+                      className="rounded border-slate-300 text-slate-950 focus:ring-slate-955 focus:ring-slate-950 bg-white"
                     />
                     Allow Unpaid Balance Deficits (LOP)
                   </label>
@@ -654,7 +654,7 @@ const LeaveDashboardPage = () => {
                 <button
                   type="submit"
                   disabled={policyLoading}
-                  className="w-full rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow"
+                  className="w-full rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow-md"
                 >
                   {policyLoading ? 'Creating...' : 'Create Leave Type'}
                 </button>
@@ -662,28 +662,28 @@ const LeaveDashboardPage = () => {
             </div>
 
             {/* Manual Adjustment Panel */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl p-6 space-y-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-6 shadow-sm">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <BadgeAlert className="h-5 w-5 text-indigo-400" /> Manual Balance Override
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <BadgeAlert className="h-5 w-5 text-slate-900" /> Manual Balance Override
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                   Adjust an employee's leave balance directly (Credit or Debit shifts).
                 </p>
               </div>
 
               <form onSubmit={handleAdjustBalance} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Target Employee *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Target Employee *</label>
                   <select
                     value={adjEmpId}
                     onChange={(e) => setAdjEmpId(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors cursor-pointer"
                   >
                     <option value="">Select Employee</option>
                     {employees.map(emp => (
-                      <option key={emp._id} value={emp._id} className="bg-slate-900">
+                      <option key={emp._id} value={emp._id}>
                         {emp.personal?.firstName} {emp.personal?.lastName} ({emp.employeeId || 'No ID'})
                       </option>
                     ))}
@@ -692,16 +692,16 @@ const LeaveDashboardPage = () => {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Leave Type *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Leave Type *</label>
                     <select
                       value={adjTypeId}
                       onChange={(e) => setAdjTypeId(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors cursor-pointer"
                     >
                       <option value="">Select Leave Type</option>
                       {leaveTypes.map(type => (
-                        <option key={type._id} value={type._id} className="bg-slate-900">
+                        <option key={type._id} value={type._id}>
                           {type.name} ({type.code})
                         </option>
                       ))}
@@ -709,12 +709,12 @@ const LeaveDashboardPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Adjustment Action *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Adjustment Action *</label>
                     <select
                       value={adjAction}
                       onChange={(e) => setAdjAction(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors cursor-pointer"
                     >
                       <option value="CREDIT">Credit (Add days)</option>
                       <option value="DEBIT">Debit (Subtract days)</option>
@@ -724,7 +724,7 @@ const LeaveDashboardPage = () => {
 
                 <div className="grid gap-4 sm:grid-cols-3">
                   <div className="sm:col-span-1">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Days Amount *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Days Amount *</label>
                     <input
                       type="number"
                       step="0.5"
@@ -733,19 +733,19 @@ const LeaveDashboardPage = () => {
                       value={adjAmount}
                       onChange={(e) => setAdjAmount(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Audit Comment/Reason *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Audit Comment/Reason *</label>
                     <input
                       type="text"
                       placeholder="e.g. Carry-forward adjustment"
                       value={adjReason}
                       onChange={(e) => setAdjReason(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
                 </div>
@@ -753,7 +753,7 @@ const LeaveDashboardPage = () => {
                 <button
                   type="submit"
                   disabled={adjLoading}
-                  className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow"
+                  className="w-full rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow-md"
                 >
                   {adjLoading ? 'Adjusting...' : 'Perform Balance Override'}
                 </button>
@@ -761,24 +761,24 @@ const LeaveDashboardPage = () => {
             </div>
 
             {/* SAML SSO Configuration Panel */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl p-6 space-y-6 lg:col-span-2">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-6 lg:col-span-2 shadow-sm">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-brand-400" /> SAML Single Sign-On (SSO)
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-slate-900" /> SAML Single Sign-On (SSO)
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                   Configure SAML assertions to authenticate enterprise users via Okta, Entra ID, or other IdPs.
                 </p>
               </div>
 
               <form onSubmit={handleUpdateSamlConfig} className="space-y-4">
-                <div className="flex border-b border-slate-800/60 pb-3 items-center">
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                <div className="flex border-b border-slate-200 pb-3 items-center">
+                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={samlEnabled}
                       onChange={(e) => setSamlEnabled(e.target.checked)}
-                      className="rounded border-slate-800 text-brand-500 focus:ring-brand-500 bg-slate-950"
+                      className="rounded border-slate-300 text-slate-950 focus:ring-slate-955 focus:ring-slate-950 bg-white"
                     />
                     Enable SAML Authentication for Workspace
                   </label>
@@ -786,43 +786,43 @@ const LeaveDashboardPage = () => {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">SAML Entrypoint URL</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">SAML Entrypoint URL</label>
                     <input
                       type="url"
                       placeholder="e.g. https://company.okta.com/app/exk.../sso/saml"
                       value={samlEntryPoint}
                       onChange={(e) => setSamlEntryPoint(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-brand-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">SAML Issuer (Entity ID)</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">SAML Issuer (Entity ID)</label>
                     <input
                       type="text"
                       placeholder="e.g. http://www.okta.com/exk..."
                       value={samlIssuer}
                       onChange={(e) => setSamlIssuer(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-brand-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">X.509 Certificate (PEM Format)</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">X.509 Certificate (PEM Format)</label>
                   <textarea
                     placeholder="-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
                     value={samlCert}
                     onChange={(e) => setSamlCert(e.target.value)}
                     rows="4"
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-xs p-3 outline-none focus:border-brand-500/50 transition-colors font-mono"
+                    className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-xs p-3 outline-none focus:border-slate-950/20 transition-colors font-mono"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={samlLoading}
-                  className="w-full rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-sm font-bold text-slate-950 py-3 transition duration-150 cursor-pointer shadow"
+                  className="w-full rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow-md"
                 >
                   {samlLoading ? 'Saving Settings...' : 'Save SAML Settings'}
                 </button>
@@ -835,15 +835,15 @@ const LeaveDashboardPage = () => {
            MODAL DIALOG: REQUEST LEAVE APPLICATION FORM
            ==================================================== */}
         {showApplyModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-            <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 space-y-6 shadow-2xl animate-none">
-              <div className="flex justify-between items-center border-b border-slate-850 pb-3">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <PlusCircle className="h-5 w-5 text-teal-400" /> Apply for Time Off
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-none">
+            <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 space-y-6 shadow-2xl animate-none">
+              <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <PlusCircle className="h-5 w-5 text-slate-900" /> Apply for Time Off
                 </h3>
                 <button
                   onClick={() => setShowApplyModal(false)}
-                  className="text-slate-400 hover:text-white font-bold cursor-pointer"
+                  className="text-slate-500 hover:text-slate-900 font-bold cursor-pointer"
                 >
                   ✕
                 </button>
@@ -851,12 +851,12 @@ const LeaveDashboardPage = () => {
 
               <form onSubmit={handleApplyLeave} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Leave Type *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Leave Type *</label>
                   <select
                     value={applyType}
                     onChange={(e) => setApplyType(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors cursor-pointer"
                   >
                     <option value="">Select leave category</option>
                     {leaveTypes.filter(t => t.isActive).map(type => (
@@ -869,35 +869,35 @@ const LeaveDashboardPage = () => {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Start Date *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Start Date *</label>
                     <input
                       type="date"
                       value={applyStart}
                       onChange={(e) => setApplyStart(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">End Date *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">End Date *</label>
                     <input
                       type="date"
                       value={applyEnd}
                       onChange={(e) => setApplyEnd(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-sm p-3 outline-none focus:border-slate-950/20 transition-colors"
                     />
                   </div>
                 </div>
 
-                <div className="flex border-t border-slate-850 pt-3 items-center justify-between">
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                <div className="flex border-t border-slate-200 pt-3 items-center justify-between">
+                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={applyHalfDay}
                       onChange={(e) => setApplyHalfDay(e.target.checked)}
-                      className="rounded border-slate-800 text-teal-600 focus:ring-teal-500 bg-slate-950"
+                      className="rounded border-slate-300 text-slate-955 focus:ring-slate-950 bg-white"
                     />
                     Is this a Half-Day Leave?
                   </label>
@@ -906,7 +906,7 @@ const LeaveDashboardPage = () => {
                     <select
                       value={applyHalfDaySession}
                       onChange={(e) => setApplyHalfDaySession(e.target.value)}
-                      className="rounded-lg border border-slate-800 bg-slate-950 text-slate-200 text-xs p-1.5 focus:border-teal-500"
+                      className="rounded-lg border border-slate-300 bg-white text-slate-900 text-xs p-1.5 focus:border-slate-950 cursor-pointer"
                     >
                       <option value="MORNING">Morning Session</option>
                       <option value="AFTERNOON">Afternoon Session</option>
@@ -915,29 +915,29 @@ const LeaveDashboardPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Reason / Comments *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Reason / Comments *</label>
                   <textarea
                     placeholder="Provide detailed description of leave request..."
                     value={applyReason}
                     onChange={(e) => setApplyReason(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-200 text-xs p-3.5 outline-none focus:border-teal-500/50 transition-colors"
+                    className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-xs p-3.5 outline-none focus:border-slate-950/20 transition-colors"
                     rows="3"
                   />
                 </div>
 
-                <div className="flex gap-3 border-t border-slate-850 pt-4">
+                <div className="flex gap-3 border-t border-slate-200 pt-4">
                   <button
                     type="button"
                     onClick={() => setShowApplyModal(false)}
-                    className="flex-1 rounded-xl border border-slate-800 hover:bg-slate-850 text-xs font-bold text-slate-400 py-3 transition duration-150 cursor-pointer text-center"
+                    className="flex-1 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-bold text-slate-700 py-3 transition duration-150 cursor-pointer text-center shadow-sm bg-white"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={applyLoading}
-                    className="flex-1 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-xs font-bold text-white py-3 transition duration-150 cursor-pointer shadow text-center"
+                    className="flex-1 rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 text-xs font-bold text-white py-3 transition duration-150 cursor-pointer shadow-md text-center"
                   >
                     {applyLoading ? 'Submitting...' : 'Submit Request'}
                   </button>

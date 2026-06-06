@@ -71,40 +71,40 @@ const NotificationPreferences = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 md:p-8 backdrop-blur-md shadow-lg space-y-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-lg space-y-6 text-slate-850">
         <div>
-          <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
-            <BellRing className="h-6 w-6 text-teal-400" />
+          <h2 className="text-xl font-extrabold text-slate-950 flex items-center gap-2">
+            <BellRing className="h-6 w-6 text-slate-950" />
             Notification Channels & Preferences
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Toggle where you want to receive alerts for leave submissions, punch approvals, weekly summaries, and SLA breach escalations.
           </p>
         </div>
 
         {message && (
-          <div className="rounded-xl border border-teal-500/20 bg-teal-500/10 p-4 text-sm text-teal-300">
+          <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-sm text-teal-700">
             {message}
           </div>
         )}
 
         {error && (
-          <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-300">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSave} className="space-y-6">
-          <div className="divide-y divide-slate-850">
+          <div className="divide-y divide-slate-100">
             {/* Email Channel */}
             <div className="flex items-center justify-between py-4.5">
               <div className="flex items-start gap-3.5">
-                <div className="mt-0.5 rounded-lg bg-slate-900 border border-slate-800 p-2.5 text-slate-400">
+                <div className="mt-0.5 rounded-lg bg-slate-50 border border-slate-200 p-2.5 text-slate-500">
                   <Mail className="h-5 w-5" />
                 </div>
                 <div>
-                  <span className="block text-sm font-bold text-slate-200">Email Alerts</span>
-                  <span className="block text-xs text-slate-450 text-slate-500 mt-1 leading-normal">
+                  <span className="block text-sm font-bold text-slate-800">Email Alerts</span>
+                  <span className="block text-xs text-slate-500 mt-1 leading-normal">
                     Receive immediate messages directly to your registered work email.
                   </span>
                 </div>
@@ -116,19 +116,19 @@ const NotificationPreferences = () => {
                   onChange={(e) => setEmail(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500 peer-checked:after:bg-slate-950"></div>
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-950"></div>
               </label>
             </div>
 
             {/* In-App Channel */}
             <div className="flex items-center justify-between py-4.5">
               <div className="flex items-start gap-3.5">
-                <div className="mt-0.5 rounded-lg bg-slate-900 border border-slate-800 p-2.5 text-slate-400">
+                <div className="mt-0.5 rounded-lg bg-slate-50 border border-slate-200 p-2.5 text-slate-500">
                   <BellRing className="h-5 w-5" />
                 </div>
                 <div>
-                  <span className="block text-sm font-bold text-slate-200">In-App Alerts Feed</span>
-                  <span className="block text-xs text-slate-450 text-slate-500 mt-1 leading-normal">
+                  <span className="block text-sm font-bold text-slate-800">In-App Alerts Feed</span>
+                  <span className="block text-xs text-slate-500 mt-1 leading-normal">
                     Display unread indicators and log alerts in the navigation bar bell dropdown.
                   </span>
                 </div>
@@ -140,19 +140,19 @@ const NotificationPreferences = () => {
                   onChange={(e) => setInApp(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500 peer-checked:after:bg-slate-950"></div>
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-950"></div>
               </label>
             </div>
 
             {/* Push Channel */}
             <div className="flex items-center justify-between py-4.5">
               <div className="flex items-start gap-3.5">
-                <div className="mt-0.5 rounded-lg bg-slate-900 border border-slate-800 p-2.5 text-slate-400">
+                <div className="mt-0.5 rounded-lg bg-slate-50 border border-slate-200 p-2.5 text-slate-500">
                   <Smartphone className="h-5 w-5" />
                 </div>
                 <div>
-                  <span className="block text-sm font-bold text-slate-200">Browser Push Alerts</span>
-                  <span className="block text-xs text-slate-450 text-slate-500 mt-1 leading-normal">
+                  <span className="block text-sm font-bold text-slate-800">Browser Push Alerts</span>
+                  <span className="block text-xs text-slate-500 mt-1 leading-normal">
                     Deliver native popups even when the HRMS portal is hidden in a background tab.
                   </span>
                 </div>
@@ -164,19 +164,19 @@ const NotificationPreferences = () => {
                   onChange={(e) => setPush(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500 peer-checked:after:bg-slate-950"></div>
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-950"></div>
               </label>
             </div>
 
             {/* Daily Digests */}
             <div className="flex items-center justify-between py-4.5">
               <div className="flex items-start gap-3.5">
-                <div className="mt-0.5 rounded-lg bg-slate-900 border border-slate-800 p-2.5 text-slate-400">
+                <div className="mt-0.5 rounded-lg bg-slate-50 border border-slate-200 p-2.5 text-slate-500">
                   <ClipboardCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <span className="block text-sm font-bold text-slate-200">Email Summaries (Digest)</span>
-                  <span className="block text-xs text-slate-450 text-slate-500 mt-1 leading-normal">
+                  <span className="block text-sm font-bold text-slate-800">Email Summaries (Digest)</span>
+                  <span className="block text-xs text-slate-500 mt-1 leading-normal">
                     Combine non-security notifications into a single summary report email.
                   </span>
                 </div>
@@ -188,7 +188,7 @@ const NotificationPreferences = () => {
                   onChange={(e) => setDigestEnabled(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500 peer-checked:after:bg-slate-950"></div>
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-950"></div>
               </label>
             </div>
           </div>
@@ -197,7 +197,7 @@ const NotificationPreferences = () => {
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 disabled:opacity-50 px-6 py-3 font-bold text-black shadow-lg shadow-teal-500/10 transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 px-6 py-3 font-bold text-white shadow-lg transition cursor-pointer"
             >
               <Save className="h-4 w-4" />
               {saving ? 'Updating...' : 'Save Preferences'}

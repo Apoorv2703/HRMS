@@ -182,36 +182,36 @@ const WorkflowConfigPage = () => {
 
   if (pageLoading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-950 text-slate-200">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-t-transparent"></div>
+      <div className="flex h-screen w-screen items-center justify-center bg-[#f8fafc] text-slate-900">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-950 border-t-transparent"></div>
         <span className="ml-3 font-medium">Loading workflows manager...</span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-radial from-slate-900 via-slate-950 to-black p-6 text-slate-100">
+    <div className="min-h-screen bg-slate-50 p-6 text-slate-900">
       <div className="mx-auto max-w-6xl space-y-6">
         {/* Header */}
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent flex items-center gap-2.5">
-              <Settings className="h-7 w-7 text-teal-400" />
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-950 flex items-center gap-2.5">
+              <Settings className="h-7 w-7 text-slate-950" />
               Workflow & Approval Policy Config
             </h1>
-            <p className="mt-1 text-slate-400 text-sm">
+            <p className="mt-1 text-slate-500 text-sm">
               Design approval processes per request type, enable SLA timelines, and configure conditional routing overrides.
             </p>
           </div>
 
           {/* Request Type Selector */}
-          <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 p-1 rounded-xl">
+          <div className="flex items-center gap-2 bg-white border border-slate-200 p-1 rounded-xl shadow-sm">
             <button
               onClick={() => setRequestType('LEAVE')}
               className={`px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer ${
                 requestType === 'LEAVE'
-                  ? 'bg-teal-500 text-black shadow shadow-teal-500/20'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-slate-950 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
               Leaves (Time Off)
@@ -220,8 +220,8 @@ const WorkflowConfigPage = () => {
               onClick={() => setRequestType('REGULARIZATION')}
               className={`px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer ${
                 requestType === 'REGULARIZATION'
-                  ? 'bg-teal-500 text-black shadow shadow-teal-500/20'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-slate-950 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
               Regularizations (Punch Corrections)
@@ -230,34 +230,34 @@ const WorkflowConfigPage = () => {
         </div>
 
         {message && (
-          <div className="rounded-xl border border-teal-500/20 bg-teal-500/10 p-4 text-sm text-teal-300">
+          <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-sm text-teal-800 shadow-sm">
             {message}
           </div>
         )}
 
         {error && (
-          <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-300">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800 shadow-sm">
             {error}
           </div>
         )}
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-t-transparent"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-950 border-t-transparent"></div>
           </div>
         ) : (
           <form onSubmit={handleSave} className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             {/* Left Column: Basic Parameters & Conditional Routing */}
             <div className="lg:col-span-1 space-y-6">
               {/* SLA Details Card */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 backdrop-blur-md shadow-lg space-y-4">
-                <h3 className="text-sm font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+                <h3 className="text-sm font-bold text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
                   <Clock className="h-4.5 w-4.5" /> SLA & Escalation Limits
                 </h3>
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
                       SLA Threshold Limit (Hours)
                     </label>
                     <input
@@ -266,7 +266,7 @@ const WorkflowConfigPage = () => {
                       onChange={(e) => setSlaHours(e.target.value)}
                       min="1"
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-250 text-slate-250 text-slate-200 outline-none focus:border-teal-500/50"
+                      className="w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-slate-950/20"
                     />
                     <span className="block text-[10px] text-slate-500 mt-1">
                       Time frame allowed for each level before automatic escalation triggers.
@@ -274,13 +274,13 @@ const WorkflowConfigPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
                       SLA Fallback Escalation User
                     </label>
                     <select
                       value={escalationUserId}
                       onChange={(e) => setEscalationUserId(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/40 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                      className="w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-slate-950/20 cursor-pointer"
                     >
                       <option value="">-- First Active HR_ADMIN (System default) --</option>
                       {employees.map((emp) => (
@@ -294,16 +294,16 @@ const WorkflowConfigPage = () => {
               </div>
 
               {/* Conditional Routing Rules Card */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 backdrop-blur-md shadow-lg space-y-4">
-                <div className="flex justify-between items-center border-b border-slate-850 pb-2">
-                  <h3 className="text-sm font-bold text-teal-400 flex items-center gap-2">
-                    <AlertTriangle className="h-4.5 w-4.5 text-teal-400" />
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+                <div className="flex justify-between items-center border-b border-slate-200 pb-2">
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <AlertTriangle className="h-4.5 w-4.5 text-slate-900" />
                     Conditional Overrides
                   </h3>
                   <button
                     type="button"
                     onClick={addRule}
-                    className="flex items-center gap-0.5 text-xs text-teal-400 hover:text-teal-300 font-bold cursor-pointer"
+                    className="flex items-center gap-0.5 text-xs text-slate-950 hover:text-slate-750 font-bold cursor-pointer"
                   >
                     <Plus className="h-3 w-3" /> Add Rule
                   </button>
@@ -318,18 +318,18 @@ const WorkflowConfigPage = () => {
                     {conditionalRules.map((rule, idx) => (
                       <div
                         key={idx}
-                        className="rounded-xl border border-slate-850 bg-slate-900/30 p-4 space-y-3 relative group"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3 relative group"
                       >
                         <button
                           type="button"
                           onClick={() => removeRule(idx)}
-                          className="absolute top-3 right-3 text-slate-500 hover:text-rose-400 transition cursor-pointer"
+                          className="absolute top-3 right-3 text-slate-500 hover:text-rose-600 transition cursor-pointer"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
 
                         <div className="space-y-2">
-                          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                             Condition {idx + 1}
                           </span>
                           <div className="grid grid-cols-3 gap-2">
@@ -337,7 +337,7 @@ const WorkflowConfigPage = () => {
                             <select
                               value={rule.field}
                               onChange={(e) => updateRuleField(idx, 'field', e.target.value)}
-                              className="rounded-lg border border-slate-800 bg-slate-950 text-slate-200 text-xs p-2 outline-none"
+                              className="rounded-lg border border-slate-300 bg-white text-slate-900 text-xs p-2 outline-none"
                             >
                               <option value="totalDays">totalDays (Leaves)</option>
                             </select>
@@ -346,7 +346,7 @@ const WorkflowConfigPage = () => {
                             <select
                               value={rule.operator}
                               onChange={(e) => updateRuleField(idx, 'operator', e.target.value)}
-                              className="rounded-lg border border-slate-800 bg-slate-950 text-slate-200 text-xs p-2 outline-none"
+                              className="rounded-lg border border-slate-300 bg-white text-slate-900 text-xs p-2 outline-none"
                             >
                               <option value="GT">&gt;</option>
                               <option value="LT">&lt;</option>
@@ -358,21 +358,21 @@ const WorkflowConfigPage = () => {
                               type="number"
                               value={rule.value}
                               onChange={(e) => updateRuleField(idx, 'value', Number(e.target.value))}
-                              className="rounded-lg border border-slate-800 bg-slate-950 text-slate-200 text-xs p-2 outline-none"
+                              className="rounded-lg border border-slate-300 bg-white text-slate-900 text-xs p-2 outline-none"
                             />
                           </div>
                         </div>
 
                         {/* Extra Step details */}
-                        <div className="space-y-2 pt-2 border-t border-slate-850/60">
-                          <span className="block text-[10px] font-bold text-teal-400 uppercase tracking-wider">
+                        <div className="space-y-2 pt-2 border-t border-slate-200">
+                          <span className="block text-[10px] font-bold text-slate-900 uppercase tracking-wider">
                             THEN APPEND APPROVAL LEVEL
                           </span>
                           <div className="grid grid-cols-2 gap-2">
                             <select
                               value={rule.extraStep?.approverType}
                               onChange={(e) => updateRuleExtraStepField(idx, 'approverType', e.target.value)}
-                              className="rounded-lg border border-slate-800 bg-slate-950 text-slate-200 text-xs p-2 outline-none cursor-pointer"
+                              className="rounded-lg border border-slate-300 bg-white text-slate-900 text-xs p-2 outline-none cursor-pointer"
                             >
                               <option value="ROLE">Role-based</option>
                               <option value="SPECIFIC_USER">Specific Colleague</option>
@@ -382,7 +382,7 @@ const WorkflowConfigPage = () => {
                               <select
                                 value={rule.extraStep?.approverRole}
                                 onChange={(e) => updateRuleExtraStepField(idx, 'approverRole', e.target.value)}
-                                className="rounded-lg border border-slate-800 bg-slate-950 text-slate-200 text-xs p-2 outline-none cursor-pointer"
+                                className="rounded-lg border border-slate-300 bg-white text-slate-900 text-xs p-2 outline-none cursor-pointer"
                               >
                                 <option value="HR_ADMIN">HR_ADMIN</option>
                                 <option value="LEADERSHIP">LEADERSHIP</option>
@@ -392,7 +392,7 @@ const WorkflowConfigPage = () => {
                               <select
                                 value={rule.extraStep?.approverUserId || ''}
                                 onChange={(e) => updateRuleExtraStepField(idx, 'approverUserId', e.target.value)}
-                                className="rounded-lg border border-slate-800 bg-slate-950 text-slate-200 text-xs p-2 outline-none cursor-pointer"
+                                className="rounded-lg border border-slate-300 bg-white text-slate-900 text-xs p-2 outline-none cursor-pointer"
                               >
                                 {employees.map((emp) => (
                                   <option key={emp._id} value={emp.userId._id}>
@@ -412,14 +412,14 @@ const WorkflowConfigPage = () => {
 
             {/* Right Column: Approval Sequence Flow */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 md:p-8 backdrop-blur-md shadow-lg space-y-6">
-                <div className="flex justify-between items-center border-b border-slate-850 pb-3">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm space-y-6">
+                <div className="flex justify-between items-center border-b border-slate-200 pb-3">
                   <div>
-                    <h3 className="text-base font-bold text-white flex items-center gap-2">
-                      <ShieldCheck className="h-5 w-5 text-teal-400" />
+                    <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                      <ShieldCheck className="h-5 w-5 text-slate-900" />
                       Approval Flow Sequence
                     </h3>
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       Configure the sequential checkpoints that submissions must resolve to reach approved state.
                     </p>
                   </div>
@@ -427,14 +427,14 @@ const WorkflowConfigPage = () => {
                   <button
                     type="button"
                     onClick={addStep}
-                    className="flex items-center gap-1 rounded-xl bg-teal-500/10 hover:bg-teal-500 text-teal-400 hover:text-black border border-teal-500/20 px-3.5 py-2 text-xs font-bold transition cursor-pointer"
+                    className="flex items-center gap-1 rounded-xl bg-slate-950 hover:bg-slate-900 text-white px-3.5 py-2 text-xs font-bold transition cursor-pointer shadow-sm"
                   >
                     <Plus className="h-4 w-4" /> Add Level
                   </button>
                 </div>
 
                 {steps.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-slate-850 py-16 text-center text-slate-500 italic text-sm">
+                  <div className="rounded-xl border border-dashed border-slate-200 py-16 text-center text-slate-500 italic text-sm">
                     No approval steps configured. Submissions will auto-approve or fail to route.
                   </div>
                 ) : (
@@ -442,10 +442,10 @@ const WorkflowConfigPage = () => {
                     {steps.map((step, idx) => (
                       <div
                         key={idx}
-                        className="group relative rounded-xl border border-slate-800 bg-slate-900/10 p-5 space-y-4 hover:border-slate-750 transition duration-200"
+                        className="group relative rounded-xl border border-slate-200 bg-slate-50 p-5 space-y-4 hover:border-slate-300 transition duration-200 shadow-sm"
                       >
                         <div className="flex justify-between items-center">
-                          <span className="inline-block rounded-lg bg-teal-500/15 border border-teal-500/30 px-3 py-1 text-xs font-black text-teal-400">
+                          <span className="inline-block rounded-lg bg-slate-200 border border-slate-300 px-3 py-1 text-xs font-black text-slate-800">
                             LEVEL {step.level}
                           </span>
 
@@ -453,7 +453,7 @@ const WorkflowConfigPage = () => {
                             <button
                               type="button"
                               onClick={() => removeStep(idx)}
-                              className="text-slate-500 hover:text-rose-400 transition opacity-0 group-hover:opacity-100 cursor-pointer"
+                              className="text-slate-500 hover:text-rose-600 transition opacity-0 group-hover:opacity-100 cursor-pointer"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
@@ -463,13 +463,13 @@ const WorkflowConfigPage = () => {
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                           {/* Approver Type */}
                           <div>
-                            <label className="block text-[10px] font-bold text-slate-550 uppercase tracking-wider mb-2 text-slate-400">
+                            <label className="block text-[10px] font-bold uppercase tracking-wider mb-2 text-slate-500">
                               Approver Type
                             </label>
                             <select
                               value={step.approverType}
                               onChange={(e) => updateStepField(idx, 'approverType', e.target.value)}
-                              className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-xs p-3 outline-none focus:border-teal-500/50 cursor-pointer"
+                              className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-xs p-3 outline-none focus:border-slate-900/20 cursor-pointer"
                             >
                               <option value="MANAGER">Reporting Manager</option>
                               <option value="ROLE">Role-based</option>
@@ -480,13 +480,13 @@ const WorkflowConfigPage = () => {
                           {/* Role-based selection (conditional) */}
                           {step.approverType === 'ROLE' && (
                             <div>
-                              <label className="block text-[10px] font-bold text-slate-550 uppercase tracking-wider mb-2 text-slate-400">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider mb-2 text-slate-500">
                                 System Role
                               </label>
                               <select
                                 value={step.approverRole || 'HR_ADMIN'}
                                 onChange={(e) => updateStepField(idx, 'approverRole', e.target.value)}
-                                className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-xs p-3 outline-none focus:border-teal-500/50 cursor-pointer"
+                                className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-xs p-3 outline-none focus:border-slate-900/20 cursor-pointer"
                               >
                                 <option value="HR_ADMIN">HR_ADMIN</option>
                                 <option value="LEADERSHIP">LEADERSHIP</option>
@@ -498,13 +498,13 @@ const WorkflowConfigPage = () => {
                           {/* Specific User selection (conditional) */}
                           {step.approverType === 'SPECIFIC_USER' && (
                             <div className="md:col-span-2">
-                              <label className="block text-[10px] font-bold text-slate-550 uppercase tracking-wider mb-2 text-slate-400">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider mb-2 text-slate-500">
                                 Colleague Contact
                               </label>
                               <select
                                 value={step.approverUserId || ''}
                                 onChange={(e) => updateStepField(idx, 'approverUserId', e.target.value)}
-                                className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-xs p-3 outline-none focus:border-teal-500/50 cursor-pointer"
+                                className="w-full rounded-xl border border-slate-300 bg-white text-slate-900 text-xs p-3 outline-none focus:border-slate-900/20 cursor-pointer"
                               >
                                 {employees.map((emp) => (
                                   <option key={emp._id} value={emp.userId._id}>
@@ -521,10 +521,10 @@ const WorkflowConfigPage = () => {
                 )}
 
                 {/* Save Configurations Footer */}
-                <div className="pt-6 border-t border-slate-850 flex justify-end">
+                <div className="pt-6 border-t border-slate-200 flex justify-end">
                   <button
                     type="submit"
-                    className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 px-6 py-3 font-bold text-black shadow-lg shadow-teal-500/10 transition cursor-pointer"
+                    className="flex items-center gap-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 px-6 py-3 font-bold text-white shadow-md transition cursor-pointer"
                   >
                     <Save className="h-4 w-4" /> Save Workflow Config
                   </button>

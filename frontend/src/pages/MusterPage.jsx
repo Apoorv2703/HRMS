@@ -4,16 +4,16 @@ import { Calendar, Clock, UserCheck, UserX, AlertCircle, Download, Search, BarCh
 import api from '../services/api';
 
 const STATUS_MAP = {
-  PRESENT: { short: 'P', label: 'Present', color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' },
-  LATE: { short: 'L', label: 'Late check-in', color: 'bg-amber-500/10 border-amber-500/20 text-amber-400' },
-  HALF_DAY: { short: 'H', label: 'Half day', color: 'bg-orange-500/10 border-orange-500/20 text-orange-400' },
-  SHORT_LEAVE: { short: 'SL', label: 'Short leave', color: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' },
-  REGULARIZED: { short: 'R', label: 'Regularized', color: 'bg-teal-500/10 border-teal-500/20 text-teal-400' },
-  ABSENT: { short: 'A', label: 'Absent', color: 'bg-rose-500/10 border-rose-500/20 text-rose-400' },
-  WEEKLY_OFF: { short: 'W', label: 'Weekly off', color: 'bg-slate-800/20 border-slate-800 text-slate-500' },
-  HOLIDAY: { short: 'Hol', label: 'Holiday', color: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
-  LEAVE: { short: 'LV', label: 'Approved Leave', color: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400' },
-  '-': { short: '-', label: 'Future date / No status', color: 'bg-slate-900/10 border-slate-900/20 text-slate-600' },
+  PRESENT: { short: 'P', label: 'Present', color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
+  LATE: { short: 'L', label: 'Late check-in', color: 'bg-amber-50 border-amber-200 text-amber-700' },
+  HALF_DAY: { short: 'H', label: 'Half day', color: 'bg-orange-50 border-orange-200 text-orange-700' },
+  SHORT_LEAVE: { short: 'SL', label: 'Short leave', color: 'bg-indigo-50 border-indigo-200 text-indigo-700' },
+  REGULARIZED: { short: 'R', label: 'Regularized', color: 'bg-teal-50 border-teal-200 text-teal-700' },
+  ABSENT: { short: 'A', label: 'Absent', color: 'bg-rose-50 border-rose-200 text-rose-700' },
+  WEEKLY_OFF: { short: 'W', label: 'Weekly off', color: 'bg-slate-100 border-slate-200 text-slate-650' },
+  HOLIDAY: { short: 'Hol', label: 'Holiday', color: 'bg-blue-50 border-blue-200 text-blue-700' },
+  LEAVE: { short: 'LV', label: 'Approved Leave', color: 'bg-indigo-50 border-indigo-200 text-indigo-700' },
+  '-': { short: '-', label: 'Future date / No status', color: 'bg-slate-50 border-slate-250 text-slate-400' },
 };
 
 const MusterPage = () => {
@@ -242,26 +242,26 @@ const MusterPage = () => {
   };
 
   return (
-    <div className="bg-slate-950 text-slate-100 min-h-[calc(100vh-4rem)] p-4 sm:p-6 lg:p-8">
+    <div className="bg-slate-50 text-slate-900 min-h-[calc(100vh-4rem)] p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-8">
         
         {/* Page Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-800 pb-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-6">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              <Calendar className="h-8 w-8 text-teal-400" />
-              Muster Register <span className="text-teal-400 font-medium text-lg sm:text-xl"> &amp; Reports</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-950 flex items-center gap-2">
+              <Calendar className="h-8 w-8 text-slate-950" />
+              Muster Register <span className="text-slate-700 font-medium text-lg sm:text-xl"> &amp; Reports</span>
             </h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-slate-500 text-sm mt-1">
               Analyze monthly attendance logs, calculate aggregate shift durations, and track overtime.
             </p>
           </div>
 
           {/* Month/Year Navigation Control */}
-          <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 p-1.5 rounded-xl self-start sm:self-center">
+          <div className="flex items-center gap-2 bg-white border border-slate-200 p-1.5 rounded-xl self-start sm:self-center shadow-sm">
             <button
               onClick={handlePrevMonth}
-              className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition cursor-pointer"
+              className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition cursor-pointer"
             >
               &larr;
             </button>
@@ -269,26 +269,26 @@ const MusterPage = () => {
             <select
               value={month}
               onChange={(e) => setMonth(Number(e.target.value))}
-              className="bg-transparent text-sm font-bold text-slate-200 outline-none px-2 cursor-pointer focus:text-teal-400"
+              className="bg-transparent text-sm font-bold text-slate-800 outline-none px-2 cursor-pointer focus:text-slate-950"
             >
               {months.map(m => (
-                <option key={m.value} value={m.value} className="bg-slate-900 text-slate-200">{m.label}</option>
+                <option key={m.value} value={m.value} className="bg-white text-slate-800">{m.label}</option>
               ))}
             </select>
 
             <select
               value={year}
               onChange={(e) => setYear(Number(e.target.value))}
-              className="bg-transparent text-sm font-bold text-slate-200 outline-none px-2 cursor-pointer focus:text-teal-400 border-l border-slate-800 pl-3"
+              className="bg-transparent text-sm font-bold text-slate-800 outline-none px-2 cursor-pointer focus:text-slate-950 border-l border-slate-200 pl-3"
             >
               {years.map(y => (
-                <option key={y} value={y} className="bg-slate-900 text-slate-200">{y}</option>
+                <option key={y} value={y} className="bg-white text-slate-800">{y}</option>
               ))}
             </select>
 
             <button
               onClick={handleNextMonth}
-              className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition cursor-pointer"
+              className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition cursor-pointer"
             >
               &rarr;
             </button>
@@ -305,46 +305,46 @@ const MusterPage = () => {
 
         {/* Dashboard Analytics Bar */}
         {stats && (
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-slate-800">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Total Present</span>
-              <span className="text-xl font-extrabold text-emerald-400 mt-1 block">{stats.totalPresent}</span>
+              <span className="text-xl font-extrabold text-emerald-700 mt-1 block">{stats.totalPresent}</span>
               <span className="text-[9px] text-slate-500 mt-1 block">days recorded</span>
             </div>
             
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-slate-800">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Late Check-ins</span>
-              <span className="text-xl font-extrabold text-amber-400 mt-1 block">{stats.totalLate}</span>
+              <span className="text-xl font-extrabold text-amber-700 mt-1 block">{stats.totalLate}</span>
               <span className="text-[9px] text-slate-500 mt-1 block">grace exceeded</span>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-slate-800">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Half-Day Markers</span>
-              <span className="text-xl font-extrabold text-orange-400 mt-1 block">{stats.totalHalfDay}</span>
+              <span className="text-xl font-extrabold text-orange-700 mt-1 block">{stats.totalHalfDay}</span>
               <span className="text-[9px] text-slate-500 mt-1 block">under threshold</span>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-slate-800">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Short Leaves</span>
-              <span className="text-xl font-extrabold text-indigo-400 mt-1 block">{stats.totalShortLeave || 0}</span>
+              <span className="text-xl font-extrabold text-indigo-700 mt-1 block">{stats.totalShortLeave || 0}</span>
               <span className="text-[9px] text-slate-500 mt-1 block">short shifts</span>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-slate-800">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Absence Days</span>
-              <span className="text-xl font-extrabold text-rose-500 mt-1 block">{stats.totalAbsent}</span>
+              <span className="text-xl font-extrabold text-rose-700 mt-1 block">{stats.totalAbsent}</span>
               <span className="text-[9px] text-slate-500 mt-1 block">working days missed</span>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-slate-800">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Avg Daily Hours</span>
-              <span className="text-xl font-extrabold text-teal-400 mt-1 block">{stats.avgWorkHours} hrs</span>
+              <span className="text-xl font-extrabold text-slate-900 mt-1 block">{stats.avgWorkHours} hrs</span>
               <span className="text-[9px] text-slate-500 mt-1 block">per present shift</span>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-slate-800">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Total Overtime</span>
-              <span className="text-xl font-extrabold text-cyan-400 mt-1 block">{stats.totalOvertimeHours} hrs</span>
+              <span className="text-xl font-extrabold text-slate-900 mt-1 block">{stats.totalOvertimeHours} hrs</span>
               <span className="text-[9px] text-slate-500 mt-1 block">over standard shifts</span>
             </div>
           </div>
@@ -352,13 +352,13 @@ const MusterPage = () => {
 
         {/* Tab Controls & Filters */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex border-b border-slate-850 gap-4">
+          <div className="flex border-b border-slate-200 gap-4">
             <button
               onClick={() => setActiveTab('grid')}
               className={`pb-2.5 text-sm font-bold tracking-wide transition-all border-b-2 cursor-pointer ${
                 activeTab === 'grid'
-                  ? 'border-teal-500 text-teal-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-slate-950 text-slate-950 font-bold'
+                  : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               Muster Grid
@@ -367,8 +367,8 @@ const MusterPage = () => {
               onClick={() => setActiveTab('overtime')}
               className={`pb-2.5 text-sm font-bold tracking-wide transition-all border-b-2 cursor-pointer ${
                 activeTab === 'overtime'
-                  ? 'border-teal-500 text-teal-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-slate-950 text-slate-950 font-bold'
+                  : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-200'
               }`}
             >
               Overtime Sheet
@@ -378,7 +378,7 @@ const MusterPage = () => {
                 onClick={() => setActiveTab('shift-config')}
                 className={`pb-2.5 text-sm font-bold tracking-wide transition-all border-b-2 cursor-pointer ${
                   activeTab === 'shift-config'
-                    ? 'border-teal-500 text-teal-400'
+                    ? 'border-teal-500 text-slate-950'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -397,7 +397,7 @@ const MusterPage = () => {
                   placeholder="Search staff name or ID..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-4 py-2 w-64 rounded-xl border border-slate-800 bg-slate-900/50 text-sm text-slate-100 outline-none focus:border-teal-500/50 transition-colors"
+                  className="pl-9 pr-4 py-2 w-64 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 transition-colors"
                 />
               </div>
             )}
@@ -406,7 +406,7 @@ const MusterPage = () => {
               <button
                 onClick={exportMusterCSV}
                 disabled={filteredGrid.length === 0}
-                className="flex items-center gap-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-xs font-bold text-white px-4.5 py-2.5 transition duration-150 cursor-pointer shadow"
+                className="flex items-center gap-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 text-xs font-bold text-white px-4.5 py-2.5 transition duration-150 cursor-pointer shadow-md"
               >
                 <Download className="h-4 w-4" /> Export CSV
               </button>
@@ -423,33 +423,33 @@ const MusterPage = () => {
         ) : activeTab === 'grid' ? (
           
           /* Muster Grid Layout */
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl shadow-xl overflow-hidden">
+          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left text-sm">
-                <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 font-bold text-xs uppercase font-mono tracking-wider sticky top-0">
+                <thead className="bg-slate-50 border-b border-slate-200 text-slate-550 font-bold text-xs uppercase font-mono tracking-wider sticky top-0">
                   <tr>
-                    <th className="px-4 py-3 min-w-[200px] border-r border-slate-800 bg-slate-900 sticky left-0 z-10">Employee Details</th>
+                    <th className="px-4 py-3 min-w-[200px] border-r border-slate-200 bg-slate-50 sticky left-0 z-10">Employee Details</th>
                     {Array.from({ length: numDays }, (_, i) => i + 1).map((d) => (
-                      <th key={d} className="px-2.5 py-3 text-center min-w-[42px] border-r border-slate-850/50">
+                      <th key={d} className="px-2.5 py-3 text-center min-w-[42px] border-r border-slate-200/50">
                         {d.toString().padStart(2, '0')}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-850 bg-slate-950/20 font-mono">
+                <tbody className="divide-y divide-slate-100 bg-white font-mono">
                   {filteredGrid.length === 0 ? (
                     <tr>
-                      <td colSpan={numDays + 1} className="px-4 py-16 text-center text-slate-500 italic bg-slate-950/10">
+                      <td colSpan={numDays + 1} className="px-4 py-16 text-center text-slate-500 italic bg-slate-50">
                         No employees found matching query or recorded for this month.
                       </td>
                     </tr>
                   ) : (
                     filteredGrid.map((emp) => (
-                      <tr key={emp._id} className="hover:bg-slate-900/40 group">
+                      <tr key={emp._id} className="hover:bg-slate-50 group">
                         
                         {/* Employee Name (Sticky column for easy scrolling) */}
-                        <td className="px-4 py-3.5 border-r border-slate-800 bg-slate-950/90 group-hover:bg-slate-900 sticky left-0 z-10">
-                          <strong className="text-slate-100 font-sans font-bold block">{emp.name}</strong>
+                        <td className="px-4 py-3.5 border-r border-slate-200 bg-white group-hover:bg-slate-50 sticky left-0 z-10">
+                          <strong className="text-slate-900 font-sans font-bold block">{emp.name}</strong>
                           <span className="text-[10px] text-slate-500 uppercase tracking-wider">{emp.employeeId || 'No ID'}</span>
                         </td>
                         
@@ -460,11 +460,11 @@ const MusterPage = () => {
                           const mapped = STATUS_MAP[status] || (status && status !== '-' ? {
                             short: status,
                             label: `Leave (${status})`,
-                            color: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400 font-semibold'
+                            color: 'bg-indigo-50 border-indigo-200 text-indigo-700 font-semibold'
                           } : STATUS_MAP['-']);
 
                           return (
-                            <td key={d} className="p-1 border-r border-slate-850/30 text-center">
+                            <td key={d} className="p-1 border-r border-slate-200/30 text-center">
                               <div
                                 title={`${emp.name} (Day ${dayKey}): ${mapped.label}`}
                                 className={`flex h-8 w-full items-center justify-center rounded border text-xs font-bold font-mono transition-transform duration-75 hover:scale-105 select-none ${mapped.color}`}
@@ -482,8 +482,8 @@ const MusterPage = () => {
             </div>
 
             {/* Grid Legend Footer */}
-            <div className="border-t border-slate-800 bg-slate-900/60 p-4 flex flex-wrap gap-x-5 gap-y-2.5 text-xs text-slate-400 font-sans items-center">
-              <strong className="text-slate-200">Legend:</strong>
+            <div className="border-t border-slate-200 bg-slate-50 p-4 flex flex-wrap gap-x-5 gap-y-2.5 text-xs text-slate-500 font-sans items-center">
+              <strong className="text-slate-800">Legend:</strong>
               {Object.entries(STATUS_MAP).filter(([k]) => k !== '-').map(([key, value]) => (
                 <div key={key} className="flex items-center gap-1.5">
                   <span className={`inline-flex items-center justify-center h-5 w-8 rounded border text-[10px] font-bold font-mono ${value.color}`}>
@@ -498,39 +498,39 @@ const MusterPage = () => {
         ) : activeTab === 'overtime' ? (
           
           /* Overtime Sheet Tab Layout */
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl shadow-xl overflow-hidden">
-            <div className="p-6 border-b border-slate-800 bg-slate-900/30 flex justify-between items-center">
+          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-cyan-400" />
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-slate-900" />
                   Monthly Overtime Sheet
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                   Accumulated hours exceeding standard shift lengths for {months.find(m => m.value === month)?.label} {year}.
                 </p>
               </div>
-              <span className="text-xs text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full font-bold border border-cyan-500/20 uppercase tracking-wide">
+              <span className="text-xs text-slate-800 bg-slate-100 px-3 py-1 rounded-full font-bold border border-slate-200 uppercase tracking-wide">
                 Total Sheet Overtime: {stats?.totalOvertimeHours || '0.00'} hrs
               </span>
             </div>
 
             {overtimeSheet.length === 0 ? (
-              <div className="px-6 py-16 text-center text-slate-500 italic bg-slate-950/10">
+              <div className="px-6 py-16 text-center text-slate-500 italic bg-slate-50">
                 No overtime recorded for any employee in this month.
               </div>
             ) : (
-              <div className="divide-y divide-slate-850">
-                <div className="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-950/40">
+              <div className="divide-y divide-slate-100">
+                <div className="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">
                   <div className="col-span-2 font-mono">Employee ID</div>
                   <div className="col-span-6">Employee Name</div>
                   <div className="col-span-4 text-right">Total Overtime Hours</div>
                 </div>
 
                 {overtimeSheet.map((ot) => (
-                  <div key={ot.employeeId} className="grid grid-cols-12 gap-4 px-6 py-4.5 items-center hover:bg-slate-900/40">
-                    <div className="col-span-2 font-mono font-semibold text-slate-400">{ot.employeeId}</div>
-                    <div className="col-span-6 font-bold text-slate-100">{ot.name}</div>
-                    <div className="col-span-4 text-right text-base font-black text-cyan-400 font-mono">
+                  <div key={ot.employeeId} className="grid grid-cols-12 gap-4 px-6 py-4.5 items-center hover:bg-slate-50">
+                    <div className="col-span-2 font-mono font-semibold text-slate-500">{ot.employeeId}</div>
+                    <div className="col-span-6 font-bold text-slate-900">{ot.name}</div>
+                    <div className="col-span-4 text-right text-base font-black text-slate-900 font-mono">
                       {ot.overtimeHours} <span className="text-xs font-medium text-slate-500 font-sans">hrs</span>
                     </div>
                   </div>
@@ -542,24 +542,24 @@ const MusterPage = () => {
           /* Shift Configuration Management Forms */
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Bulk Shift Assignment Card */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-905/30 bg-slate-900/20 backdrop-blur-xl shadow-xl p-6 space-y-6">
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-xl p-6 space-y-6 text-slate-900">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <UserCheck className="h-5 w-5 text-teal-400" />
+                <h3 className="text-lg font-bold text-slate-950 flex items-center gap-2">
+                  <UserCheck className="h-5 w-5 text-slate-950" />
                   Bulk Team Shift Assignment
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                   Assign a default shift in bulk to all active employees in a department, a location, or both.
                 </p>
               </div>
 
               <form onSubmit={handleBulkAssign} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Department</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Department</label>
                   <select
                     value={bulkDept}
                     onChange={(e) => setBulkDept(e.target.value)}
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 transition-colors"
                   >
                     <option value="">All Departments</option>
                     {departments.map((d) => (
@@ -571,11 +571,11 @@ const MusterPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Location</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Location</label>
                   <select
                     value={bulkLoc}
                     onChange={(e) => setBulkLoc(e.target.value)}
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 transition-colors"
                   >
                     <option value="">All Locations</option>
                     {locations.map((l) => (
@@ -587,12 +587,12 @@ const MusterPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Target Shift *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Target Shift *</label>
                   <select
                     value={bulkShiftId}
                     onChange={(e) => setBulkShiftId(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 transition-colors"
                   >
                     <option value="">Select Shift</option>
                     {shifts.map((s) => (
@@ -614,13 +614,13 @@ const MusterPage = () => {
             </div>
 
             {/* Rotational Shift Scheduler Card */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl shadow-xl p-6 space-y-6">
+            <div className="rounded-2xl border border-slate-200 bg-slate-900/20 backdrop-blur-xl shadow-xl p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-lg font-bold text-slate-950 flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-indigo-400" />
                   Rotational Shift Scheduler
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                   Override shift schedules for selected employees across specific dates.
                 </p>
               </div>
@@ -628,35 +628,35 @@ const MusterPage = () => {
               <form onSubmit={handleRotationalAssign} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Start Date *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Start Date *</label>
                     <input
                       type="date"
                       value={rotationalStart}
                       onChange={(e) => setRotationalStart(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">End Date *</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">End Date *</label>
                     <input
                       type="date"
                       value={rotationalEnd}
                       onChange={(e) => setRotationalEnd(e.target.value)}
                       required
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Target Shift *</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Target Shift *</label>
                   <select
                     value={rotationalShiftId}
                     onChange={(e) => setRotationalShiftId(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm p-3 outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950/20 transition-colors"
                   >
                     <option value="">Select Shift</option>
                     {shifts.map((s) => (
@@ -670,7 +670,7 @@ const MusterPage = () => {
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Select Employees *</label>
-                    <div className="flex gap-2 text-[10px] font-bold text-teal-400">
+                    <div className="flex gap-2 text-[10px] font-bold text-slate-950">
                       <button
                         type="button"
                         onClick={() => setSelectedEmpIds(employees.map(e => e._id))}
@@ -705,11 +705,11 @@ const MusterPage = () => {
                         }
                       });
                     }}
-                    className="w-full mb-2 rounded-lg border border-slate-800/80 bg-slate-950/40 text-slate-200 text-xs px-3 py-2 outline-none focus:border-teal-500/30 transition-colors"
+                    className="w-full mb-2 rounded-lg border border-slate-300 bg-white text-slate-900 text-xs px-3 py-2 outline-none focus:border-slate-950/20 transition-colors placeholder-slate-400"
                   />
 
                   {/* Employees Scroll list */}
-                  <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-3 max-h-48 overflow-y-auto space-y-2">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 max-h-48 overflow-y-auto space-y-2">
                     {employees.length === 0 ? (
                       <p className="text-xs text-slate-500 italic text-center py-4">No employees loaded.</p>
                     ) : (
@@ -718,7 +718,7 @@ const MusterPage = () => {
                         return (
                           <label
                             key={emp._id}
-                            className="emp-check-item flex items-center gap-2.5 rounded-lg hover:bg-slate-900/50 p-1.5 cursor-pointer text-xs transition duration-75 select-none"
+                            className="emp-check-item flex items-center gap-2.5 rounded-lg hover:bg-slate-250 p-1.5 cursor-pointer text-xs transition duration-75 select-none"
                           >
                             <input
                               type="checkbox"
@@ -730,9 +730,9 @@ const MusterPage = () => {
                                   setSelectedEmpIds([...selectedEmpIds, emp._id]);
                                 }
                               }}
-                              className="rounded border-slate-800 text-teal-600 focus:ring-teal-500 bg-slate-900 animate-none"
+                              className="rounded border-slate-300 text-slate-950 focus:ring-slate-950 bg-white animate-none"
                             />
-                            <span className="flex-1 font-semibold text-slate-200">
+                            <span className="flex-1 font-semibold text-slate-700">
                               {emp.personal?.firstName} {emp.personal?.lastName}
                             </span>
                             <span className="text-[10px] text-slate-500 font-mono">
@@ -748,7 +748,7 @@ const MusterPage = () => {
                 <button
                   type="submit"
                   disabled={rotationalLoading}
-                  className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow"
+                  className="w-full rounded-xl bg-slate-950 hover:bg-slate-900 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow-md"
                 >
                   {rotationalLoading ? 'Scheduling...' : 'Schedule Rotational Shift'}
                 </button>
