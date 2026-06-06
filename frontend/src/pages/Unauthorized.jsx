@@ -17,7 +17,7 @@ const Unauthorized = () => {
         </p>
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex w-full justify-center rounded-lg bg-brand-600 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-brand-500 focus:outline-none"
+          className="flex w-full justify-center rounded-lg bg-brand-600 py-2.5 text-sm font-semibold text-slate-950 shadow-lg hover:bg-brand-500 focus:outline-none"
         >
           Return to Dashboard
         </button>

@@ -822,7 +822,7 @@ const LeaveDashboardPage = () => {
                 <button
                   type="submit"
                   disabled={samlLoading}
-                  className="w-full rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow"
+                  className="w-full rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-sm font-bold text-slate-950 py-3 transition duration-150 cursor-pointer shadow"
                 >
                   {samlLoading ? 'Saving Settings...' : 'Save SAML Settings'}
                 </button>

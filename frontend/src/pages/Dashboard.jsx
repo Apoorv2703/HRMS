@@ -169,7 +169,7 @@ const Dashboard = () => {
           <div className="md:col-span-1 space-y-8">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl shadow-xl">
               <div className="flex flex-col items-center text-center">
-                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-brand-600 to-indigo-600 text-white shadow-xl">
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-white to-slate-200 text-slate-950 shadow-xl">
                   <span className="text-3xl font-bold uppercase">{user?.email[0]}</span>
                   <span className="absolute bottom-0 right-0 rounded-full bg-emerald-500 p-1.5 border-2 border-slate-900"></span>
                 </div>
@@ -280,7 +280,7 @@ const Dashboard = () => {
                   <button
                     onClick={startMfaSetup}
                     disabled={mfaLoading}
-                    className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 py-2.5 text-xs font-semibold text-white shadow"
+                    className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 py-2.5 text-xs font-semibold text-slate-950 shadow"
                   >
                     <QrCode className="h-4 w-4" /> Setup Google Authenticator
                   </button>
