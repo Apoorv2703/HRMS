@@ -34,6 +34,19 @@ const shiftSchema = new mongoose.Schema(
       type: [Number],
       default: [0, 6], // Array of numbers representing Sunday (0) to Saturday (6)
     },
+    shortLeaveThresholdMins: {
+      type: Number,
+      default: 360, // minimum work duration in minutes required to qualify for full day
+    },
+    type: {
+      type: String,
+      enum: ['FIXED', 'FLEXIBLE'],
+      default: 'FIXED',
+    },
+    minWorkMinutesPerDay: {
+      type: Number,
+      default: 480, // e.g. 8 hours standard work requirement
+    },
   },
   {
     timestamps: true,

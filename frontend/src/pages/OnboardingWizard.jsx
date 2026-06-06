@@ -34,6 +34,7 @@ const OnboardingWizard = () => {
   const [joiningDate, setJoiningDate] = useState('');
   const [reportingManagerId, setReportingManagerId] = useState('');
   const [assignedShift, setAssignedShift] = useState('');
+  const [shiftId, setShiftId] = useState('');
   const [employmentType, setEmploymentType] = useState('FULL_TIME');
 
   // Dropdowns loading
@@ -41,6 +42,7 @@ const OnboardingWizard = () => {
   const [locations, setLocations] = useState([]);
   const [grades, setGrades] = useState([]);
   const [managers, setManagers] = useState([]);
+  const [shifts, setShifts] = useState([]);
 
   // Result info
   const [inviteResult, setInviteResult] = useState(null);
@@ -62,6 +64,14 @@ const OnboardingWizard = () => {
       const empResponse = await api.get('/employees', { params: { limit: 100 } });
       // Filter out exited employees or show all
       setManagers(empResponse.data.employees || []);
+
+      // Fetch active shifts list
+      try {
+        const shiftResponse = await api.get('/attendance-config/shifts');
+        setShifts(shiftResponse.data || []);
+      } catch (shiftErr) {
+        console.error('Error fetching shifts config', shiftErr);
+      }
     } catch (err) {
       console.error('Error fetching org metadata', err);
     }
@@ -115,6 +125,7 @@ const OnboardingWizard = () => {
           joiningDate: joiningDate || undefined,
           reportingManagerId: reportingManagerId || undefined,
           assignedShift: assignedShift || undefined,
+          shiftId: shiftId || undefined,
           employmentType: employmentType || 'FULL_TIME',
         },
       };
@@ -523,15 +534,21 @@ const OnboardingWizard = () => {
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Assigned Shift</label>
                 <select
-                  value={assignedShift}
-                  onChange={(e) => setAssignedShift(e.target.value)}
+                  value={shiftId}
+                  onChange={(e) => {
+                    const id = e.target.value;
+                    setShiftId(id);
+                    const match = shifts.find(s => s._id === id);
+                    setAssignedShift(match ? match.name : '');
+                  }}
                   className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
                 >
                   <option value="">Select Shift</option>
-                  <option value="Day Shift">Day Shift</option>
-                  <option value="Night Shift">Night Shift</option>
-                  <option value="Morning Shift">Morning Shift</option>
-                  <option value="Evening Shift">Evening Shift</option>
+                  {shifts.map((s) => (
+                    <option key={s._id} value={s._id}>
+                      {s.name} ({s.startTime} - {s.endTime})
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

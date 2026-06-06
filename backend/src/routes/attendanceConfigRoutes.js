@@ -11,6 +11,8 @@ router.use(tenantIsolation);
 // Shifts Routing
 router.post('/shifts', rbac(['HR_ADMIN']), configController.createShift);
 router.get('/shifts', configController.getShifts);
+router.post('/shifts/assign-rotational', rbac(['HR_ADMIN']), configController.assignRotationalShifts);
+router.post('/shifts/assign-to-team', rbac(['HR_ADMIN']), configController.assignShiftToTeam);
 router.get('/shifts/:id', configController.getShiftById);
 router.put('/shifts/:id', rbac(['HR_ADMIN']), configController.updateShift);
 router.delete('/shifts/:id', rbac(['HR_ADMIN']), configController.deleteShift);

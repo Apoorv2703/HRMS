@@ -40,7 +40,7 @@ const attendanceRecordSchema = new mongoose.Schema(
     punches: [punchSchema],
     status: {
       type: String,
-      enum: ['PRESENT', 'LATE', 'HALF_DAY', 'ABSENT', 'WEEKLY_OFF', 'HOLIDAY', 'REGULARIZED'],
+      enum: ['PRESENT', 'LATE', 'HALF_DAY', 'ABSENT', 'WEEKLY_OFF', 'HOLIDAY', 'REGULARIZED', 'SHORT_LEAVE'],
       default: 'PRESENT',
     },
     totalWorkMinutes: {

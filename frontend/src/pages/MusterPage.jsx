@@ -7,6 +7,7 @@ const STATUS_MAP = {
   PRESENT: { short: 'P', label: 'Present', color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' },
   LATE: { short: 'L', label: 'Late check-in', color: 'bg-amber-500/10 border-amber-500/20 text-amber-400' },
   HALF_DAY: { short: 'H', label: 'Half day', color: 'bg-orange-500/10 border-orange-500/20 text-orange-400' },
+  SHORT_LEAVE: { short: 'SL', label: 'Short leave', color: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' },
   REGULARIZED: { short: 'R', label: 'Regularized', color: 'bg-teal-500/10 border-teal-500/20 text-teal-400' },
   ABSENT: { short: 'A', label: 'Absent', color: 'bg-rose-500/10 border-rose-500/20 text-rose-400' },
   WEEKLY_OFF: { short: 'W', label: 'Weekly off', color: 'bg-slate-800/20 border-slate-800 text-slate-500' },
@@ -20,7 +21,7 @@ const MusterPage = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('grid'); // 'grid' or 'overtime'
+  const [activeTab, setActiveTab] = useState('grid'); // 'grid', 'overtime', or 'shift-config'
   
   // Data states
   const [gridData, setGridData] = useState([]);
@@ -28,9 +29,50 @@ const MusterPage = () => {
   const [stats, setStats] = useState(null);
   const [overtimeSheet, setOvertimeSheet] = useState([]);
   
+  // Shift Management Metadata States
+  const [shifts, setShifts] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  
+  // Bulk Assign form state
+  const [bulkDept, setBulkDept] = useState('');
+  const [bulkLoc, setBulkLoc] = useState('');
+  const [bulkShiftId, setBulkShiftId] = useState('');
+  const [bulkLoading, setBulkLoading] = useState(false);
+
+  // Rotational Assign form state
+  const [rotationalShiftId, setRotationalShiftId] = useState('');
+  const [rotationalStart, setRotationalStart] = useState('');
+  const [rotationalEnd, setRotationalEnd] = useState('');
+  const [selectedEmpIds, setSelectedEmpIds] = useState([]);
+  const [rotationalLoading, setRotationalLoading] = useState(false);
+  
   // UI states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (user?.role === 'HR_ADMIN') {
+      fetchShiftManagementMetadata();
+    }
+  }, [user]);
+
+  const fetchShiftManagementMetadata = async () => {
+    try {
+      const shiftResponse = await api.get('/attendance-config/shifts');
+      setShifts(shiftResponse.data || []);
+
+      const orgResponse = await api.get('/organization');
+      setDepartments(orgResponse.data.departments || []);
+      setLocations(orgResponse.data.locations || []);
+
+      const empResponse = await api.get('/employees', { params: { limit: 100 } });
+      setEmployees(empResponse.data.employees || []);
+    } catch (err) {
+      console.error('Failed to load shift management metadata:', err);
+    }
+  };
 
   // Year list selection
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i);
@@ -71,6 +113,72 @@ const MusterPage = () => {
       setError(err.response?.data?.error || 'Failed to load muster data.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBulkAssign = async (e) => {
+    e.preventDefault();
+    if (!bulkShiftId) {
+      alert('Please select a shift.');
+      return;
+    }
+    if (!bulkDept && !bulkLoc) {
+      alert('Please select either a department or a location.');
+      return;
+    }
+    setBulkLoading(true);
+    try {
+      const response = await api.post('/attendance-config/shifts/assign-to-team', {
+        department: bulkDept || undefined,
+        location: bulkLoc || undefined,
+        shiftId: bulkShiftId,
+      });
+      alert(response.data.message);
+      // Reset form & reload grid stats
+      setBulkDept('');
+      setBulkLoc('');
+      setBulkShiftId('');
+      fetchMusterData();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to bulk assign shift.');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleRotationalAssign = async (e) => {
+    e.preventDefault();
+    if (!rotationalShiftId) {
+      alert('Please select a shift.');
+      return;
+    }
+    if (!rotationalStart || !rotationalEnd) {
+      alert('Please select start and end dates.');
+      return;
+    }
+    if (selectedEmpIds.length === 0) {
+      alert('Please select at least one employee.');
+      return;
+    }
+    setRotationalLoading(true);
+    try {
+      const response = await api.post('/attendance-config/shifts/assign-rotational', {
+        employeeIds: selectedEmpIds,
+        startDate: rotationalStart,
+        endDate: rotationalEnd,
+        shiftId: rotationalShiftId,
+      });
+      alert(response.data.message);
+      // Reset form & reload grid stats
+      setRotationalShiftId('');
+      setRotationalStart('');
+      setRotationalEnd('');
+      setSelectedEmpIds([]);
+      fetchMusterData();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to assign rotational shift.');
+    } finally {
+      setRotationalLoading(false);
     }
   };
 
@@ -196,7 +304,7 @@ const MusterPage = () => {
 
         {/* Dashboard Analytics Bar */}
         {stats && (
-          <div className="grid gap-4 grid-cols-2 lg:grid-cols-6">
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
             <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Total Present</span>
               <span className="text-xl font-extrabold text-emerald-400 mt-1 block">{stats.totalPresent}</span>
@@ -213,6 +321,12 @@ const MusterPage = () => {
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Half-Day Markers</span>
               <span className="text-xl font-extrabold text-orange-400 mt-1 block">{stats.totalHalfDay}</span>
               <span className="text-[9px] text-slate-500 mt-1 block">under threshold</span>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Short Leaves</span>
+              <span className="text-xl font-extrabold text-indigo-400 mt-1 block">{stats.totalShortLeave || 0}</span>
+              <span className="text-[9px] text-slate-500 mt-1 block">short shifts</span>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 backdrop-blur shadow">
@@ -258,6 +372,18 @@ const MusterPage = () => {
             >
               Overtime Sheet
             </button>
+            {user?.role === 'HR_ADMIN' && (
+              <button
+                onClick={() => setActiveTab('shift-config')}
+                className={`pb-2.5 text-sm font-bold tracking-wide transition-all border-b-2 cursor-pointer ${
+                  activeTab === 'shift-config'
+                    ? 'border-teal-500 text-teal-400'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Shift Management
+              </button>
+            )}
           </div>
 
           {/* Search and Action Toolbar */}
@@ -275,13 +401,15 @@ const MusterPage = () => {
               </div>
             )}
 
-            <button
-              onClick={exportMusterCSV}
-              disabled={filteredGrid.length === 0}
-              className="flex items-center gap-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-xs font-bold text-white px-4.5 py-2.5 transition duration-150 cursor-pointer shadow"
-            >
-              <Download className="h-4 w-4" /> Export CSV
-            </button>
+            {activeTab !== 'shift-config' && (
+              <button
+                onClick={exportMusterCSV}
+                disabled={filteredGrid.length === 0}
+                className="flex items-center gap-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-xs font-bold text-white px-4.5 py-2.5 transition duration-150 cursor-pointer shadow"
+              >
+                <Download className="h-4 w-4" /> Export CSV
+              </button>
+            )}
           </div>
         </div>
 
@@ -362,7 +490,7 @@ const MusterPage = () => {
             </div>
           </div>
 
-        ) : (
+        ) : activeTab === 'overtime' ? (
           
           /* Overtime Sheet Tab Layout */
           <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl shadow-xl overflow-hidden">
@@ -405,7 +533,224 @@ const MusterPage = () => {
               </div>
             )}
           </div>
-        )}
+        ) : activeTab === 'shift-config' ? (
+          /* Shift Configuration Management Forms */
+          <div className="grid gap-8 lg:grid-cols-2">
+            {/* Bulk Shift Assignment Card */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-905/30 bg-slate-900/20 backdrop-blur-xl shadow-xl p-6 space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <UserCheck className="h-5 w-5 text-teal-400" />
+                  Bulk Team Shift Assignment
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Assign a default shift in bulk to all active employees in a department, a location, or both.
+                </p>
+              </div>
+
+              <form onSubmit={handleBulkAssign} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Department</label>
+                  <select
+                    value={bulkDept}
+                    onChange={(e) => setBulkDept(e.target.value)}
+                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                  >
+                    <option value="">All Departments</option>
+                    {departments.map((d) => (
+                      <option key={d._id || d.name} value={d.name}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Location</label>
+                  <select
+                    value={bulkLoc}
+                    onChange={(e) => setBulkLoc(e.target.value)}
+                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                  >
+                    <option value="">All Locations</option>
+                    {locations.map((l) => (
+                      <option key={l._id || l.name} value={l.name}>
+                        {l.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Target Shift *</label>
+                  <select
+                    value={bulkShiftId}
+                    onChange={(e) => setBulkShiftId(e.target.value)}
+                    required
+                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                  >
+                    <option value="">Select Shift</option>
+                    {shifts.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.name} ({s.type === 'FLEXIBLE' ? 'Flexible' : `${s.startTime} - ${s.endTime}`})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={bulkLoading}
+                  className="w-full rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow"
+                >
+                  {bulkLoading ? 'Assigning...' : 'Assign Shift to Team'}
+                </button>
+              </form>
+            </div>
+
+            {/* Rotational Shift Scheduler Card */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl shadow-xl p-6 space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-indigo-400" />
+                  Rotational Shift Scheduler
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Override shift schedules for selected employees across specific dates.
+                </p>
+              </div>
+
+              <form onSubmit={handleRotationalAssign} className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Start Date *</label>
+                    <input
+                      type="date"
+                      value={rotationalStart}
+                      onChange={(e) => setRotationalStart(e.target.value)}
+                      required
+                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">End Date *</label>
+                    <input
+                      type="date"
+                      value={rotationalEnd}
+                      onChange={(e) => setRotationalEnd(e.target.value)}
+                      required
+                      className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Target Shift *</label>
+                  <select
+                    value={rotationalShiftId}
+                    onChange={(e) => setRotationalShiftId(e.target.value)}
+                    required
+                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 text-slate-100 text-sm p-3 outline-none focus:border-teal-500/50 transition-colors"
+                  >
+                    <option value="">Select Shift</option>
+                    {shifts.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.name} ({s.type === 'FLEXIBLE' ? 'Flexible' : `${s.startTime} - ${s.endTime}`})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Select Employees *</label>
+                    <div className="flex gap-2 text-[10px] font-bold text-teal-400">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedEmpIds(employees.map(e => e._id))}
+                        className="hover:underline cursor-pointer"
+                      >
+                        Select All
+                      </button>
+                      <span>|</span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedEmpIds([])}
+                        className="hover:underline cursor-pointer"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Search filter for checklist */}
+                  <input
+                    type="text"
+                    placeholder="Filter employees..."
+                    onChange={(e) => {
+                      const filterVal = e.target.value.toLowerCase();
+                      const items = document.querySelectorAll('.emp-check-item');
+                      items.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        if (text.includes(filterVal)) {
+                          item.classList.remove('hidden');
+                        } else {
+                          item.classList.add('hidden');
+                        }
+                      });
+                    }}
+                    className="w-full mb-2 rounded-lg border border-slate-800/80 bg-slate-950/40 text-slate-200 text-xs px-3 py-2 outline-none focus:border-teal-500/30 transition-colors"
+                  />
+
+                  {/* Employees Scroll list */}
+                  <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-3 max-h-48 overflow-y-auto space-y-2">
+                    {employees.length === 0 ? (
+                      <p className="text-xs text-slate-500 italic text-center py-4">No employees loaded.</p>
+                    ) : (
+                      employees.map((emp) => {
+                        const isChecked = selectedEmpIds.includes(emp._id);
+                        return (
+                          <label
+                            key={emp._id}
+                            className="emp-check-item flex items-center gap-2.5 rounded-lg hover:bg-slate-900/50 p-1.5 cursor-pointer text-xs transition duration-75 select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {
+                                if (isChecked) {
+                                  setSelectedEmpIds(selectedEmpIds.filter(id => id !== emp._id));
+                                } else {
+                                  setSelectedEmpIds([...selectedEmpIds, emp._id]);
+                                }
+                              }}
+                              className="rounded border-slate-800 text-teal-600 focus:ring-teal-500 bg-slate-900 animate-none"
+                            />
+                            <span className="flex-1 font-semibold text-slate-200">
+                              {emp.personal?.firstName} {emp.personal?.lastName}
+                            </span>
+                            <span className="text-[10px] text-slate-500 font-mono">
+                              {emp.employeeId || 'No ID'}
+                            </span>
+                          </label>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={rotationalLoading}
+                  className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow"
+                >
+                  {rotationalLoading ? 'Scheduling...' : 'Schedule Rotational Shift'}
+                </button>
+              </form>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

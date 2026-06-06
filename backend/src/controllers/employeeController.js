@@ -129,6 +129,7 @@ export const inviteEmployee = async (req, res, next) => {
         location: employment.location || '',
         grade: employment.grade || '',
         assignedShift: employment.assignedShift || '',
+        shiftId: employment.shiftId || null,
         employmentType: employment.employmentType || 'FULL_TIME',
       },
       professional: {
@@ -592,6 +593,7 @@ export const updateProfile = async (req, res, next) => {
         if (employment.location) employee.employment.location = employment.location;
         if (employment.grade) employee.employment.grade = employment.grade;
         if (employment.assignedShift !== undefined) employee.employment.assignedShift = employment.assignedShift;
+        if (employment.shiftId !== undefined) employee.employment.shiftId = employment.shiftId;
         if (employment.employmentType !== undefined) employee.employment.employmentType = employment.employmentType;
       }
 

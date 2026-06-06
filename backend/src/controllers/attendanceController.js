@@ -41,24 +41,28 @@ export const recalculateRecordRules = (record, shift) => {
   // 1. Evaluate Late Status (based on the first IN punch of the day)
   const firstIn = inPunches[0];
   if (firstIn) {
-    let shiftStartMins = 9 * 60; // default 09:00 AM
-    let gracePeriod = 15;        // default 15 minutes
-
-    if (shift) {
-      const [sh, sm] = shift.startTime.split(':').map(Number);
-      shiftStartMins = sh * 60 + sm;
-      gracePeriod = shift.gracePeriodMins;
-    }
-
-    const firstInTime = new Date(firstIn.time);
-    const punchHours = firstInTime.getHours();
-    const punchMins = firstInTime.getMinutes();
-    const punchMinutesFromMidnight = punchHours * 60 + punchMins;
-
-    if (punchMinutesFromMidnight > shiftStartMins + gracePeriod) {
-      record.status = 'LATE';
+    if (shift && shift.type === 'FLEXIBLE') {
+      record.status = 'PRESENT'; // Flexible shifts are never late by clock-in
     } else {
-      record.status = 'PRESENT';
+      let shiftStartMins = 9 * 60; // default 09:00 AM
+      let gracePeriod = 15;        // default 15 minutes
+
+      if (shift) {
+        const [sh, sm] = shift.startTime.split(':').map(Number);
+        shiftStartMins = sh * 60 + sm;
+        gracePeriod = shift.gracePeriodMins;
+      }
+
+      const firstInTime = new Date(firstIn.time);
+      const punchHours = firstInTime.getHours();
+      const punchMins = firstInTime.getMinutes();
+      const punchMinutesFromMidnight = punchHours * 60 + punchMins;
+
+      if (punchMinutesFromMidnight > shiftStartMins + gracePeriod) {
+        record.status = 'LATE';
+      } else {
+        record.status = 'PRESENT';
+      }
     }
   } else {
     record.status = 'ABSENT'; // No IN punches means absent
@@ -79,26 +83,34 @@ export const recalculateRecordRules = (record, shift) => {
   }
   record.totalWorkMinutes = totalWorkedMins;
 
-  // Apply Half-Day checks
+  // Apply Half-Day and Short-Leave checks
   let halfDayThreshold = 240; // default 4 hours
+  let shortLeaveThreshold = 360; // default 6 hours
   if (shift) {
     halfDayThreshold = shift.halfDayThresholdMins;
+    shortLeaveThreshold = shift.shortLeaveThresholdMins !== undefined ? shift.shortLeaveThresholdMins : 360;
   }
 
   if (totalWorkedMins > 0) {
     if (totalWorkedMins < halfDayThreshold) {
       record.status = 'HALF_DAY';
+    } else if (totalWorkedMins < shortLeaveThreshold) {
+      record.status = 'SHORT_LEAVE';
     }
   }
 
   // 3. Overtime Calculations
   let shiftLengthMins = 8 * 60; // default 8 hours
   if (shift) {
-    const [startH, startM] = shift.startTime.split(':').map(Number);
-    const [endH, endM] = shift.endTime.split(':').map(Number);
-    const startMin = startH * 60 + startM;
-    const endMin = endH * 60 + endM;
-    shiftLengthMins = endMin > startMin ? (endMin - startMin) : (24 * 60 - startMin + endMin);
+    if (shift.type === 'FLEXIBLE') {
+      shiftLengthMins = shift.minWorkMinutesPerDay !== undefined ? shift.minWorkMinutesPerDay : 8 * 60;
+    } else {
+      const [startH, startM] = shift.startTime.split(':').map(Number);
+      const [endH, endM] = shift.endTime.split(':').map(Number);
+      const startMin = startH * 60 + startM;
+      const endMin = endH * 60 + endM;
+      shiftLengthMins = endMin > startMin ? (endMin - startMin) : (24 * 60 - startMin + endMin);
+    }
   }
 
   if (totalWorkedMins > shiftLengthMins) {
@@ -197,9 +209,18 @@ export const punchAttendance = async (req, res, next) => {
       }
     }
 
-    // Load active Shift
+    // Load active Shift (rotational override check)
     let shift = null;
-    if (employee.employment?.shiftId) {
+    const { default: EmployeeShiftSchedule } = await import('../models/EmployeeShiftSchedule.js');
+    const rotationalOverride = await EmployeeShiftSchedule.findOne({
+      tenantId: req.tenantId,
+      employeeId: employee._id,
+      date,
+    });
+
+    if (rotationalOverride) {
+      shift = await Shift.findById(rotationalOverride.shiftId);
+    } else if (employee.employment?.shiftId) {
       shift = await Shift.findById(employee.employment.shiftId);
     }
 
@@ -290,9 +311,18 @@ export const biometricSyncPunch = async (req, res, next) => {
     const punchTime = new Date(time);
     const date = time.split('T')[0];
 
-    // Load active Shift
+    // Load active Shift (rotational override check)
     let shift = null;
-    if (employee.employment?.shiftId) {
+    const { default: EmployeeShiftSchedule } = await import('../models/EmployeeShiftSchedule.js');
+    const rotationalOverride = await EmployeeShiftSchedule.findOne({
+      tenantId: tenant._id,
+      employeeId: employee._id,
+      date,
+    });
+
+    if (rotationalOverride) {
+      shift = await Shift.findById(rotationalOverride.shiftId);
+    } else if (employee.employment?.shiftId) {
       shift = await Shift.findById(employee.employment.shiftId);
     }
 
@@ -497,19 +527,32 @@ export const reviewRegularization = async (req, res, next) => {
       const workedMins = Math.max(0, Math.floor(diffMs / 1000 / 60));
       record.totalWorkMinutes = workedMins;
 
-      // Load shift rules for overtime
+      // Load shift rules for overtime (supporting rotational overrides and flexible shifts)
       let shift = null;
-      if (record.employeeId.employment?.shiftId) {
+      const { default: EmployeeShiftSchedule } = await import('../models/EmployeeShiftSchedule.js');
+      const rotationalOverride = await EmployeeShiftSchedule.findOne({
+        tenantId: req.tenantId,
+        employeeId: record.employeeId._id,
+        date: record.date,
+      });
+
+      if (rotationalOverride) {
+        shift = await Shift.findById(rotationalOverride.shiftId);
+      } else if (record.employeeId.employment?.shiftId) {
         shift = await Shift.findById(record.employeeId.employment.shiftId);
       }
 
       let shiftLengthMins = 8 * 60; // default 8 hours
       if (shift) {
-        const [startH, startM] = shift.startTime.split(':').map(Number);
-        const [endH, endM] = shift.endTime.split(':').map(Number);
-        const startMin = startH * 60 + startM;
-        const endMin = endH * 60 + endM;
-        shiftLengthMins = endMin > startMin ? (endMin - startMin) : (24 * 60 - startMin + endMin);
+        if (shift.type === 'FLEXIBLE') {
+          shiftLengthMins = shift.minWorkMinutesPerDay !== undefined ? shift.minWorkMinutesPerDay : 8 * 60;
+        } else {
+          const [startH, startM] = shift.startTime.split(':').map(Number);
+          const [endH, endM] = shift.endTime.split(':').map(Number);
+          const startMin = startH * 60 + startM;
+          const endMin = endH * 60 + endM;
+          shiftLengthMins = endMin > startMin ? (endMin - startMin) : (24 * 60 - startMin + endMin);
+        }
       }
 
       if (workedMins > shiftLengthMins) {

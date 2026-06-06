@@ -43,8 +43,9 @@ async function runTests() {
     await shift.save();
     console.log('✔ Shift configured');
 
-    // 3. Create Holiday on the 10th of the current month
+    // 3. Create Holiday on the 10th of the current month (specifically for HQ location)
     const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
     const monthStr = month.toString().padStart(2, '0');
@@ -53,12 +54,12 @@ async function runTests() {
       tenantId: tenant._id,
       name: 'Report Test Holiday',
       date: new Date(`${year}-${monthStr}-10T00:00:00.000Z`),
-      location: 'All'
+      location: 'HQ'
     });
     await holiday.save();
-    console.log('✔ Holiday created on the 10th of the month');
+    console.log('✔ Location-specific Holiday (HQ) created on the 10th of the month');
 
-    // 4. Create Employee 1
+    // 4. Create Employee 1 (HQ location)
     user1 = new User({
       tenantId: tenant._id,
       email: `emp1-${Date.now()}@test.com`,
@@ -74,12 +75,13 @@ async function runTests() {
       personal: { firstName: 'Donald', lastName: 'Knuth' },
       employment: {
         status: 'ACTIVE',
-        shiftId: shift._id
+        shiftId: shift._id,
+        location: 'HQ'
       }
     });
     await emp1.save();
 
-    // 5. Create Employee 2
+    // 5. Create Employee 2 (Remote location)
     user2 = new User({
       tenantId: tenant._id,
       email: `emp2-${Date.now()}@test.com`,
@@ -95,11 +97,12 @@ async function runTests() {
       personal: { firstName: 'Grace', lastName: 'Hopper' },
       employment: {
         status: 'ACTIVE',
-        shiftId: shift._id
+        shiftId: shift._id,
+        location: 'Remote'
       }
     });
     await emp2.save();
-    console.log('✔ Two active employees onboarded');
+    console.log('✔ Two active employees onboarded (Donald at HQ, Grace at Remote)');
 
     // 6. Seed mock punches for Employee 1
     // Day 1: Present, on-time, standard hours (09:00 - 17:00 = 480 worked mins, OT = 0)
@@ -221,6 +224,10 @@ async function runTests() {
     if (donaldRow.days['03'] !== 'PRESENT') throw new Error('Donald Day 03 status mismatch');
     if (donaldRow.days['04'] !== 'HALF_DAY') throw new Error('Donald Day 04 status mismatch');
     if (donaldRow.days['10'] !== 'HOLIDAY') throw new Error('Donald Day 10 status mismatch');
+
+    const expectedGraceDay10Status = `${year}-${monthStr}-10` > todayStr ? '-' : 'ABSENT';
+    console.log(`  - Grace Day 10: ${graceRow.days['10']} (expected: ${expectedGraceDay10Status} due to location specific holiday mismatch)`);
+    if (graceRow.days['10'] !== expectedGraceDay10Status) throw new Error(`Grace Day 10 location-specific holiday check failed: should be ${expectedGraceDay10Status}`);
 
     // Find a Sunday to check Weekly Off
     const firstSunday = [1, 2, 3, 4, 5, 6, 7].find(d => {

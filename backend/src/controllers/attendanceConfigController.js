@@ -2,6 +2,8 @@ import Shift from '../models/Shift.js';
 import Holiday from '../models/Holiday.js';
 import AuditLog from '../models/AuditLog.js';
 import Tenant from '../models/Tenant.js';
+import Employee from '../models/Employee.js';
+import EmployeeShiftSchedule from '../models/EmployeeShiftSchedule.js';
 import crypto from 'crypto';
 
 // ==========================================
@@ -46,7 +48,43 @@ export const createShift = async (req, res, next) => {
 
 export const getShifts = async (req, res, next) => {
   try {
-    const shifts = await Shift.find({ tenantId: req.tenantId });
+    let shifts = await Shift.find({ tenantId: req.tenantId });
+    if (shifts.length === 0) {
+      const defaultShifts = [
+        {
+          tenantId: req.tenantId,
+          name: 'Day Shift',
+          startTime: '09:00',
+          endTime: '17:00',
+          gracePeriodMins: 15,
+          halfDayThresholdMins: 240,
+          shortLeaveThresholdMins: 360,
+          weeklyOffs: [0, 6],
+        },
+        {
+          tenantId: req.tenantId,
+          name: 'Night Shift',
+          startTime: '22:00',
+          endTime: '06:00',
+          gracePeriodMins: 15,
+          halfDayThresholdMins: 240,
+          shortLeaveThresholdMins: 360,
+          weeklyOffs: [0, 6],
+        },
+        {
+          tenantId: req.tenantId,
+          name: 'Morning Shift',
+          startTime: '06:00',
+          endTime: '14:00',
+          gracePeriodMins: 15,
+          halfDayThresholdMins: 240,
+          shortLeaveThresholdMins: 360,
+          weeklyOffs: [0, 6],
+        }
+      ];
+      await Shift.insertMany(defaultShifts);
+      shifts = await Shift.find({ tenantId: req.tenantId });
+    }
     return res.status(200).json(shifts);
   } catch (err) {
     next(err);
@@ -320,6 +358,129 @@ export const updateAttendanceSettings = async (req, res, next) => {
     return res.status(200).json({
       message: 'Attendance settings updated successfully.',
       settings: tenant.settings.attendance,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ==========================================
+// BULK TEAM AND ROTATIONAL SHIFT ASSIGNMENTS
+// ==========================================
+
+/**
+ * Bulk assigns a shift to all active employees in a department and/or office location.
+ */
+export const assignShiftToTeam = async (req, res, next) => {
+  try {
+    const { department, location, shiftId } = req.body;
+
+    if (!shiftId) {
+      return res.status(400).json({ error: 'shiftId is required.' });
+    }
+
+    if (!department && !location) {
+      return res.status(400).json({ error: 'Either department or location must be specified.' });
+    }
+
+    const shift = await Shift.findOne({ tenantId: req.tenantId, _id: shiftId });
+    if (!shift) {
+      return res.status(404).json({ error: 'Shift configuration not found.' });
+    }
+
+    const filter = { tenantId: req.tenantId, 'employment.status': 'ACTIVE' };
+    if (department) filter['employment.department'] = department;
+    if (location) filter['employment.location'] = location;
+
+    const result = await Employee.updateMany(filter, {
+      $set: {
+        'employment.shiftId': shift._id,
+        'employment.assignedShift': shift.name,
+      }
+    });
+
+    await AuditLog.create({
+      tenantId: req.tenantId,
+      actorId: req.user.id,
+      action: 'SHIFT_ASSIGN_TEAM_BULK',
+      entity: 'EMPLOYEE',
+      entityId: shift._id,
+      details: { department, location, modifiedCount: result.modifiedCount },
+      ip: req.ip || '127.0.0.1',
+      userAgent: req.headers?.['user-agent'] || 'Server',
+    });
+
+    return res.status(200).json({
+      message: `Successfully assigned ${shift.name} to ${result.modifiedCount} employees matching search filters.`,
+      modifiedCount: result.modifiedCount,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Creates rotational schedule overrides for specified employees across a date range.
+ */
+export const assignRotationalShifts = async (req, res, next) => {
+  try {
+    const { employeeIds, startDate, endDate, shiftId } = req.body;
+
+    if (!employeeIds || !Array.isArray(employeeIds) || employeeIds.length === 0) {
+      return res.status(400).json({ error: 'employeeIds array is required and cannot be empty.' });
+    }
+    if (!startDate || !endDate || !shiftId) {
+      return res.status(400).json({ error: 'startDate, endDate, and shiftId are required.' });
+    }
+
+    const shift = await Shift.findOne({ tenantId: req.tenantId, _id: shiftId });
+    if (!shift) {
+      return res.status(404).json({ error: 'Shift configuration not found.' });
+    }
+
+    // Generate dates range (inclusive)
+    const dates = [];
+    let current = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (current > end) {
+      return res.status(400).json({ error: 'startDate cannot be after endDate.' });
+    }
+
+    while (current <= end) {
+      dates.push(current.toISOString().split('T')[0]);
+      current.setDate(current.getDate() + 1);
+    }
+
+    // Prepare bulk ops upserts
+    const ops = [];
+    employeeIds.forEach(empId => {
+      dates.forEach(d => {
+        ops.push({
+          updateOne: {
+            filter: { tenantId: req.tenantId, employeeId: empId, date: d },
+            update: { $set: { shiftId: shift._id } },
+            upsert: true,
+          }
+        });
+      });
+    });
+
+    await EmployeeShiftSchedule.bulkWrite(ops);
+
+    await AuditLog.create({
+      tenantId: req.tenantId,
+      actorId: req.user.id,
+      action: 'SHIFT_ASSIGN_ROTATIONAL_BULK',
+      entity: 'EMPLOYEE',
+      entityId: shift._id,
+      details: { employeesCount: employeeIds.length, startDate, endDate },
+      ip: req.ip || '127.0.0.1',
+      userAgent: req.headers?.['user-agent'] || 'Server',
+    });
+
+    return res.status(200).json({
+      message: `Successfully scheduled rotational shift ${shift.name} for ${employeeIds.length} employees from ${startDate} to ${endDate}.`,
     });
   } catch (err) {
     next(err);
