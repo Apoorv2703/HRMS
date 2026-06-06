@@ -2,6 +2,7 @@ import Employee from '../models/Employee.js';
 import Shift from '../models/Shift.js';
 import Holiday from '../models/Holiday.js';
 import AttendanceRecord from '../models/AttendanceRecord.js';
+import LeaveRequest from '../models/LeaveRequest.js';
 
 /**
  * Helper to get number of days in a month
@@ -23,6 +24,7 @@ export const getMusterRegister = async (req, res, next) => {
     }
 
     const monthStr = month.toString().padStart(2, '0');
+    const numDays = getDaysInMonth(year, month);
 
     // 1. Fetch active employees (populate shift)
     const employees = await Employee.find({
@@ -61,13 +63,20 @@ export const getMusterRegister = async (req, res, next) => {
       date: { $regex: `^${year}-${monthStr}` },
     });
 
+    // Fetch approved leaves for the month in bulk
+    const approvedLeaves = await LeaveRequest.find({
+      tenantId: req.tenantId,
+      status: 'APPROVED',
+      startDate: { $lte: `${year}-${monthStr}-${numDays.toString().padStart(2, '0')}` },
+      endDate: { $gte: `${year}-${monthStr}-01` },
+    }).populate('leaveTypeId', 'code');
+
     // Create a map for quick record lookup: employeeId_date -> record
     const recordMap = new Map();
     records.forEach(rec => {
       recordMap.set(`${rec.employeeId.toString()}_${rec.date}`, rec);
     });
 
-    const numDays = getDaysInMonth(year, month);
     const todayStr = new Date().toISOString().split('T')[0];
 
     // Build the grid
@@ -81,39 +90,43 @@ export const getMusterRegister = async (req, res, next) => {
         const recordKey = `${emp._id.toString()}_${dateKey}`;
         const record = recordMap.get(recordKey);
 
-        if (record) {
+        const dayLeave = approvedLeaves.find(l =>
+          l.employeeId.toString() === emp._id.toString() &&
+          l.startDate <= dateKey &&
+          l.endDate >= dateKey
+        );
+
+        // Resolve active shift for this employee on this date
+        let shift = emp.employment?.shiftId ? shiftMap.get(emp.employment.shiftId.toString()) : null;
+        const overrideShiftId = scheduleMap.get(`${emp._id.toString()}_${dateKey}`);
+        if (overrideShiftId) {
+          shift = shiftMap.get(overrideShiftId);
+        }
+
+        const weeklyOffs = shift?.weeklyOffs || [0, 6]; // default Sat/Sun off
+        const dateObj = new Date(year, month - 1, day);
+        const dayOfWeek = dateObj.getDay(); // 0 is Sun, 6 is Sat
+
+        const isHoliday = holidays.some(h => {
+          const hDate = h.date.toISOString().split('T')[0];
+          if (hDate !== dateKey) return false;
+          const hLoc = h.location?.trim().toLowerCase() || 'all';
+          const empLoc = emp.employment?.location?.trim().toLowerCase() || '';
+          return hLoc === 'all' || hLoc === empLoc;
+        });
+
+        if (record && record.status !== 'ABSENT') {
           dailyAttendance[dayStr] = record.status;
-        } else if (
-          holidays.some(h => {
-            const hDate = h.date.toISOString().split('T')[0];
-            if (hDate !== dateKey) return false;
-            const hLoc = h.location?.trim().toLowerCase() || 'all';
-            const empLoc = emp.employment?.location?.trim().toLowerCase() || '';
-            return hLoc === 'all' || hLoc === empLoc;
-          })
-        ) {
+        } else if (isHoliday) {
           dailyAttendance[dayStr] = 'HOLIDAY';
+        } else if (weeklyOffs.includes(dayOfWeek)) {
+          dailyAttendance[dayStr] = 'WEEKLY_OFF';
+        } else if (dayLeave) {
+          dailyAttendance[dayStr] = dayLeave.leaveTypeId?.code || 'LEAVE';
+        } else if (dateKey > todayStr) {
+          dailyAttendance[dayStr] = '-';
         } else {
-          // Check shift weekly offs
-          const dateObj = new Date(year, month - 1, day);
-          const dayOfWeek = dateObj.getDay(); // 0 is Sun, 6 is Sat
-
-          // Resolve active shift for this employee on this date
-          let shift = emp.employment?.shiftId ? shiftMap.get(emp.employment.shiftId.toString()) : null;
-          const overrideShiftId = scheduleMap.get(`${emp._id.toString()}_${dateKey}`);
-          if (overrideShiftId) {
-            shift = shiftMap.get(overrideShiftId);
-          }
-
-          const weeklyOffs = shift?.weeklyOffs || [0, 6]; // default Sat/Sun off
-
-          if (weeklyOffs.includes(dayOfWeek)) {
-            dailyAttendance[dayStr] = 'WEEKLY_OFF';
-          } else if (dateKey > todayStr) {
-            dailyAttendance[dayStr] = '-';
-          } else {
-            dailyAttendance[dayStr] = 'ABSENT';
-          }
+          dailyAttendance[dayStr] = 'ABSENT';
         }
       }
       return {
@@ -216,6 +229,38 @@ export const getAttendanceStats = async (req, res, next) => {
       }
     });
 
+    // Fetch approved leaves for the month to calculate LOP and total leaves
+    const numDays = getDaysInMonth(year, month);
+    const approvedLeaves = await LeaveRequest.find({
+      tenantId: req.tenantId,
+      status: 'APPROVED',
+      startDate: { $lte: `${year}-${monthStr}-${numDays.toString().padStart(2, '0')}` },
+      endDate: { $gte: `${year}-${monthStr}-01` }
+    });
+
+    let totalLeaves = 0;
+    let totalLopDays = 0;
+
+    approvedLeaves.forEach(l => {
+      // Find overlap dates with current month
+      const current = new Date(l.startDate);
+      const end = new Date(l.endDate);
+      const dates = [];
+      while (current <= end) {
+        dates.push(current.toISOString().split('T')[0]);
+        current.setDate(current.getDate() + 1);
+      }
+
+      const monthPrefix = `${year}-${monthStr}-`;
+      const daysInMonth = dates.filter(d => d.startsWith(monthPrefix));
+
+      if (dates.length > 0 && daysInMonth.length > 0) {
+        const ratio = daysInMonth.length / dates.length;
+        totalLeaves += l.totalDays * ratio;
+        totalLopDays += (l.lopDays || 0) * ratio;
+      }
+    });
+
     const avgWorkHours = workDaysCount > 0 ? (totalWorkMins / workDaysCount / 60).toFixed(2) : '0.00';
     const totalOvertimeHours = (totalOvertimeMins / 60).toFixed(2);
 
@@ -236,6 +281,8 @@ export const getAttendanceStats = async (req, res, next) => {
         totalAbsent,
         avgWorkHours,
         totalOvertimeHours,
+        totalLeaves: Math.round(totalLeaves * 100) / 100,
+        totalLopDays: Math.round(totalLopDays * 100) / 100,
       },
       overtimeSheet,
     });

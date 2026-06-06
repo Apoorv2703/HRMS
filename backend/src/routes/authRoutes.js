@@ -1,6 +1,7 @@
 import express from 'express';
 import * as authController from '../controllers/authController.js';
 import tenantIsolation from '../middleware/tenantIsolation.js';
+import rbac from '../middleware/rbac.js';
 
 const router = express.Router();
 
@@ -14,10 +15,12 @@ router.post('/verify-mfa', authController.verifyMfa);
 router.post('/google/callback', authController.googleLogin);
 router.post('/microsoft/callback', authController.microsoftLogin);
 router.post('/saml/callback', authController.samlCallback);
+router.get('/sso-config', authController.getSsoConfig);
 
 // Protected session paths
 router.get('/sessions', tenantIsolation, authController.getSessions);
 router.post('/mfa/setup', tenantIsolation, authController.setupMfa);
 router.post('/mfa/enable', tenantIsolation, authController.enableMfa);
+router.put('/sso-config/saml', tenantIsolation, rbac(['HR_ADMIN']), authController.updateSamlConfig);
 
 export default router;

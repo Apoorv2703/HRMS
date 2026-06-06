@@ -926,3 +926,76 @@ export const samlCallback = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error validating SAML callback assertion.' });
   }
 };
+
+export const getSsoConfig = async (req, res) => {
+  const { subdomain } = req.query;
+
+  if (!subdomain) {
+    return res.status(400).json({ error: 'Subdomain is required.' });
+  }
+
+  try {
+    const tenant = await Tenant.findOne({ subdomain: subdomain.toLowerCase(), isActive: true });
+    if (!tenant) {
+      return res.status(404).json({ error: 'Workspace not found.' });
+    }
+
+    const googleClientId = process.env.GOOGLE_CLIENT_ID || '';
+    const microsoftClientId = process.env.MICROSOFT_CLIENT_ID || '';
+
+    return res.status(200).json({
+      googleEnabled: !!googleClientId,
+      googleClientId,
+      microsoftEnabled: !!microsoftClientId,
+      microsoftClientId,
+      samlEnabled: tenant.settings?.saml?.enabled || false,
+      samlEntryPoint: tenant.settings?.saml?.entryPoint || '',
+      samlIssuer: tenant.settings?.saml?.issuer || '',
+      samlCert: tenant.settings?.saml?.cert || '',
+    });
+  } catch (err) {
+    console.error('Get SSO Config Error:', err);
+    return res.status(500).json({ error: 'Internal server error retrieving SSO configuration.' });
+  }
+};
+
+export const updateSamlConfig = async (req, res) => {
+  const { enabled, entryPoint, issuer, cert } = req.body;
+
+  try {
+    const tenant = await Tenant.findById(req.tenantId);
+    if (!tenant) {
+      return res.status(404).json({ error: 'Tenant not found.' });
+    }
+
+    if (!tenant.settings) {
+      tenant.settings = {};
+    }
+
+    tenant.settings.saml = {
+      enabled: !!enabled,
+      entryPoint: entryPoint || '',
+      issuer: issuer || '',
+      cert: cert || '',
+    };
+
+    await tenant.save();
+
+    await AuditLog.create({
+      tenantId: tenant._id,
+      userId: req.user.id,
+      action: 'UPDATE_SAML_SETTINGS',
+      ipAddress: req.ip,
+      userAgent: req.headers?.['user-agent'] || 'Server',
+      details: { enabled, entryPoint, issuer },
+    });
+
+    return res.status(200).json({
+      message: 'SAML settings updated successfully.',
+      saml: tenant.settings.saml,
+    });
+  } catch (err) {
+    console.error('Update SAML Config Error:', err);
+    return res.status(500).json({ error: 'Internal server error updating SAML configuration.' });
+  }
+};

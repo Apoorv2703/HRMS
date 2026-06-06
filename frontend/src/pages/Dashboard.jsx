@@ -25,6 +25,14 @@ const Dashboard = () => {
   const [regLoading, setRegLoading] = useState(false);
   const [reviewComments, setReviewComments] = useState({});
 
+  // Leave approval states
+  const [pendingLeaves, setPendingLeaves] = useState([]);
+  const [leavesLoading, setLeavesLoading] = useState(false);
+  const [reviewLeaveComments, setReviewLeaveComments] = useState({});
+
+  // Active approvals sub-tab
+  const [activeApprovalTab, setActiveApprovalTab] = useState('attendance'); // 'attendance' or 'leaves'
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -33,6 +41,7 @@ const Dashboard = () => {
     fetchSessions();
     if (user?.role === 'MANAGER' || user?.role === 'HR_ADMIN') {
       fetchPendingRegularizations();
+      fetchPendingLeaves();
     }
   }, [user]);
 
@@ -61,12 +70,40 @@ const Dashboard = () => {
     }
   };
 
+  const fetchPendingLeaves = async () => {
+    setLeavesLoading(true);
+    try {
+      const response = await api.get('/leaves/pending');
+      setPendingLeaves(response.data);
+    } catch (err) {
+      console.error('Failed to load pending leaves:', err);
+    } finally {
+      setLeavesLoading(false);
+    }
+  };
+
   const handleReviewRegularization = async (recordId, action) => {
     const comment = reviewComments[recordId] || '';
     try {
       const response = await api.post(`/attendance/regularize/${recordId}/review`, { action, comment });
       alert(response.data.message);
       fetchPendingRegularizations();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to submit review action.');
+    }
+  };
+
+  const handleReviewLeave = async (id, action) => {
+    const comment = reviewLeaveComments[id] || '';
+    try {
+      const response = await api.post(`/leaves/requests/${id}/review`, { action, comment });
+      alert(response.data.message);
+      setReviewLeaveComments(prev => {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      });
+      fetchPendingLeaves();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to submit review action.');
     }
@@ -256,94 +293,194 @@ const Dashboard = () => {
           <div className="md:col-span-2 space-y-8">
             <AttendanceWidget />
 
-            {/* Team Regularization Approvals Card (Managers & Admins only) */}
+            {/* Unified Team Approvals Center (Managers & Admins only) */}
             {(user?.role === 'MANAGER' || user?.role === 'HR_ADMIN') && (
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl shadow-xl space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl shadow-xl space-y-5">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div className="flex items-center gap-2.5">
                     <History className="h-5 w-5 text-teal-400" />
-                    <h3 className="text-lg font-bold text-white">Team Attendance Regularizations</h3>
+                    <h3 className="text-lg font-bold text-white">Team Approvals Center</h3>
                   </div>
                   <button
-                    onClick={fetchPendingRegularizations}
-                    className="text-xs font-medium text-teal-400 hover:text-teal-300 hover:underline cursor-pointer"
+                    onClick={() => { fetchPendingRegularizations(); fetchPendingLeaves(); }}
+                    className="text-xs font-semibold text-teal-400 hover:text-teal-300 transition flex items-center gap-1 cursor-pointer"
                   >
-                    Refresh List
+                    Refresh Queues
                   </button>
                 </div>
 
-                {regLoading ? (
-                  <div className="flex h-32 items-center justify-center">
-                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-teal-500 border-t-transparent"></div>
-                  </div>
-                ) : pendingRegularizations.length === 0 ? (
-                  <p className="text-sm text-slate-400 italic text-center py-4 bg-slate-950/20 rounded-xl border border-slate-850/50">
-                    No pending attendance corrections to review.
-                  </p>
-                ) : (
-                  <div className="space-y-4 max-h-72 overflow-y-auto pr-1">
-                    {pendingRegularizations.map((rec) => (
-                      <div key={rec._id} className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 space-y-3 text-sm">
-                        <div className="flex justify-between border-b border-slate-850 pb-2">
-                          <div>
-                            <strong className="text-slate-200 block">
-                              {rec.employeeId?.personal?.firstName} {rec.employeeId?.personal?.lastName}
-                            </strong>
-                            <span className="text-[10px] text-slate-500 font-mono uppercase">Date: {rec.date}</span>
-                          </div>
-                          <span className="rounded bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-400 uppercase tracking-wide h-fit font-mono">
-                            Pending Correction
-                          </span>
-                        </div>
+                {/* Sub-tab navigation */}
+                <div className="flex border-b border-slate-850 gap-4 text-xs font-bold uppercase tracking-wider">
+                  <button
+                    onClick={() => setActiveApprovalTab('attendance')}
+                    className={`pb-2 transition border-b-2 cursor-pointer ${
+                      activeApprovalTab === 'attendance' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-450 hover:text-slate-200'
+                    }`}
+                  >
+                    Attendance Corrections ({pendingRegularizations.length})
+                  </button>
+                  <button
+                    onClick={() => setActiveApprovalTab('leaves')}
+                    className={`pb-2 transition border-b-2 cursor-pointer ${
+                      activeApprovalTab === 'leaves' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-450 hover:text-slate-200'
+                    }`}
+                  >
+                    Leave Requests ({pendingLeaves.length})
+                  </button>
+                </div>
 
-                        <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-slate-900/40 p-2.5 rounded-lg border border-slate-850">
-                          <div>
-                            <span className="text-[9px] text-slate-500 block font-sans">PROPOSED IN</span>
-                            <span className="text-slate-300">
-                              {new Date(rec.regularization.requestedTimeIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-[9px] text-slate-500 block font-sans">PROPOSED OUT</span>
-                            <span className="text-slate-300">
-                              {new Date(rec.regularization.requestedTimeOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="text-xs text-slate-400 bg-slate-900/20 p-2 rounded-lg border border-slate-850/30">
-                          <strong className="text-slate-300 block text-[10px] uppercase font-sans mb-1">Reason:</strong>
-                          {rec.regularization.reason}
-                        </div>
-
-                        <div className="space-y-2 pt-1">
-                          <input
-                            type="text"
-                            placeholder="Add review feedback/comments (optional)..."
-                            value={reviewComments[rec._id] || ''}
-                            onChange={(e) => setReviewComments({
-                              ...reviewComments,
-                              [rec._id]: e.target.value
-                            })}
-                            className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2 text-xs text-slate-200 outline-none focus:border-teal-500/50"
-                          />
-                          <div className="flex justify-end gap-2 text-xs font-bold">
-                            <button
-                              onClick={() => handleReviewRegularization(rec._id, 'REJECT')}
-                              className="rounded-lg bg-rose-500/10 hover:bg-rose-500 border border-rose-500/20 hover:border-rose-500 hover:text-black px-3 py-1.5 text-rose-400 transition cursor-pointer"
-                            >
-                              Reject
-                            </button>
-                            <button
-                              onClick={() => handleReviewRegularization(rec._id, 'APPROVE')}
-                              className="rounded-lg bg-teal-500/10 hover:bg-teal-500 border border-teal-500/20 hover:border-teal-500 px-3 py-1.5 text-teal-400 transition cursor-pointer"
-                            >
-                              Approve
-                            </button>
-                          </div>
-                        </div>
+                {/* Tab 1: Attendance Corrections */}
+                {activeApprovalTab === 'attendance' && (
+                  <div>
+                    {regLoading ? (
+                      <div className="flex h-32 items-center justify-center">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-teal-500 border-t-transparent"></div>
                       </div>
-                    ))}
+                    ) : pendingRegularizations.length === 0 ? (
+                      <p className="text-sm text-slate-500 italic text-center py-6 bg-slate-950/20 rounded-xl border border-slate-850/50">
+                        No pending attendance corrections to review.
+                      </p>
+                    ) : (
+                      <div className="space-y-4 max-h-80 overflow-y-auto pr-1">
+                        {pendingRegularizations.map((rec) => (
+                          <div key={rec._id} className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 space-y-3 text-sm">
+                            <div className="flex justify-between border-b border-slate-850 pb-2">
+                              <div>
+                                <strong className="text-slate-200 block">
+                                  {rec.employeeId?.personal?.firstName} {rec.employeeId?.personal?.lastName}
+                                </strong>
+                                <span className="text-[10px] text-slate-500 font-mono uppercase">Date: {rec.date}</span>
+                              </div>
+                              <span className="rounded bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-400 uppercase tracking-wide h-fit font-mono">
+                                Pending Correction
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-slate-900/40 p-2.5 rounded-lg border border-slate-850">
+                              <div>
+                                <span className="text-[9px] text-slate-500 block font-sans">PROPOSED IN</span>
+                                <span className="text-slate-300">
+                                  {new Date(rec.regularization.requestedTimeIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-[9px] text-slate-500 block font-sans">PROPOSED OUT</span>
+                                <span className="text-slate-300">
+                                  {new Date(rec.regularization.requestedTimeOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="text-xs text-slate-400 bg-slate-900/20 p-2 rounded-lg border border-slate-850/30">
+                              <strong className="text-slate-300 block text-[10px] uppercase font-sans mb-1">Reason:</strong>
+                              {rec.regularization.reason}
+                            </div>
+
+                            <div className="space-y-2 pt-1">
+                              <input
+                                type="text"
+                                placeholder="Add review feedback/comments (optional)..."
+                                value={reviewComments[rec._id] || ''}
+                                onChange={(e) => setReviewComments({
+                                  ...reviewComments,
+                                  [rec._id]: e.target.value
+                                })}
+                                className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2 text-xs text-slate-200 outline-none focus:border-teal-500/50"
+                              />
+                              <div className="flex justify-end gap-2 text-xs font-bold">
+                                <button
+                                  onClick={() => handleReviewRegularization(rec._id, 'REJECT')}
+                                  className="rounded-lg bg-rose-500/10 hover:bg-rose-500 border border-rose-500/20 hover:border-rose-500 hover:text-black px-3 py-1.5 text-rose-400 transition cursor-pointer"
+                                >
+                                  Reject
+                                </button>
+                                <button
+                                  onClick={() => handleReviewRegularization(rec._id, 'APPROVE')}
+                                  className="rounded-lg bg-teal-500/10 hover:bg-teal-500 border border-teal-500/20 hover:border-teal-500 px-3 py-1.5 text-teal-400 transition cursor-pointer"
+                                >
+                                  Approve
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Tab 2: Leave Requests */}
+                {activeApprovalTab === 'leaves' && (
+                  <div>
+                    {leavesLoading ? (
+                      <div className="flex h-32 items-center justify-center">
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-teal-500 border-t-transparent"></div>
+                      </div>
+                    ) : pendingLeaves.length === 0 ? (
+                      <p className="text-sm text-slate-500 italic text-center py-6 bg-slate-950/20 rounded-xl border border-slate-850/50">
+                        No pending team leave requests to review.
+                      </p>
+                    ) : (
+                      <div className="space-y-4 max-h-80 overflow-y-auto pr-1">
+                        {pendingLeaves.map((req) => {
+                          const empName = `${req.employeeId?.personal?.firstName} ${req.employeeId?.personal?.lastName}`;
+                          return (
+                            <div key={req._id} className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 space-y-3 text-sm">
+                              <div className="flex justify-between border-b border-slate-850 pb-2">
+                                <div>
+                                  <strong className="text-slate-200 block">{empName}</strong>
+                                  <span className="text-[10px] text-slate-500 font-mono uppercase">
+                                    {req.leaveTypeId?.code || 'LEAVE'} &bull; {req.totalDays} {req.totalDays === 1 ? 'Day' : 'Days'}
+                                  </span>
+                                </div>
+                                <span className="rounded bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 text-[10px] font-semibold text-teal-400 uppercase tracking-wide h-fit font-mono">
+                                  Pending Leave
+                                </span>
+                              </div>
+
+                              <div className="text-xs text-slate-350 bg-slate-900/40 p-2.5 rounded-lg border border-slate-850 space-y-1.5">
+                                <p><strong>Timeline:</strong> <span className="font-mono">{req.startDate} to {req.endDate}</span> {req.halfDay && `(Half-Day ${req.halfDaySession})`}</p>
+                                {req.lopDays > 0 && (
+                                  <p className="text-rose-400 font-bold">Includes {req.lopDays} Loss of Pay (LOP) days.</p>
+                                )}
+                              </div>
+
+                              <div className="text-xs text-slate-400 bg-slate-900/20 p-2 rounded-lg border border-slate-850/30">
+                                <strong className="text-slate-300 block text-[10px] uppercase font-sans mb-1">Reason:</strong>
+                                {req.reason}
+                              </div>
+
+                              <div className="space-y-2 pt-1">
+                                <input
+                                  type="text"
+                                  placeholder="Add review feedback/comments (optional)..."
+                                  value={reviewLeaveComments[req._id] || ''}
+                                  onChange={(e) => setReviewLeaveComments({
+                                    ...reviewLeaveComments,
+                                    [req._id]: e.target.value
+                                  })}
+                                  className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2 text-xs text-slate-200 outline-none focus:border-teal-500/50"
+                                />
+                                <div className="flex justify-end gap-2 text-xs font-bold">
+                                  <button
+                                    onClick={() => handleReviewLeave(req._id, 'REJECT')}
+                                    className="rounded-lg bg-rose-500/10 hover:bg-rose-500 border border-rose-500/20 hover:border-rose-500 hover:text-black px-3 py-1.5 text-rose-400 transition cursor-pointer"
+                                  >
+                                    Reject
+                                  </button>
+                                  <button
+                                    onClick={() => handleReviewLeave(req._id, 'APPROVE')}
+                                    className="rounded-lg bg-teal-500/10 hover:bg-teal-500 border border-teal-500/20 hover:border-teal-500 px-3 py-1.5 text-teal-400 transition cursor-pointer"
+                                  >
+                                    Approve
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

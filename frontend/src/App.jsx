@@ -12,6 +12,8 @@ import OnboardingVerification from './pages/OnboardingVerification';
 import ESSProfilePage from './pages/ESSProfilePage';
 import OrgChartPage from './pages/OrgChartPage';
 import MusterPage from './pages/MusterPage';
+import LeaveDashboardPage from './pages/LeaveDashboardPage';
+import AuthCallbackPage from './pages/AuthCallbackPage';
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
       <Route path="/register-tenant" element={<RegisterPage />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/onboard" element={<OnboardingVerification />} />
+      <Route path="/auth/callback/:provider" element={<AuthCallbackPage />} />
 
       {/* Protected Routes (Authenticated Access Only) */}
       <Route element={<ProtectedRoute />}>
@@ -30,6 +33,7 @@ function App() {
           <Route path="/directory" element={<DirectoryPage />} />
           <Route path="/org-chart" element={<OrgChartPage />} />
           <Route path="/profile" element={<ESSProfilePage />} />
+          <Route path="/leaves" element={<LeaveDashboardPage />} />
           
           {/* Reports Management Routes */}
           <Route element={<ProtectedRoute allowedRoles={['HR_ADMIN', 'LEADERSHIP', 'MANAGER']} />}>

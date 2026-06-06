@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { User, Briefcase, Landmark, ShieldAlert, Check, X, ClipboardList, AlertCircle, Save, GraduationCap, Award, Plus, Trash2, FileText, UploadCloud, ExternalLink, Download } from 'lucide-react';
+import { User, Briefcase, Landmark, ShieldAlert, Check, X, ClipboardList, AlertCircle, Save, GraduationCap, Award, Plus, Trash2, FileText, UploadCloud, ExternalLink, Download, DollarSign } from 'lucide-react';
 import api from '../services/api';
 
 const ESSProfilePage = () => {
@@ -90,6 +90,19 @@ const ESSProfilePage = () => {
   const [docType, setDocType] = useState('ID_PROOF');
   const [uploadingDoc, setUploadingDoc] = useState(false);
 
+  // Payslips states
+  const [payslips, setPayslips] = useState([]);
+  const [payslipsLoading, setPayslipsLoading] = useState(false);
+  const [selectedPayslip, setSelectedPayslip] = useState(null);
+
+  // HR Admin payslip generation states
+  const [genMonth, setGenMonth] = useState(new Date().getMonth() + 1);
+  const [genYear, setGenYear] = useState(new Date().getFullYear());
+  const [genBasic, setGenBasic] = useState('');
+  const [genAllowances, setGenAllowances] = useState('');
+  const [genDeductions, setGenDeductions] = useState('');
+  const [genLoading, setGenLoading] = useState(false);
+
   const isAdmin = user?.role === 'HR_ADMIN';
 
   useEffect(() => {
@@ -149,10 +162,60 @@ const ESSProfilePage = () => {
       setExperienceList(emp.professional?.experience || []);
       setSkillsList(emp.professional?.skills || []);
       setCertificationsList(emp.professional?.certifications || []);
+      
+      // Load payslips list for this employee
+      fetchPayslips(emp._id);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to retrieve employee profile data.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPayslips = async (empId) => {
+    setPayslipsLoading(true);
+    try {
+      let response;
+      if (profileId === 'me') {
+        response = await api.get('/payslips/mine');
+      } else {
+        response = await api.get(`/payslips/employee/${empId}`);
+      }
+      setPayslips(response.data || []);
+    } catch (err) {
+      console.error('Failed to load payslips list', err);
+    } finally {
+      setPayslipsLoading(false);
+    }
+  };
+
+  const handleGeneratePayslip = async (e) => {
+    e.preventDefault();
+    if (!genMonth || !genYear || !genBasic) {
+      alert('Month, Year, and Basic Salary are required.');
+      return;
+    }
+    setGenLoading(true);
+    try {
+      const response = await api.post('/payslips', {
+        employeeId: employee._id,
+        month: Number(genMonth),
+        year: Number(genYear),
+        basicSalary: Number(genBasic),
+        allowances: Number(genAllowances) || 0,
+        deductions: Number(genDeductions) || 0,
+      });
+      alert(response.data.message || 'Payslip generated successfully.');
+      fetchPayslips(employee._id);
+      
+      // Reset inputs
+      setGenBasic('');
+      setGenAllowances('');
+      setGenDeductions('');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to generate payslip.');
+    } finally {
+      setGenLoading(false);
     }
   };
 
@@ -403,6 +466,17 @@ const ESSProfilePage = () => {
               }`}
             >
               <FileText className="h-4 w-4" /> Documents & Files
+            </button>
+          )}
+
+          {(isAdmin || user?.role === 'LEADERSHIP' || profileId === 'me' || employee?.userId?._id === user?.id) && (
+            <button
+              onClick={() => setActiveTab('payslips')}
+              className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
+                activeTab === 'payslips' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <DollarSign className="h-4 w-4" /> Payslips & Salary
             </button>
           )}
 
@@ -1341,6 +1415,300 @@ const ESSProfilePage = () => {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Payslips Tab */}
+        {activeTab === 'payslips' && (
+          <div className="space-y-8">
+            <style>{`
+              @media print {
+                body * {
+                  visibility: hidden;
+                }
+                #payslip-print-modal, #payslip-print-modal * {
+                  visibility: visible;
+                }
+                #payslip-print-modal {
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  width: 100%;
+                  background: white !important;
+                  color: black !important;
+                  box-shadow: none !important;
+                  border: none !important;
+                }
+                .no-print {
+                  display: none !important;
+                }
+                .no-print-overlay {
+                  background: white !important;
+                  backdrop-filter: none !important;
+                }
+                .print-only {
+                  display: flex !important;
+                }
+              }
+              .print-only {
+                display: none;
+              }
+            `}</style>
+
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+              {/* HR Admin Payslip Generator Card */}
+              {isAdmin && (
+                <div className="lg:col-span-1 rounded-2xl border border-slate-800 bg-slate-900/20 p-6 space-y-6 h-fit">
+                  <div>
+                    <h3 className="text-base font-bold text-white flex items-center gap-2">
+                      <DollarSign className="h-5 w-5 text-teal-400" /> Generate Payslip
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Calculate and publish monthly salaries with automated LOP deductions.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleGeneratePayslip} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Month</label>
+                        <select
+                          value={genMonth}
+                          onChange={(e) => setGenMonth(e.target.value)}
+                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                        >
+                          {Array.from({ length: 12 }, (_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                              {new Date(0, i).toLocaleString('default', { month: 'long' })}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Year</label>
+                        <input
+                          type="number"
+                          value={genYear}
+                          onChange={(e) => setGenYear(e.target.value)}
+                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Basic Salary (monthly) *</label>
+                      <input
+                        type="number"
+                        placeholder="e.g. 50000"
+                        value={genBasic}
+                        onChange={(e) => setGenBasic(e.target.value)}
+                        required
+                        className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Allowances</label>
+                        <input
+                          type="number"
+                          placeholder="0"
+                          value={genAllowances}
+                          onChange={(e) => setGenAllowances(e.target.value)}
+                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">General Deductions</label>
+                        <input
+                          type="number"
+                          placeholder="0"
+                          value={genDeductions}
+                          onChange={(e) => setGenDeductions(e.target.value)}
+                          className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 text-sm p-3 outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={genLoading}
+                      className="w-full rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-sm font-bold text-white py-3 transition duration-150 cursor-pointer shadow"
+                    >
+                      {genLoading ? 'Calculating...' : 'Generate & Publish'}
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              {/* Payslips History List */}
+              <div className={`${isAdmin ? 'lg:col-span-2' : 'lg:col-span-3'} rounded-2xl border border-slate-800 bg-slate-900/20 p-6 space-y-4`}>
+                <h3 className="text-base font-bold text-teal-400 border-b border-slate-850 pb-2 flex items-center gap-2">
+                  <Landmark className="h-5 w-5 text-teal-400" /> Compensation & Payslip History
+                </h3>
+
+                {payslipsLoading ? (
+                  <div className="flex h-48 items-center justify-center">
+                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-t-transparent"></div>
+                  </div>
+                ) : payslips.length === 0 ? (
+                  <div className="text-center py-12 text-slate-450 italic text-sm">
+                    No payroll slips generated for this period.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-800 text-slate-450 uppercase tracking-wider">
+                          <th className="py-3 px-4">Period</th>
+                          <th className="py-3 px-4 text-center">LOP Days</th>
+                          <th className="py-3 px-4 text-right">Basic Pay</th>
+                          <th className="py-3 px-4 text-right">Deductions</th>
+                          <th className="py-3 px-4 text-right">Net Salary</th>
+                          <th className="py-3 px-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-850 text-slate-200">
+                        {payslips.map((pay) => (
+                          <tr key={pay._id} className="hover:bg-slate-900/10">
+                            <td className="py-3 px-4 font-semibold font-mono">
+                              {new Date(pay.year, pay.month - 1).toLocaleString('default', { month: 'short' })} {pay.year}
+                            </td>
+                            <td className="py-3 px-4 text-center font-mono font-bold text-rose-450">
+                              {pay.lopDays > 0 ? `${pay.lopDays} LOP` : '-'}
+                            </td>
+                            <td className="py-3 px-4 text-right font-mono">${pay.basicSalary.toLocaleString()}</td>
+                            <td className="py-3 px-4 text-right font-mono text-rose-400">${pay.deductions.toLocaleString()}</td>
+                            <td className="py-3 px-4 text-right font-semibold font-mono text-emerald-400">${pay.netSalary.toLocaleString()}</td>
+                            <td className="py-3 px-4 text-right flex justify-end">
+                              <button
+                                type="button"
+                                onClick={() => setSelectedPayslip(pay)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 hover:bg-teal-500 rounded-lg text-white font-bold transition duration-150 cursor-pointer shadow"
+                              >
+                                <Download className="h-3.5 w-3.5" /> Print / PDF
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Payslip Detail Printing Modal */}
+        {selectedPayslip && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm no-print-overlay">
+            <div id="payslip-print-modal" className="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8 space-y-6 shadow-2xl relative">
+              
+              {/* Header Details */}
+              <div className="flex justify-between items-start border-b border-slate-800 pb-5">
+                <div>
+                  <h2 className="text-xl font-black text-white flex items-center gap-2">
+                    <Landmark className="h-6 w-6 text-teal-400" />
+                    {localStorage.getItem('workspaceSubdomain')?.toUpperCase() || 'HRMS'} CORPORATE PAYSLIP
+                  </h2>
+                  <p className="text-xs text-slate-450 mt-1 font-mono uppercase">
+                    Payroll Cycle: {new Date(selectedPayslip.year, selectedPayslip.month - 1).toLocaleString('default', { month: 'long' })} {selectedPayslip.year}
+                  </p>
+                </div>
+                <div className="no-print flex gap-2">
+                  <button
+                    onClick={() => window.print()}
+                    className="flex items-center gap-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-bold text-white px-3.5 py-2 transition shadow cursor-pointer"
+                  >
+                    <Download className="h-3.5 w-3.5" /> Print / Save PDF
+                  </button>
+                  <button
+                    onClick={() => setSelectedPayslip(null)}
+                    className="flex items-center justify-center h-8 w-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white font-bold cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+
+              {/* Employee Information */}
+              <div className="grid grid-cols-2 gap-4 text-xs bg-slate-950/40 border border-slate-850 p-4 rounded-xl text-slate-300">
+                <div>
+                  <p className="mb-1"><span className="text-slate-500">Employee Name:</span> <strong className="text-slate-200">{employee?.personal?.firstName} {employee?.personal?.lastName}</strong></p>
+                  <p className="mb-1"><span className="text-slate-500">Employee ID:</span> <strong className="text-slate-200">{employee?.employeeId}</strong></p>
+                  <p><span className="text-slate-500">Department:</span> <strong className="text-slate-200">{employee?.employment?.department}</strong></p>
+                </div>
+                <div>
+                  <p className="mb-1"><span className="text-slate-500">Designation:</span> <strong className="text-slate-200">{employee?.employment?.designation}</strong></p>
+                  <p className="mb-1"><span className="text-slate-500">Location:</span> <strong className="text-slate-200">{employee?.employment?.location || 'HQ'}</strong></p>
+                  <p><span className="text-slate-500">Loss of Pay (LOP) Days:</span> <strong className="text-rose-400 font-mono">{selectedPayslip.lopDays > 0 ? `${selectedPayslip.lopDays} Days` : '0 Days'}</strong></p>
+                </div>
+              </div>
+
+              {/* Salary Structure Grid */}
+              <div className="grid grid-cols-2 gap-6 text-xs border border-slate-800 rounded-xl overflow-hidden">
+                {/* Earnings */}
+                <div className="divide-y divide-slate-850 border-r border-slate-800 bg-slate-900/10">
+                  <div className="bg-slate-900 px-4 py-2.5 font-bold uppercase tracking-wider text-slate-400 text-[10px]">Earnings</div>
+                  <div className="flex justify-between px-4 py-3 text-slate-300">
+                    <span>Basic Salary</span>
+                    <span className="font-mono">${selectedPayslip.basicSalary.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3 text-slate-300">
+                    <span>Allowances / Bonuses</span>
+                    <span className="font-mono">${selectedPayslip.allowances.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3 font-semibold text-slate-100 bg-slate-950/20">
+                    <span>Gross Earnings</span>
+                    <span className="font-mono">${(selectedPayslip.basicSalary + selectedPayslip.allowances).toLocaleString()}</span>
+                  </div>
+                </div>
+
+                {/* Deductions */}
+                <div className="divide-y divide-slate-850 bg-slate-900/10">
+                  <div className="bg-slate-900 px-4 py-2.5 font-bold uppercase tracking-wider text-slate-400 text-[10px]">Deductions</div>
+                  <div className="flex justify-between px-4 py-3 text-slate-350">
+                    <span>Tax & Statutory Deductions</span>
+                    <span className="font-mono">
+                      ${Math.max(0, selectedPayslip.deductions - (selectedPayslip.lopDays * (selectedPayslip.basicSalary / new Date(selectedPayslip.year, selectedPayslip.month, 0).getDate()))).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3 text-slate-355 text-slate-350">
+                    <span>Loss of Pay (LOP) Deductions</span>
+                    <span className="font-mono text-rose-400">
+                      ${(selectedPayslip.lopDays * (selectedPayslip.basicSalary / new Date(selectedPayslip.year, selectedPayslip.month, 0).getDate())).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3 font-semibold text-rose-455 text-rose-400 bg-slate-950/20">
+                    <span>Total Deductions</span>
+                    <span className="font-mono">${selectedPayslip.deductions.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Net Payable Summary */}
+              <div className="flex justify-between items-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4.5 text-slate-100">
+                <div>
+                  <span className="text-xs text-slate-405 text-slate-400 uppercase tracking-wider font-bold">Net Payable Salary (Net Pay)</span>
+                  <span className="block text-[10px] text-slate-500">Calculated after LOP deductions and statutory contributions</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-black text-emerald-400 font-mono">${selectedPayslip.netSalary.toLocaleString()}</span>
+                </div>
+              </div>
+
+              {/* Signature Section */}
+              <div className="print-only flex justify-between pt-16 text-xs text-slate-400 font-medium">
+                <div>
+                  <div className="border-t border-slate-500 w-48 text-center pt-1.5">Employee Signature</div>
+                </div>
+                <div>
+                  <div className="border-t border-slate-500 w-48 text-center pt-1.5">Authorized Signatory</div>
+                </div>
+              </div>
+
             </div>
           </div>
         )}

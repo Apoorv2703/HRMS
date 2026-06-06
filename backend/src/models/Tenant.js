@@ -70,6 +70,24 @@ const tenantSchema = new mongoose.Schema(
           default: 90,
         },
       },
+      saml: {
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        entryPoint: {
+          type: String,
+          trim: true,
+        },
+        issuer: {
+          type: String,
+          trim: true,
+        },
+        cert: {
+          type: String,
+          trim: true,
+        },
+      },
     },
     isActive: {
       type: Boolean,

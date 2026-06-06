@@ -25,9 +25,74 @@ const LoginPage = () => {
   const [mfaToken, setMfaToken] = useState('');
   const [tempToken, setTempToken] = useState('');
 
+  // SSO config state
+  const [ssoConfig, setSsoConfig] = useState(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+
+  // Debounced check for subdomain SSO configuration
+  useEffect(() => {
+    if (!subdomain.trim() || subdomain.trim().length < 2) {
+      setSsoConfig(null);
+      return;
+    }
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        const response = await api.get('/auth/sso-config', {
+          params: { subdomain: subdomain.trim() }
+        });
+        setSsoConfig(response.data);
+      } catch (err) {
+        setSsoConfig(null);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [subdomain]);
+
+  const handleGoogleLogin = (clientId) => {
+    localStorage.setItem('workspaceSubdomain', subdomain.trim());
+    if (clientId === 'MOCK_CLIENT_ID') {
+      const mockEmail = prompt("Enter mock Google email address to authenticate:", `admin@${subdomain.trim()}.com`);
+      if (mockEmail) {
+        navigate(`/auth/callback/google?code=${encodeURIComponent(mockEmail)}&state=${encodeURIComponent(subdomain.trim())}`);
+      }
+      return;
+    }
+    const redirectUri = encodeURIComponent('http://localhost:5173/auth/callback/google');
+    const scope = encodeURIComponent('openid email profile');
+    const state = encodeURIComponent(subdomain.trim());
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
+  };
+
+  const handleMicrosoftLogin = (clientId) => {
+    localStorage.setItem('workspaceSubdomain', subdomain.trim());
+    if (clientId === 'MOCK_CLIENT_ID') {
+      const mockEmail = prompt("Enter mock Microsoft email address to authenticate:", `admin@${subdomain.trim()}.com`);
+      if (mockEmail) {
+        navigate(`/auth/callback/microsoft?code=${encodeURIComponent(mockEmail)}&state=${encodeURIComponent(subdomain.trim())}`);
+      }
+      return;
+    }
+    const redirectUri = encodeURIComponent('http://localhost:5173/auth/callback/microsoft');
+    const scope = encodeURIComponent('openid email profile User.Read');
+    const state = encodeURIComponent(subdomain.trim());
+    window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
+  };
+
+  const handleSamlLogin = (entryPoint) => {
+    localStorage.setItem('workspaceSubdomain', subdomain.trim());
+    if (entryPoint.startsWith('MOCK_SAML_IDP') || entryPoint.startsWith('mock') || !entryPoint) {
+      const mockEmail = prompt("Enter mock SAML email address to authenticate:", `admin@${subdomain.trim()}.com`);
+      if (mockEmail) {
+        navigate(`/auth/callback/saml?SAMLResponse=MOCK_SAML_ASSERTION:${encodeURIComponent(mockEmail)}&state=${encodeURIComponent(subdomain.trim())}`);
+      }
+      return;
+    }
+    window.location.href = `${entryPoint}?subdomain=${encodeURIComponent(subdomain.trim())}`;
+  };
 
   useEffect(() => {
     dispatch(clearError());
@@ -417,6 +482,63 @@ const LoginPage = () => {
               </button>
             </div>
           </form>
+        )}
+
+        {ssoConfig && (ssoConfig.googleEnabled || ssoConfig.microsoftEnabled || ssoConfig.samlEnabled) && (
+          <div className="mt-6 space-y-4">
+            <div className="relative flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-800"></div>
+              </div>
+              <span className="relative bg-slate-900 px-3 text-[10px] font-mono text-slate-550 text-slate-400 uppercase tracking-wider">
+                Or Workspace SSO
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {ssoConfig.googleEnabled && (
+                <button
+                  type="button"
+                  onClick={() => handleGoogleLogin(ssoConfig.googleClientId)}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/45 hover:bg-slate-800 text-xs font-bold text-slate-200 px-4 py-2.5 transition duration-150 cursor-pointer"
+                >
+                  <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
+                    <path
+                      fill="#EA4335"
+                      d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.859-3.579-7.859-8s3.53-8 7.859-8c2.46 0 4.105 1.025 5.047 1.926l3.245-3.12C18.28 1.965 15.485 1 12.24 1 5.922 1 1 5.92 1 12.2s4.922 11.2 11.24 11.2c6.6 0 11-4.64 11-11.2 0-.756-.08-1.332-.178-1.915H12.24z"
+                    />
+                  </svg>
+                  Google
+                </button>
+              )}
+              {ssoConfig.microsoftEnabled && (
+                <button
+                  type="button"
+                  onClick={() => handleMicrosoftLogin(ssoConfig.microsoftClientId)}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/45 hover:bg-slate-800 text-xs font-bold text-slate-200 px-4 py-2.5 transition duration-150 cursor-pointer"
+                >
+                  <svg className="h-4 w-4 shrink-0" viewBox="0 0 23 23">
+                    <path fill="#f25022" d="M1 1h10v10H1z" />
+                    <path fill="#7fba00" d="M12 1h10v10H12z" />
+                    <path fill="#00a4ef" d="M1 12h10v10H1z" />
+                    <path fill="#ffb900" d="M12 12h10v10H12z" />
+                  </svg>
+                  Microsoft
+                </button>
+              )}
+            </div>
+
+            {ssoConfig.samlEnabled && (
+              <button
+                type="button"
+                onClick={() => handleSamlLogin(ssoConfig.samlEntryPoint)}
+                className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/45 hover:bg-slate-850 hover:border-brand-500/30 px-4 py-3 text-xs font-bold text-white transition duration-150 cursor-pointer"
+              >
+                <ShieldCheck className="h-4.5 w-4.5 text-brand-400" />
+                Sign in with SAML Single Sign-On
+              </button>
+            )}
+          </div>
         )}
 
         <div className="mt-6 border-t border-slate-800 pt-6 text-center text-sm">

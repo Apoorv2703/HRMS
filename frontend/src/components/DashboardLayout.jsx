@@ -26,6 +26,7 @@ const DashboardLayout = () => {
     { name: 'Dashboard', path: '/dashboard', icon: <Home className="h-4 w-4" /> },
     { name: 'Directory', path: '/directory', icon: <Users className="h-4 w-4" /> },
     { name: 'Org Chart', path: '/org-chart', icon: <Network className="h-4 w-4" /> },
+    { name: 'Leaves', path: '/leaves', icon: <Calendar className="h-4 w-4" /> },
     { name: 'My Profile', path: '/profile', icon: <User className="h-4 w-4" /> },
   ];
 
