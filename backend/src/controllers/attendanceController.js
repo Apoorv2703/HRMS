@@ -3,6 +3,9 @@ import Shift from '../models/Shift.js';
 import AttendanceRecord from '../models/AttendanceRecord.js';
 import AuditLog from '../models/AuditLog.js';
 import Tenant from '../models/Tenant.js';
+import ApprovalInstance from '../models/ApprovalInstance.js';
+import ApprovalDelegation from '../models/ApprovalDelegation.js';
+import * as workflowEngine from '../utils/workflowEngine.js';
 
 /**
  * Checks and returns the attendance record for the logged-in employee for a given date.
@@ -431,6 +434,15 @@ export const requestRegularization = async (req, res, next) => {
 
     await record.save();
 
+    // Initiate workflow engine approval chain
+    await workflowEngine.initiateWorkflow(
+      req.tenantId,
+      'REGULARIZATION',
+      req.user.id,
+      record._id,
+      {}
+    );
+
     await AuditLog.create({
       tenantId: req.tenantId,
       actorId: req.user.id,
@@ -453,22 +465,32 @@ export const requestRegularization = async (req, res, next) => {
  */
 export const getPendingRegularizations = async (req, res, next) => {
   try {
-    const manager = await Employee.findOne({ tenantId: req.tenantId, userId: req.user.id });
-    if (!manager) {
-      return res.status(200).json([]); // if user doesn't have employee shell, return empty
-    }
+    const now = new Date();
+    // Resolve active delegations for the current user
+    const activeDelegationsForMe = await ApprovalDelegation.find({
+      tenantId: req.tenantId,
+      delegateeId: req.user.id,
+      startDate: { $lte: now },
+      endDate: { $gte: now },
+      isActive: true,
+    });
+    const delegators = activeDelegationsForMe.map(d => d.delegatorId);
 
-    // Find reporting team members
-    const team = await Employee.find({ tenantId: req.tenantId, 'employment.reportingManagerId': manager._id });
-    if (team.length === 0) {
-      return res.status(200).json([]);
-    }
+    const instances = await ApprovalInstance.find({
+      tenantId: req.tenantId,
+      status: { $in: ['PENDING', 'ESCALATED'] },
+      requestType: 'REGULARIZATION',
+      $or: [
+        { activeApproverId: req.user.id },
+        { activeApproverId: { $in: delegators } }
+      ]
+    });
 
-    const teamIds = team.map(emp => emp._id);
+    const recordIds = instances.map(inst => inst.requestId);
+
     const records = await AttendanceRecord.find({
       tenantId: req.tenantId,
-      employeeId: { $in: teamIds },
-      'regularization.status': 'PENDING',
+      _id: { $in: recordIds },
     }).populate('employeeId', 'personal.firstName personal.lastName employeeId');
 
     return res.status(200).json(records);
@@ -494,81 +516,14 @@ export const reviewRegularization = async (req, res, next) => {
       return res.status(404).json({ error: 'Attendance record not found.' });
     }
 
-    if (!record.regularization || record.regularization.status !== 'PENDING') {
-      return res.status(400).json({ error: 'No pending regularization request exists for this record.' });
-    }
-
-    // Access check: must be reporting manager or HR Admin
-    const manager = await Employee.findOne({ tenantId: req.tenantId, userId: req.user.id });
-    const isManager = manager && record.employeeId.employment?.reportingManagerId?.toString() === manager._id.toString();
-    const isAdmin = req.user.role === 'HR_ADMIN';
-
-    if (!isManager && !isAdmin) {
-      return res.status(403).json({ error: 'Access denied. Only the reporting manager or an HR Admin can review this request.' });
-    }
-
-    if (action === 'APPROVE') {
-      // Overwrite punches
-      record.punches = [
-        {
-          time: record.regularization.requestedTimeIn,
-          type: 'IN',
-          ip: 'Regularized',
-        },
-        {
-          time: record.regularization.requestedTimeOut,
-          type: 'OUT',
-          ip: 'Regularized',
-        },
-      ];
-
-      // Recalculate work duration in minutes
-      const diffMs = new Date(record.regularization.requestedTimeOut) - new Date(record.regularization.requestedTimeIn);
-      const workedMins = Math.max(0, Math.floor(diffMs / 1000 / 60));
-      record.totalWorkMinutes = workedMins;
-
-      // Load shift rules for overtime (supporting rotational overrides and flexible shifts)
-      let shift = null;
-      const { default: EmployeeShiftSchedule } = await import('../models/EmployeeShiftSchedule.js');
-      const rotationalOverride = await EmployeeShiftSchedule.findOne({
-        tenantId: req.tenantId,
-        employeeId: record.employeeId._id,
-        date: record.date,
-      });
-
-      if (rotationalOverride) {
-        shift = await Shift.findById(rotationalOverride.shiftId);
-      } else if (record.employeeId.employment?.shiftId) {
-        shift = await Shift.findById(record.employeeId.employment.shiftId);
-      }
-
-      let shiftLengthMins = 8 * 60; // default 8 hours
-      if (shift) {
-        if (shift.type === 'FLEXIBLE') {
-          shiftLengthMins = shift.minWorkMinutesPerDay !== undefined ? shift.minWorkMinutesPerDay : 8 * 60;
-        } else {
-          const [startH, startM] = shift.startTime.split(':').map(Number);
-          const [endH, endM] = shift.endTime.split(':').map(Number);
-          const startMin = startH * 60 + startM;
-          const endMin = endH * 60 + endM;
-          shiftLengthMins = endMin > startMin ? (endMin - startMin) : (24 * 60 - startMin + endMin);
-        }
-      }
-
-      if (workedMins > shiftLengthMins) {
-        record.overtimeMinutes = workedMins - shiftLengthMins;
-      } else {
-        record.overtimeMinutes = 0;
-      }
-
-      record.status = 'REGULARIZED';
-      record.regularization.status = 'APPROVED';
-    } else {
-      record.regularization.status = 'REJECTED';
-    }
-
-    record.regularization.approverComment = comment || '';
-    await record.save();
+    // Delegate to workflow engine
+    const instance = await workflowEngine.processAction(
+      req.tenantId,
+      record._id,
+      req.user.id,
+      action,
+      comment
+    );
 
     await AuditLog.create({
       tenantId: req.tenantId,
@@ -581,9 +536,12 @@ export const reviewRegularization = async (req, res, next) => {
       userAgent: req.headers?.['user-agent'] || 'Server',
     });
 
+    const updatedRecord = await AttendanceRecord.findById(record._id).populate('employeeId');
+
     return res.status(200).json({
       message: `Regularization request successfully ${action === 'APPROVE' ? 'approved' : 'rejected'}.`,
-      record,
+      record: updatedRecord,
+      instance,
     });
   } catch (err) {
     next(err);

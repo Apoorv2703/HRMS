@@ -6,6 +6,9 @@ import AuditLog from '../models/AuditLog.js';
 import Shift from '../models/Shift.js';
 import Holiday from '../models/Holiday.js';
 import EmployeeShiftSchedule from '../models/EmployeeShiftSchedule.js';
+import ApprovalInstance from '../models/ApprovalInstance.js';
+import ApprovalDelegation from '../models/ApprovalDelegation.js';
+import * as workflowEngine from '../utils/workflowEngine.js';
 
 // Helper to generate dates in range YYYY-MM-DD
 const getDatesInRange = (startDate, endDate) => {
@@ -183,6 +186,15 @@ export const applyLeave = async (req, res, next) => {
     });
     await leaveRequest.save();
 
+    // Initiate workflow engine approval chain
+    await workflowEngine.initiateWorkflow(
+      req.tenantId,
+      'LEAVE',
+      req.user.id,
+      leaveRequest._id,
+      { totalDays: leaveRequest.totalDays }
+    );
+
     await AuditLog.create({
       tenantId: req.tenantId,
       actorId: req.user.id,
@@ -283,38 +295,14 @@ export const reviewLeaveRequest = async (req, res, next) => {
       return res.status(404).json({ error: 'Leave request not found.' });
     }
 
-    if (request.status !== 'PENDING') {
-      return res.status(400).json({ error: 'This request has already been reviewed.' });
-    }
-
-    // Access check: must be reporting manager or HR Admin
-    const manager = await Employee.findOne({ tenantId: req.tenantId, userId: req.user.id });
-    const isManager = manager && request.employeeId.employment?.reportingManagerId?.toString() === manager._id.toString();
-    const isAdmin = req.user.role === 'HR_ADMIN';
-
-    if (!isManager && !isAdmin) {
-      return res.status(403).json({ error: 'Access denied. Only the reporting manager or an HR Admin can review this request.' });
-    }
-
-    const balance = await LeaveBalance.findOne({
-      tenantId: req.tenantId,
-      employeeId: request.employeeId._id,
-      leaveTypeId: request.leaveTypeId,
-    });
-
-    if (balance) {
-      // Clear the locked pending balance
-      balance.pendingApproval = Math.max(0, balance.pendingApproval - request.totalDays);
-      if (action === 'APPROVE') {
-        balance.used += request.totalDays;
-      }
-      await balance.save();
-    }
-
-    request.status = action === 'APPROVE' ? 'APPROVED' : 'REJECTED';
-    request.reviewedBy = manager?._id || null;
-    request.approverComment = comment || '';
-    await request.save();
+    // Delegate to workflow engine
+    const instance = await workflowEngine.processAction(
+      req.tenantId,
+      request._id,
+      req.user.id,
+      action,
+      comment
+    );
 
     await AuditLog.create({
       tenantId: req.tenantId,
@@ -327,9 +315,12 @@ export const reviewLeaveRequest = async (req, res, next) => {
       userAgent: req.headers?.['user-agent'] || 'Server',
     });
 
+    const updatedRequest = await LeaveRequest.findById(request._id).populate('employeeId');
+
     return res.status(200).json({
       message: `Leave request successfully ${action.toLowerCase()}d.`,
-      request,
+      request: updatedRequest,
+      instance,
     });
   } catch (err) {
     next(err);
@@ -358,24 +349,32 @@ export const getMyLeaveRequests = async (req, res, next) => {
 // Retrieve pending requests queue for the logged-in manager
 export const getPendingLeaveRequests = async (req, res, next) => {
   try {
-    const manager = await Employee.findOne({ tenantId: req.tenantId, userId: req.user.id });
-    if (!manager) {
-      return res.status(200).json([]);
-    }
-
-    const team = await Employee.find({
+    const now = new Date();
+    // Resolve active delegations for the current user
+    const activeDelegationsForMe = await ApprovalDelegation.find({
       tenantId: req.tenantId,
-      'employment.reportingManagerId': manager._id,
+      delegateeId: req.user.id,
+      startDate: { $lte: now },
+      endDate: { $gte: now },
+      isActive: true,
+    });
+    const delegators = activeDelegationsForMe.map(d => d.delegatorId);
+
+    const instances = await ApprovalInstance.find({
+      tenantId: req.tenantId,
+      status: { $in: ['PENDING', 'ESCALATED'] },
+      requestType: 'LEAVE',
+      $or: [
+        { activeApproverId: req.user.id },
+        { activeApproverId: { $in: delegators } }
+      ]
     });
 
-    if (team.length === 0) {
-      return res.status(200).json([]);
-    }
+    const requestIds = instances.map(inst => inst.requestId);
 
     const requests = await LeaveRequest.find({
       tenantId: req.tenantId,
-      employeeId: { $in: team.map(emp => emp._id) },
-      status: 'PENDING',
+      _id: { $in: requestIds },
     }).populate('employeeId', 'personal.firstName personal.lastName employeeId')
       .populate('leaveTypeId', 'name code')
       .sort({ createdAt: -1 });
@@ -386,10 +385,47 @@ export const getPendingLeaveRequests = async (req, res, next) => {
   }
 };
 
+// Helper to ensure an employee has leave balance records for all active leave types
+const ensureLeaveBalances = async (tenantId, employeeId) => {
+  let allLeaveTypes = await LeaveType.find({ tenantId });
+  if (allLeaveTypes.length === 0) {
+    const defaultTypes = [
+      { tenantId, name: 'Casual Leave', code: 'CL', annualEntitlement: 12, allowHalfDay: true, allowNegativeBalance: false },
+      { tenantId, name: 'Sick Leave', code: 'SL', annualEntitlement: 10, allowHalfDay: true, allowNegativeBalance: false },
+      { tenantId, name: 'Earned Leave', code: 'EL', annualEntitlement: 15, allowHalfDay: false, allowNegativeBalance: false },
+      { tenantId, name: 'Comp-off', code: 'COMP', annualEntitlement: 0, allowHalfDay: true, allowNegativeBalance: false },
+      { tenantId, name: 'Maternity Leave', code: 'ML', annualEntitlement: 84, allowHalfDay: false, allowNegativeBalance: false },
+      { tenantId, name: 'Paternity Leave', code: 'PL', annualEntitlement: 14, allowHalfDay: false, allowNegativeBalance: false },
+      { tenantId, name: 'Loss of Pay', code: 'LOP', annualEntitlement: 0, allowHalfDay: true, allowNegativeBalance: true }
+    ];
+    allLeaveTypes = await LeaveType.insertMany(defaultTypes);
+  }
+
+  const existingBalances = await LeaveBalance.find({ tenantId, employeeId });
+  const existingTypeIds = new Set(existingBalances.map(b => b.leaveTypeId.toString()));
+  const missingTypes = allLeaveTypes.filter(lt => !existingTypeIds.has(lt._id.toString()));
+
+  if (missingTypes.length > 0) {
+    const newBalances = missingTypes.map(lt => ({
+      tenantId,
+      employeeId,
+      leaveTypeId: lt._id,
+      allocated: lt.annualEntitlement,
+      used: 0,
+      pendingApproval: 0,
+      carriedForward: 0,
+    }));
+    await LeaveBalance.insertMany(newBalances);
+  }
+};
+
 // Retrieve leave balances for a specific employee
 export const getEmployeeLeaveBalances = async (req, res, next) => {
   try {
     const { employeeId } = req.params;
+    
+    await ensureLeaveBalances(req.tenantId, employeeId);
+
     const balances = await LeaveBalance.find({
       tenantId: req.tenantId,
       employeeId,
@@ -408,6 +444,8 @@ export const getMyLeaveBalances = async (req, res, next) => {
     if (!employee) {
       return res.status(404).json({ error: 'Employee profile not found.' });
     }
+
+    await ensureLeaveBalances(req.tenantId, employee._id);
 
     const balances = await LeaveBalance.find({
       tenantId: req.tenantId,

@@ -13,8 +13,15 @@ export const injectStore = (store) => {
   storeInstance = store;
 };
 
+// Check if running on localhost to toggle between local API and Render API
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+export const BASE_BACKEND_URL = isLocalhost 
+  ? 'http://localhost:5000' 
+  : 'https://hrms-2-cqdz.onrender.com';
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api/v1',
+  baseURL: `${BASE_BACKEND_URL}/api/v1`,
   withCredentials: true, // Crucial to send HttpOnly refresh token cookie
 });
 
@@ -46,7 +53,7 @@ api.interceptors.response.use(
       try {
         // Call refresh token endpoint
         const response = await axios.post(
-          'http://localhost:5000/api/v1/auth/refresh-token',
+          `${BASE_BACKEND_URL}/api/v1/auth/refresh-token`,
           {},
           { withCredentials: true }
         );

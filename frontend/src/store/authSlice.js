@@ -5,7 +5,7 @@ const initialState = {
   user: null,
   token: null,
   isAuthenticated: false,
-  loading: false,
+  loading: true, // Start as true during initial session check on app mount
   error: null,
 };
 

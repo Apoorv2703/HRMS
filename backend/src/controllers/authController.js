@@ -8,6 +8,7 @@ import User from '../models/User.js';
 import Employee from '../models/Employee.js';
 import AuditLog from '../models/AuditLog.js';
 import { validatePassword } from '../utils/passwordValidator.js';
+import { sendPasswordResetEmail } from '../utils/emailService.js';
 
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY_DAYS = 7;
@@ -28,6 +29,52 @@ const generateAccessToken = (user) => {
 // Helper to generate a refresh token
 const generateRefreshToken = () => {
   return crypto.randomBytes(40).toString('hex');
+};
+
+const findTenantBySubdomainOrName = async (input) => {
+  if (!input) return null;
+  const searchVal = input.trim().toLowerCase();
+  
+  // 1. Try exact subdomain match
+  let tenant = await Tenant.findOne({ subdomain: searchVal, isActive: true });
+  if (tenant) return tenant;
+  
+  // 2. Try exact name match (case-insensitive)
+  const escapedInput = searchVal.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  tenant = await Tenant.findOne({
+    name: { $regex: new RegExp("^" + escapedInput + "$", "i") },
+    isActive: true
+  });
+  if (tenant) return tenant;
+
+  // 3. Typo handling (common crop/corp swaps)
+  let fallbackSearch = searchVal;
+  if (searchVal.includes('corp')) {
+    fallbackSearch = searchVal.replace('corp', 'crop');
+  } else if (searchVal.includes('crop')) {
+    fallbackSearch = searchVal.replace('crop', 'corp');
+  }
+  
+  if (fallbackSearch !== searchVal) {
+    const escapedFallback = fallbackSearch.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    tenant = await Tenant.findOne({
+      $or: [
+        { subdomain: fallbackSearch },
+        { name: { $regex: new RegExp("^" + escapedFallback + "$", "i") } }
+      ],
+      isActive: true
+    });
+    if (tenant) return tenant;
+  }
+
+  // 4. Partial name match (e.g. typing "redvision" matches "redvision crop")
+  tenant = await Tenant.findOne({
+    name: { $regex: new RegExp(escapedInput, "i") },
+    isActive: true
+  });
+  if (tenant) return tenant;
+
+  return null;
 };
 
 // Controller functions
@@ -123,7 +170,7 @@ export const login = async (req, res) => {
 
   try {
     // Lookup tenant
-    const tenant = await Tenant.findOne({ subdomain: subdomain.toLowerCase(), isActive: true });
+    const tenant = await findTenantBySubdomainOrName(subdomain);
     if (!tenant) {
       return res.status(401).json({ error: 'Invalid subdomain or inactive tenant.' });
     }
@@ -341,7 +388,16 @@ export const refreshToken = async (req, res) => {
       maxAge: REFRESH_TOKEN_EXPIRY_DAYS * 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({ token: accessToken });
+    return res.status(200).json({
+      token: accessToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        tenantId: user.tenantId,
+        mfaEnabled: user.mfaEnabled,
+      },
+    });
   } catch (err) {
     console.error('Refresh Token Error:', err);
     return res.status(500).json({ error: 'Internal server error during token refresh.' });
@@ -638,7 +694,7 @@ export const googleLogin = async (req, res) => {
   }
 
   try {
-    const tenant = await Tenant.findOne({ subdomain: subdomain.toLowerCase(), isActive: true });
+    const tenant = await findTenantBySubdomainOrName(subdomain);
     if (!tenant) {
       return res.status(400).json({ error: 'Invalid subdomain or inactive tenant.' });
     }
@@ -667,7 +723,9 @@ export const googleLogin = async (req, res) => {
       });
 
       if (!tokenResponse.ok) {
-        throw new Error('Failed to exchange Google OAuth code.');
+        const errorText = await tokenResponse.text();
+        console.error('Google OAuth token exchange failed:', tokenResponse.status, errorText);
+        throw new Error(`Failed to exchange Google OAuth code: ${errorText}`);
       }
 
       const tokenData = await tokenResponse.json();
@@ -676,7 +734,9 @@ export const googleLogin = async (req, res) => {
       });
 
       if (!profileResponse.ok) {
-        throw new Error('Failed to fetch user info from Google.');
+        const errorText = await profileResponse.text();
+        console.error('Google OAuth profile fetch failed:', profileResponse.status, errorText);
+        throw new Error(`Failed to fetch user info from Google: ${errorText}`);
       }
 
       const profileData = await profileResponse.json();
@@ -745,7 +805,7 @@ export const microsoftLogin = async (req, res) => {
   }
 
   try {
-    const tenant = await Tenant.findOne({ subdomain: subdomain.toLowerCase(), isActive: true });
+    const tenant = await findTenantBySubdomainOrName(subdomain);
     if (!tenant) {
       return res.status(400).json({ error: 'Invalid subdomain or inactive tenant.' });
     }
@@ -850,7 +910,7 @@ export const samlCallback = async (req, res) => {
   }
 
   try {
-    const tenant = await Tenant.findOne({ subdomain: subdomain.toLowerCase(), isActive: true });
+    const tenant = await findTenantBySubdomainOrName(subdomain);
     if (!tenant) {
       return res.status(400).json({ error: 'Invalid subdomain or inactive tenant.' });
     }
@@ -935,7 +995,7 @@ export const getSsoConfig = async (req, res) => {
   }
 
   try {
-    const tenant = await Tenant.findOne({ subdomain: subdomain.toLowerCase(), isActive: true });
+    const tenant = await findTenantBySubdomainOrName(subdomain);
     if (!tenant) {
       return res.status(404).json({ error: 'Workspace not found.' });
     }
@@ -997,5 +1057,112 @@ export const updateSamlConfig = async (req, res) => {
   } catch (err) {
     console.error('Update SAML Config Error:', err);
     return res.status(500).json({ error: 'Internal server error updating SAML configuration.' });
+  }
+};
+
+/**
+ * Initiates a password reset by generating a secure token and emailing a reset link.
+ * POST /api/v1/auth/forgot-password
+ * Body: { email, subdomain }
+ */
+export const forgotPassword = async (req, res, next) => {
+  const { email, subdomain } = req.body;
+
+  if (!email || !subdomain) {
+    return res.status(400).json({ error: 'Email and workspace subdomain are required.' });
+  }
+
+  try {
+    // Always respond with a generic message to prevent user enumeration
+    const genericResponse = {
+      message: 'If that email is registered in your workspace, a password reset link has been sent.',
+    };
+
+    const tenant = await findTenantBySubdomainOrName(subdomain);
+    if (!tenant) return res.status(200).json(genericResponse);
+
+    const user = await User.findOne({ tenantId: tenant._id, email: email.toLowerCase().trim() });
+    if (!user) return res.status(200).json(genericResponse);
+
+    // Generate a cryptographically secure raw token
+    const rawToken = crypto.randomBytes(32).toString('hex');
+
+    // Store the SHA-256 hash of the token (never store raw tokens in DB)
+    const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+    user.passwordResetToken = hashedToken;
+    user.passwordResetExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+    await user.save({ validateBeforeSave: false });
+
+    // Build reset URL with raw token (frontend will send it back)
+    const frontendBase = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const resetLink = `${frontendBase}/reset-password?token=${rawToken}&email=${encodeURIComponent(email.toLowerCase().trim())}&subdomain=${encodeURIComponent(subdomain.toLowerCase().trim())}`;
+
+    // Get display name from Employee profile if available
+    const emp = await Employee.findOne({ tenantId: tenant._id, userId: user._id });
+    const displayName = emp ? `${emp.personal?.firstName || ''} ${emp.personal?.lastName || ''}`.trim() : 'User';
+
+    await sendPasswordResetEmail(email.toLowerCase().trim(), resetLink, displayName);
+
+    return res.status(200).json(genericResponse);
+  } catch (err) {
+    console.error('Forgot Password Error:', err);
+    next(err);
+  }
+};
+
+/**
+ * Validates reset token and updates the user's password.
+ * POST /api/v1/auth/reset-password
+ * Body: { token, email, subdomain, newPassword }
+ */
+export const resetPassword = async (req, res, next) => {
+  const { token, email, subdomain, newPassword } = req.body;
+
+  if (!token || !email || !subdomain || !newPassword) {
+    return res.status(400).json({ error: 'Token, email, subdomain, and new password are all required.' });
+  }
+
+  try {
+    // Validate password strength
+    const passwordCheck = validatePassword(newPassword);
+    if (!passwordCheck.valid) {
+      return res.status(400).json({ error: passwordCheck.message });
+    }
+
+    const tenant = await findTenantBySubdomainOrName(subdomain);
+    if (!tenant) {
+      return res.status(400).json({ error: 'Invalid or expired reset link.' });
+    }
+
+    const user = await User.findOne({ tenantId: tenant._id, email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid or expired reset link.' });
+    }
+
+    // Hash the incoming raw token and compare with stored hash
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    if (
+      !user.passwordResetToken ||
+      user.passwordResetToken !== hashedToken ||
+      !user.passwordResetExpiry ||
+      user.passwordResetExpiry < Date.now()
+    ) {
+      return res.status(400).json({ error: 'This password reset link is invalid or has expired. Please request a new one.' });
+    }
+
+    // Set new password (pre-save hook will hash it)
+    user.passwordHash = newPassword;
+    user.passwordResetToken = null;
+    user.passwordResetExpiry = null;
+    user.failedLoginAttempts = 0;
+    user.lockoutUntil = null;
+    await user.save();
+
+    return res.status(200).json({ message: 'Password reset successfully. You can now login with your new password.' });
+  } catch (err) {
+    console.error('Reset Password Error:', err);
+    next(err);
   }
 };

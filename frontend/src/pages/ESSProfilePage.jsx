@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { User, Briefcase, Landmark, ShieldAlert, Check, X, ClipboardList, AlertCircle, Save, GraduationCap, Award, Plus, Trash2, FileText, UploadCloud, ExternalLink, Download, DollarSign } from 'lucide-react';
-import api from '../services/api';
+import { User, Briefcase, Landmark, ShieldAlert, Check, X, ClipboardList, AlertCircle, Save, GraduationCap, Award, Plus, Trash2, FileText, UploadCloud, ExternalLink, Download, DollarSign, UserCheck, Bell } from 'lucide-react';
+import api, { BASE_BACKEND_URL } from '../services/api';
+import DelegationSettings from '../components/DelegationSettings';
+import NotificationPreferences from '../components/NotificationPreferences';
 
 const ESSProfilePage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -319,7 +321,7 @@ const ESSProfilePage = () => {
   const getDocumentUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    return `http://localhost:5000${url}`;
+    return `${BASE_BACKEND_URL}${url}`;
   };
 
   const handleDocumentUpload = async (e) => {
@@ -490,10 +492,32 @@ const ESSProfilePage = () => {
               <ClipboardList className="h-4 w-4" /> Review Requests ({pendingRequests.length})
             </button>
           )}
+
+          {profileId === 'me' && (
+            <button
+              onClick={() => setActiveTab('delegation')}
+              className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
+                activeTab === 'delegation' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <UserCheck className="h-4 w-4" /> Delegation Settings
+            </button>
+          )}
+
+          {profileId === 'me' && (
+            <button
+              onClick={() => setActiveTab('notifications')}
+              className={`flex items-center gap-2 px-4 py-2.5 font-semibold text-sm border-b-2 transition cursor-pointer ${
+                activeTab === 'notifications' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Bell className="h-4 w-4" /> Notification Preferences
+            </button>
+          )}
         </div>
 
         {/* Form Container */}
-        {activeTab !== 'review' && activeTab !== 'documents' && (
+        {activeTab !== 'review' && activeTab !== 'documents' && activeTab !== 'payslips' && activeTab !== 'delegation' && activeTab !== 'notifications' && (
           <form onSubmit={handleProfileSubmit} className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 md:p-8 backdrop-blur-md shadow-lg space-y-6">
             {activeTab === 'personal' && (
               <div className="space-y-6">
@@ -1832,6 +1856,16 @@ const ESSProfilePage = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* Delegation Tab */}
+        {activeTab === 'delegation' && (
+          <DelegationSettings />
+        )}
+
+        {/* Notifications Preference Tab */}
+        {activeTab === 'notifications' && (
+          <NotificationPreferences />
         )}
       </div>
     </div>

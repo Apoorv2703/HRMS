@@ -1,9 +1,10 @@
 import React from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { LogOut, Home, Users, Network, User, Calendar } from 'lucide-react';
+import { LogOut, Home, Users, Network, User, Calendar, Settings, FileText } from 'lucide-react';
 import { logout } from '../store/authSlice';
 import api from '../services/api';
+import NotificationBell from './NotificationBell';
 
 const DashboardLayout = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,14 @@ const DashboardLayout = () => {
   if (['HR_ADMIN', 'LEADERSHIP', 'MANAGER'].includes(user?.role)) {
     navItems.splice(3, 0, { name: 'Muster Register', path: '/muster', icon: <Calendar className="h-4 w-4" /> });
   }
+
+  // Reports is available to all authenticated users (backend scopes data per role)
+  navItems.splice(navItems.length - 1, 0, { name: 'Reports', path: '/reports', icon: <FileText className="h-4 w-4" /> });
+
+  if (user?.role === 'HR_ADMIN') {
+    navItems.push({ name: 'Workflow Config', path: '/workflows', icon: <Settings className="h-4 w-4" /> });
+  }
+
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -76,6 +85,8 @@ const DashboardLayout = () => {
               <span className="hidden text-xs text-slate-500 sm:inline-block font-mono bg-slate-900 border border-slate-850 px-2.5 py-1 rounded-lg">
                 Workspace: <span className="text-slate-300 font-semibold">{user?.tenantId}</span>
               </span>
+              
+              <NotificationBell />
               
               <button
                 onClick={handleLogout}

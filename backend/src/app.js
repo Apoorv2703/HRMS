@@ -9,6 +9,9 @@ import attendanceConfigRoutes from './routes/attendanceConfigRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js';
 import payslipRoutes from './routes/payslipRoutes.js';
+import workflowRoutes from './routes/workflowRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 const app = express();
 
@@ -36,6 +39,9 @@ app.use('/api/v1/attendance-config', attendanceConfigRoutes);
 app.use('/api/v1/attendance', attendanceRoutes);
 app.use('/api/v1/leaves', leaveRoutes);
 app.use('/api/v1/payslips', payslipRoutes);
+app.use('/api/v1/workflows', workflowRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/reports', reportRoutes);
 
 // Root path diagnostic endpoint
 app.get('/health', (req, res) => {

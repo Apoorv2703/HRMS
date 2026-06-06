@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Calendar, Clock, UserCheck, UserX, AlertCircle, PlusCircle, CheckCircle2, ListTodo, Settings, Briefcase, RefreshCw, BadgeAlert } from 'lucide-react';
+import { Calendar, Clock, UserCheck, UserX, AlertCircle, PlusCircle, CheckCircle2, ListTodo, Settings, Briefcase, RefreshCw, BadgeAlert, ShieldCheck } from 'lucide-react';
 import api from '../services/api';
 
 const STATUS_BADGES = {

@@ -12,6 +12,7 @@ const STATUS_MAP = {
   ABSENT: { short: 'A', label: 'Absent', color: 'bg-rose-500/10 border-rose-500/20 text-rose-400' },
   WEEKLY_OFF: { short: 'W', label: 'Weekly off', color: 'bg-slate-800/20 border-slate-800 text-slate-500' },
   HOLIDAY: { short: 'Hol', label: 'Holiday', color: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
+  LEAVE: { short: 'LV', label: 'Approved Leave', color: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400' },
   '-': { short: '-', label: 'Future date / No status', color: 'bg-slate-900/10 border-slate-900/20 text-slate-600' },
 };
 
@@ -456,7 +457,11 @@ const MusterPage = () => {
                         {Array.from({ length: numDays }, (_, i) => i + 1).map((d) => {
                           const dayKey = d.toString().padStart(2, '0');
                           const status = emp.days[dayKey] || '-';
-                          const mapped = STATUS_MAP[status] || STATUS_MAP['-'];
+                          const mapped = STATUS_MAP[status] || (status && status !== '-' ? {
+                            short: status,
+                            label: `Leave (${status})`,
+                            color: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400 font-semibold'
+                          } : STATUS_MAP['-']);
 
                           return (
                             <td key={d} className="p-1 border-r border-slate-850/30 text-center">

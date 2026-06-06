@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Search, MapPin, Briefcase, FileSpreadsheet, UserPlus, Upload, ShieldAlert, ArrowLeft, ArrowRight, UserCheck, FileText, ExternalLink } from 'lucide-react';
-import api from '../services/api';
+import api, { BASE_BACKEND_URL } from '../services/api';
 
 const DirectoryPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -549,7 +549,7 @@ const DirectoryPage = () => {
                               </span>
                             </div>
                             <a
-                              href={doc.fileUrl.startsWith('http') ? doc.fileUrl : `http://localhost:5000${doc.fileUrl}`}
+                              href={doc.fileUrl.startsWith('http') ? doc.fileUrl : `${BASE_BACKEND_URL}${doc.fileUrl}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg text-slate-200 font-medium transition cursor-pointer"

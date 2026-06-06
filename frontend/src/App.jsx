@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess, logout } from './store/authSlice';
+import api from './services/api';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
@@ -14,8 +17,26 @@ import OrgChartPage from './pages/OrgChartPage';
 import MusterPage from './pages/MusterPage';
 import LeaveDashboardPage from './pages/LeaveDashboardPage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
+import WorkflowConfigPage from './pages/WorkflowConfigPage';
+import ReportsPage from './pages/ReportsPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await api.post('/auth/refresh-token', {}, { withCredentials: true });
+        dispatch(loginSuccess(response.data));
+      } catch (err) {
+        dispatch(logout());
+      }
+    };
+    checkSession();
+  }, [dispatch]);
+
   return (
     <Routes>
       {/* Public Routes */}
@@ -24,6 +45,8 @@ function App() {
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/onboard" element={<OnboardingVerification />} />
       <Route path="/auth/callback/:provider" element={<AuthCallbackPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       {/* Protected Routes (Authenticated Access Only) */}
       <Route element={<ProtectedRoute />}>
@@ -35,14 +58,18 @@ function App() {
           <Route path="/profile" element={<ESSProfilePage />} />
           <Route path="/leaves" element={<LeaveDashboardPage />} />
           
-          {/* Reports Management Routes */}
+          {/* Muster — Manager/Admin only */}
           <Route element={<ProtectedRoute allowedRoles={['HR_ADMIN', 'LEADERSHIP', 'MANAGER']} />}>
             <Route path="/muster" element={<MusterPage />} />
           </Route>
+
+          {/* Reports — all authenticated roles (scoped per role on backend) */}
+          <Route path="/reports" element={<ReportsPage />} />
           
           {/* Admin Protected Layout Routes */}
           <Route element={<ProtectedRoute allowedRoles={['HR_ADMIN']} />}>
             <Route path="/onboard-staff" element={<OnboardingWizard />} />
+            <Route path="/workflows" element={<WorkflowConfigPage />} />
           </Route>
         </Route>
       </Route>

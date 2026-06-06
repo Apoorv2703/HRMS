@@ -18,6 +18,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.1",
     "multer": "^2.1.1",
+    "nodemailer": "^8.0.10",
     "otplib": "^13.4.1",
     "qrcode": "^1.5.4"
   }

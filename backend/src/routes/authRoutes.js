@@ -12,6 +12,8 @@ router.post('/refresh-token', authController.refreshToken);
 router.post('/logout', authController.logout);
 router.post('/reset-expired-password', authController.resetExpiredPassword);
 router.post('/verify-mfa', authController.verifyMfa);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password', authController.resetPassword);
 router.post('/google/callback', authController.googleLogin);
 router.post('/microsoft/callback', authController.microsoftLogin);
 router.post('/saml/callback', authController.samlCallback);

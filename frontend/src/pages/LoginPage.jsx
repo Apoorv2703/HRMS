@@ -61,7 +61,7 @@ const LoginPage = () => {
       }
       return;
     }
-    const redirectUri = encodeURIComponent('http://localhost:5173/auth/callback/google');
+    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/callback/google`);
     const scope = encodeURIComponent('openid email profile');
     const state = encodeURIComponent(subdomain.trim());
     window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
@@ -76,7 +76,7 @@ const LoginPage = () => {
       }
       return;
     }
-    const redirectUri = encodeURIComponent('http://localhost:5173/auth/callback/microsoft');
+    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/callback/microsoft`);
     const scope = encodeURIComponent('openid email profile User.Read');
     const state = encodeURIComponent(subdomain.trim());
     window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
@@ -463,9 +463,12 @@ const LoginPage = () => {
                   Remember device
                 </label>
               </div>
-              <a href="#" className="font-medium text-brand-400 hover:text-brand-300">
+              <Link
+                to={`/forgot-password${subdomain ? `?subdomain=${encodeURIComponent(subdomain)}` : ''}`}
+                className="font-medium text-teal-400 hover:text-teal-300 transition duration-150"
+              >
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <div>
