@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Building2, Mail, KeyRound, ArrowLeft, CheckCircle, AlertTriangle } from 'lucide-react';
+import { CheckCircle, AlertTriangle } from 'lucide-react';
 import api from '../services/api';
 
 const RegisterPage = () => {
@@ -87,7 +87,7 @@ const RegisterPage = () => {
               id="company-name"
               type="text"
               required
-              placeholder="Company Name"
+              placeholder="e.g. Redvision Corp"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               className="block w-full rounded-lg border border-slate-300 bg-white py-2.5 px-3.5 text-sm text-slate-900 placeholder-slate-400 focus:border-[#101828] focus:ring-1 focus:ring-[#101828] outline-none shadow-sm transition duration-150"
@@ -102,7 +102,7 @@ const RegisterPage = () => {
                 id="subdomain-reg"
                 type="text"
                 required
-                placeholder="Workspace Subdomain"
+                placeholder="subdomain"
                 value={subdomain}
                 onChange={(e) => setSubdomain(e.target.value.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase())}
                 className="block w-full rounded-lg border border-slate-300 bg-white py-2.5 px-3.5 pr-24 text-sm text-slate-900 placeholder-slate-400 focus:border-[#101828] focus:ring-1 focus:ring-[#101828] outline-none shadow-sm transition duration-150"
@@ -120,7 +120,7 @@ const RegisterPage = () => {
               id="admin-email"
               type="email"
               required
-              placeholder="HR Admin Email"
+              placeholder="admin@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="block w-full rounded-lg border border-slate-300 bg-white py-2.5 px-3.5 text-sm text-slate-900 placeholder-slate-400 focus:border-[#101828] focus:ring-1 focus:ring-[#101828] outline-none shadow-sm transition duration-150"
@@ -134,7 +134,7 @@ const RegisterPage = () => {
               id="admin-password"
               type="password"
               required
-              placeholder="HR Admin Password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="block w-full rounded-lg border border-slate-300 bg-white py-2.5 px-3.5 text-sm text-slate-900 placeholder-slate-400 focus:border-[#101828] focus:ring-1 focus:ring-[#101828] outline-none shadow-sm transition duration-150"
