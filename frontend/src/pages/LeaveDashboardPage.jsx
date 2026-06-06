@@ -285,13 +285,13 @@ const LeaveDashboardPage = () => {
       <div className="mx-auto max-w-7xl space-y-8">
         
         {/* Page Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-800 pb-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-6">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              <Calendar className="h-8 w-8 text-teal-400" />
-              Leave Management <span className="text-teal-400 font-medium text-lg sm:text-xl"> &amp; Allowances</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+              <Calendar className="h-8 w-8 text-teal-600" />
+              Leave Management <span className="text-teal-600 font-medium text-lg sm:text-xl"> &amp; Allowances</span>
             </h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-slate-500 text-sm mt-1">
               Apply for time off, verify active leave balances, and review team approval queues.
             </p>
           </div>
@@ -299,7 +299,7 @@ const LeaveDashboardPage = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => { fetchUserData(); if (user?.role !== 'EMPLOYEE') fetchManagerData(); }}
-              className="p-2.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:text-teal-400 text-slate-400 transition"
+              className="p-2.5 rounded-xl border border-slate-200 bg-white hover:text-teal-650 text-slate-500 transition shadow-sm"
               title="Refresh Data"
             >
               <RefreshCw className="h-4 w-4" />
@@ -322,11 +322,11 @@ const LeaveDashboardPage = () => {
         )}
 
         {/* Tab Selection Navigation */}
-        <div className="flex border-b border-slate-850 gap-4">
+        <div className="flex border-b border-slate-200 gap-4">
           <button
             onClick={() => setActiveTab('my-leaves')}
             className={`pb-2.5 text-sm font-bold tracking-wide transition-all border-b-2 cursor-pointer ${
-              activeTab === 'my-leaves' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+              activeTab === 'my-leaves' ? 'border-teal-600 text-teal-600' : 'border-transparent text-slate-500 hover:text-slate-900'
             }`}
           >
             My Leaves &amp; History
@@ -335,7 +335,7 @@ const LeaveDashboardPage = () => {
             <button
               onClick={() => setActiveTab('approvals')}
               className={`pb-2.5 text-sm font-bold tracking-wide transition-all border-b-2 cursor-pointer relative ${
-                activeTab === 'approvals' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'approvals' ? 'border-teal-600 text-teal-600' : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
               Team Approvals
@@ -350,7 +350,7 @@ const LeaveDashboardPage = () => {
             <button
               onClick={() => setActiveTab('hr-config')}
               className={`pb-2.5 text-sm font-bold tracking-wide transition-all border-b-2 cursor-pointer ${
-                activeTab === 'hr-config' ? 'border-teal-500 text-teal-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                activeTab === 'hr-config' ? 'border-teal-600 text-teal-600' : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
               Admin Controls
@@ -372,11 +372,11 @@ const LeaveDashboardPage = () => {
           <div className="space-y-8 animate-none">
             {/* Balance Grid Cards */}
             <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-450 text-slate-400 mb-4 flex items-center gap-1.5">
-                <Briefcase className="h-4 w-4 text-teal-400" /> Current Leave Balances
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-1.5">
+                <Briefcase className="h-4 w-4 text-teal-600" /> Current Leave Balances
               </h2>
               {balances.length === 0 ? (
-                <div className="rounded-2xl border border-slate-850 bg-slate-900/10 p-6 text-center text-slate-500 italic">
+                <div className="rounded-2xl border border-slate-200 bg-slate-100/50 p-6 text-center text-slate-500 italic">
                   No active leave balances allocated to your profile.
                 </div>
               ) : (
@@ -384,17 +384,17 @@ const LeaveDashboardPage = () => {
                   {balances.map((bal) => {
                     const available = bal.allocated + bal.carriedForward - bal.used - bal.pendingApproval;
                     return (
-                      <div key={bal._id} className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 backdrop-blur shadow hover:border-slate-700 transition">
-                        <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-teal-400 bg-teal-500/10 px-2.5 py-0.5 rounded-full inline-block mb-3">
+                      <div key={bal._id} className="rounded-xl border border-slate-200 bg-white p-5 shadow hover:border-slate-350 transition">
+                        <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-teal-600 bg-teal-500/10 px-2.5 py-0.5 rounded-full inline-block mb-3">
                           {bal.leaveTypeId?.code || 'LEAVE'}
                         </span>
-                        <h3 className="text-base font-bold text-slate-100">{bal.leaveTypeId?.name}</h3>
-                        <div className="mt-4 flex items-baseline justify-between border-t border-slate-800/60 pt-3">
+                        <h3 className="text-base font-bold text-slate-900">{bal.leaveTypeId?.name}</h3>
+                        <div className="mt-4 flex items-baseline justify-between border-t border-slate-100 pt-3">
                           <div>
-                            <span className="text-2xl font-black text-white">{available}</span>
+                            <span className="text-2xl font-black text-slate-900">{available}</span>
                             <span className="text-[10px] text-slate-500 ml-1">days free</span>
                           </div>
-                          <div className="text-right text-xs text-slate-400">
+                          <div className="text-right text-xs text-slate-500">
                             <p>Allocated: {bal.allocated + bal.carriedForward}</p>
                             <p>Taken: {bal.used} | Locked: {bal.pendingApproval}</p>
                           </div>
@@ -408,13 +408,13 @@ const LeaveDashboardPage = () => {
 
             {/* My Request History Table */}
             <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
-                <Clock className="h-4 w-4 text-teal-400" /> Leave Application Timeline
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-1.5">
+                <Clock className="h-4 w-4 text-teal-600" /> Leave Application Timeline
               </h2>
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/20 backdrop-blur-xl shadow-xl overflow-hidden">
+              <div className="rounded-2xl border border-slate-200 bg-white shadow overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse text-left text-sm">
-                    <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 font-bold text-xs uppercase font-mono tracking-wider">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold text-xs uppercase font-mono tracking-wider">
                       <tr>
                         <th className="px-6 py-3">Leave Type</th>
                         <th className="px-6 py-3">Duration Dates</th>

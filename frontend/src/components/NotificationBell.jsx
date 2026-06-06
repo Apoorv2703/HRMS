@@ -101,7 +101,7 @@ const NotificationBell = () => {
 
       {/* Notification Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl border border-slate-250 bg-white p-4 shadow-2xl z-50 animate-in fade-in slide-in-from-top-3 duration-250">
+        <div className="absolute right-0 md:right-auto md:left-0 mt-3 w-80 sm:w-96 rounded-2xl border border-slate-250 bg-white p-4 shadow-2xl z-50 animate-in fade-in slide-in-from-top-3 duration-250">
           <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
             <span className="text-sm font-bold text-slate-950 flex items-center gap-1.5">
               Notifications

@@ -80,24 +80,31 @@ const DashboardLayout = () => {
         </div>
 
         {/* Sidebar Nav Items */}
-        <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={`flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer border-l-4 ${
-                  isActive
-                    ? 'bg-slate-100 text-slate-950 border-slate-950 font-bold'
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-950 border-transparent'
-                }`}
-              >
-                {item.icon}
-                <span>{item.name}</span>
-              </button>
-            );
-          })}
+        <div className="flex-1 flex flex-col min-h-0 gap-2">
+          <div className="flex flex-col gap-1 overflow-y-auto pr-1">
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer border-l-4 ${
+                    isActive
+                      ? 'bg-slate-100 text-slate-950 border-slate-950 font-bold'
+                      : 'text-slate-500 hover:bg-slate-50 hover:text-slate-950 border-transparent'
+                  }`}
+                >
+                  {item.icon}
+                  <span>{item.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-1 px-4 py-2 border-t border-slate-100 pt-3 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Notifications</span>
+            <NotificationBell />
+          </div>
         </div>
 
         {/* Sidebar Footer */}
@@ -109,9 +116,6 @@ const DashboardLayout = () => {
             <div className="overflow-hidden">
               <span className="block text-[11px] font-bold text-slate-800 truncate leading-none mb-1">{user?.email}</span>
               <span className="block text-[9px] font-semibold text-slate-400 uppercase tracking-wider leading-none">{user?.role}</span>
-            </div>
-            <div className="ml-auto">
-              <NotificationBell />
             </div>
           </div>
           
