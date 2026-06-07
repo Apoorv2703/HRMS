@@ -178,41 +178,41 @@ const OnboardingWizard = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 text-slate-900 flex items-center justify-center">
-      <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-2xl text-slate-850">
+      <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-2xl text-slate-800">
         {/* Back button */}
         {step < 3 && (
           <button
             onClick={() => navigate('/directory')}
-            className="mb-6 flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition cursor-pointer"
+            className="mb-6 flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition cursor-pointer"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to Directory
+            <ArrowLeft className="h-4 w-4 text-slate-500" /> Back to Directory
           </button>
         )}
 
         <div className="mb-8 text-center">
-          <h1 className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent">
+          <h1 className="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent">
             Staff Onboarding Wizard
           </h1>
-          <p className="mt-1.5 text-sm text-slate-400">Initialize a new employee profile and trigger credentials setup.</p>
+          <p className="mt-1.5 text-sm text-slate-500">Initialize a new employee profile and trigger credentials setup.</p>
         </div>
 
         {/* Multi-step Progress Bar */}
         <div className="mb-10 flex items-center justify-center">
           <div className="flex items-center gap-4">
             <div className={`flex h-9 w-9 items-center justify-center rounded-full border-2 font-bold transition duration-300 ${
-              step >= 1 ? 'border-teal-500 bg-teal-500/10 text-teal-400' : 'border-slate-800 text-slate-500'
+              step >= 1 ? 'border-teal-500 bg-teal-50 text-teal-600' : 'border-slate-200 bg-slate-50 text-slate-400'
             }`}>
               1
             </div>
-            <div className={`h-0.5 w-16 transition duration-300 ${step >= 2 ? 'bg-teal-500' : 'bg-slate-800'}`}></div>
+            <div className={`h-0.5 w-16 transition duration-300 ${step >= 2 ? 'bg-teal-500' : 'bg-slate-200'}`}></div>
             <div className={`flex h-9 w-9 items-center justify-center rounded-full border-2 font-bold transition duration-300 ${
-              step >= 2 ? 'border-teal-500 bg-teal-500/10 text-teal-400' : 'border-slate-800 text-slate-500'
+              step >= 2 ? 'border-teal-500 bg-teal-50 text-teal-600' : 'border-slate-200 bg-slate-50 text-slate-400'
             }`}>
               2
             </div>
-            <div className={`h-0.5 w-16 transition duration-300 ${step >= 3 ? 'bg-teal-500' : 'bg-slate-800'}`}></div>
+            <div className={`h-0.5 w-16 transition duration-300 ${step >= 3 ? 'bg-teal-500' : 'bg-slate-200'}`}></div>
             <div className={`flex h-9 w-9 items-center justify-center rounded-full border-2 font-bold transition duration-300 ${
-              step >= 3 ? 'border-teal-500 bg-teal-500/10 text-teal-400' : 'border-slate-800 text-slate-500'
+              step >= 3 ? 'border-teal-500 bg-teal-50 text-teal-600' : 'border-slate-200 bg-slate-50 text-slate-400'
             }`}>
               3
             </div>
@@ -222,55 +222,55 @@ const OnboardingWizard = () => {
         {/* Step Contents */}
         {step === 1 && (
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-teal-400 flex items-center gap-2">
-              <User className="h-5 w-5" /> Step 1: Personal Details
+            <h3 className="text-lg font-bold text-teal-600 flex items-center gap-2">
+              <User className="h-5 w-5 text-teal-500" /> Step 1: Personal Details
             </h3>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">First Name *</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">First Name *</label>
                 <input
                   type="text"
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="John"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Last Name *</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Last Name *</label>
                 <input
                   type="text"
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Doe"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Personal Email *</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Personal Email *</label>
               <input
                 type="email"
                 required
                 value={personalEmail}
                 onChange={(e) => setPersonalEmail(e.target.value)}
                 placeholder="john.doe@personal.com"
-                className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
               />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="sm:col-span-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Gender</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Gender</label>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="">Select</option>
                   <option value="Male">Male</option>
@@ -280,34 +280,34 @@ const OnboardingWizard = () => {
               </div>
 
               <div className="sm:col-span-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Date of Birth</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Date of Birth</label>
                 <input
                   type="date"
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20"
                 />
               </div>
 
               <div className="sm:col-span-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Phone Number</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Phone Number</label>
                 <input
                   type="tel"
                   value={contactNumber}
                   onChange={(e) => setContactNumber(e.target.value)}
                   placeholder="+1 555-0199"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Marital Status</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Marital Status</label>
                 <select
                   value={maritalStatus}
                   onChange={(e) => setMaritalStatus(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="">Select Marital Status</option>
                   <option value="Single">Single</option>
@@ -318,43 +318,43 @@ const OnboardingWizard = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nationality</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Nationality</label>
                 <input
                   type="text"
                   placeholder="e.g. Indian, American"
                   value={nationality}
                   onChange={(e) => setNationality(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Current Address</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Current Address</label>
                 <input
                   type="text"
                   placeholder="Street, Apt, City, Country"
                   value={currentAddress}
                   onChange={(e) => setCurrentAddress(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Permanent Address</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Permanent Address</label>
                 <input
                   type="text"
                   placeholder="Street, Apt, City, Country"
                   value={permanentAddress}
                   onChange={(e) => setPermanentAddress(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/20 p-4 space-y-4">
-              <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Emergency Contact Details</span>
+            <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-4">
+              <span className="block text-xs font-semibold uppercase tracking-wider text-slate-600">Emergency Contact Details</span>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div>
                   <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Contact Name</label>
@@ -363,7 +363,7 @@ const OnboardingWizard = () => {
                     placeholder="e.g. Jane Doe"
                     value={emergencyName}
                     onChange={(e) => setEmergencyName(e.target.value)}
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 text-xs"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400 text-xs"
                   />
                 </div>
                 <div>
@@ -373,7 +373,7 @@ const OnboardingWizard = () => {
                     placeholder="e.g. Spouse, Parent"
                     value={emergencyRelationship}
                     onChange={(e) => setEmergencyRelationship(e.target.value)}
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 text-xs"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400 text-xs"
                   />
                 </div>
                 <div>
@@ -383,7 +383,7 @@ const OnboardingWizard = () => {
                     placeholder="e.g. +1 555-0155"
                     value={emergencyPhone}
                     onChange={(e) => setEmergencyPhone(e.target.value)}
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 text-xs"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400 text-xs"
                   />
                 </div>
               </div>
@@ -393,7 +393,7 @@ const OnboardingWizard = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 px-6 py-3 font-bold text-black transition cursor-pointer"
+                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 px-6 py-3 font-bold text-slate-950 shadow-lg shadow-teal-500/10 transition cursor-pointer"
               >
                 Next Step <ChevronRight className="h-4 w-4" />
               </button>
@@ -403,43 +403,43 @@ const OnboardingWizard = () => {
 
         {step === 2 && (
           <form onSubmit={handleSubmit} className="space-y-6">
-            <h3 className="text-lg font-bold text-teal-400 flex items-center gap-2">
-              <Briefcase className="h-5 w-5" /> Step 2: Employment Profile
+            <h3 className="text-lg font-bold text-teal-600 flex items-center gap-2">
+              <Briefcase className="h-5 w-5 text-teal-500" /> Step 2: Employment Profile
             </h3>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Employee ID (Optional)</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Employee ID (Optional)</label>
                 <input
                   type="text"
                   placeholder="Leave blank to auto-generate"
                   value={employeeId}
                   onChange={(e) => setEmployeeId(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
                 <span className="text-[10px] text-slate-500 mt-1 block">Blank will auto-generate format: EMP-00001</span>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Work Email *</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Work Email *</label>
                 <input
                   type="email"
                   required
                   placeholder="john@company.com"
                   value={workEmail}
                   onChange={(e) => setWorkEmail(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">System Role</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">System Role</label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="EMPLOYEE">Employee</option>
                   <option value="MANAGER">Manager</option>
@@ -449,12 +449,12 @@ const OnboardingWizard = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Department *</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Department *</label>
                 <select
                   required
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="">Select Department</option>
                   {departments.map((d) => (
@@ -464,25 +464,25 @@ const OnboardingWizard = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Designation</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Designation</label>
                 <input
                   type="text"
                   placeholder="e.g. Senior Software Architect"
                   value={designation}
                   onChange={(e) => setDesignation(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 placeholder-slate-400"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Office Location *</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Office Location *</label>
                 <select
                   required
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="">Select Location</option>
                   {locations.map((l) => (
@@ -492,11 +492,11 @@ const OnboardingWizard = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Job Grade</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Job Grade</label>
                 <select
                   value={grade}
                   onChange={(e) => setGrade(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="">Select Grade</option>
                   {grades.map((g) => (
@@ -506,23 +506,23 @@ const OnboardingWizard = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Joining Date</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Joining Date</label>
                 <input
                   type="date"
                   value={joiningDate}
                   onChange={(e) => setJoiningDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Employment Type</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Employment Type</label>
                 <select
                   value={employmentType}
                   onChange={(e) => setEmploymentType(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="FULL_TIME">Full-time</option>
                   <option value="PART_TIME">Part-time</option>
@@ -532,7 +532,7 @@ const OnboardingWizard = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Assigned Shift</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Assigned Shift</label>
                 <select
                   value={shiftId}
                   onChange={(e) => {
@@ -541,7 +541,7 @@ const OnboardingWizard = () => {
                     const match = shifts.find(s => s._id === id);
                     setAssignedShift(match ? match.name : '');
                   }}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
                 >
                   <option value="">Select Shift</option>
                   {shifts.map((s) => (
@@ -554,11 +554,11 @@ const OnboardingWizard = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Reporting Manager</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Reporting Manager</label>
               <select
                 value={reportingManagerId}
                 onChange={(e) => setReportingManagerId(e.target.value)}
-                className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-slate-200 outline-none focus:border-teal-500/50 cursor-pointer"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 cursor-pointer"
               >
                 <option value="">None (Independent / Top Node)</option>
                 {managers.map((m) => (
@@ -573,7 +573,7 @@ const OnboardingWizard = () => {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="flex items-center gap-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 px-5 py-3 font-semibold transition cursor-pointer"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-55 px-5 py-3 font-semibold text-slate-700 transition cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4" /> Previous
               </button>

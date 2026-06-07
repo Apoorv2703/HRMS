@@ -761,15 +761,17 @@ export const reviewPendingEdits = async (req, res, next) => {
     const changeData = employee.pendingChanges.data;
 
     if (action === 'APPROVE') {
-      if (changeData.personal) {
-        if (changeData.personal.firstName) employee.personal.firstName = changeData.personal.firstName;
-        if (changeData.personal.lastName) employee.personal.lastName = changeData.personal.lastName;
-      }
-      if (changeData.bankDetails) {
-        employee.bankDetails = { ...employee.bankDetails, ...changeData.bankDetails };
-      }
-      if (changeData.statutory) {
-        employee.statutory = { ...employee.statutory, ...changeData.statutory };
+      if (changeData) {
+        if (changeData.personal) {
+          if (changeData.personal.firstName) employee.personal.firstName = changeData.personal.firstName;
+          if (changeData.personal.lastName) employee.personal.lastName = changeData.personal.lastName;
+        }
+        if (changeData.bankDetails) {
+          employee.bankDetails = { ...employee.bankDetails, ...changeData.bankDetails };
+        }
+        if (changeData.statutory) {
+          employee.statutory = { ...employee.statutory, ...changeData.statutory };
+        }
       }
 
       employee.pendingChanges = {
@@ -785,7 +787,7 @@ export const reviewPendingEdits = async (req, res, next) => {
         action: 'EMPLOYEE_UPDATE_APPROVED',
         entity: 'EMPLOYEE',
         entityId: employee._id,
-        details: { approvedFields: Object.keys(changeData) },
+        details: { approvedFields: changeData ? Object.keys(changeData) : [] },
         ip: req.ip || '127.0.0.1',
         userAgent: req.headers?.['user-agent'] || 'Server',
       });
@@ -806,7 +808,7 @@ export const reviewPendingEdits = async (req, res, next) => {
         action: 'EMPLOYEE_UPDATE_REJECTED',
         entity: 'EMPLOYEE',
         entityId: employee._id,
-        details: { rejectedFields: Object.keys(changeData) },
+        details: { rejectedFields: changeData ? Object.keys(changeData) : [] },
         ip: req.ip || '127.0.0.1',
         userAgent: req.headers?.['user-agent'] || 'Server',
       });
