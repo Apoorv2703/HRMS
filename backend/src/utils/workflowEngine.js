@@ -529,6 +529,9 @@ export const checkSlaBreaches = async () => {
           comment: `SLA breached. Escalated automatically from ${instance.activeApproverId} to ${targetEscalationUserId}.`,
         });
 
+        instance.activeApproverId = targetEscalationUserId;
+        instance.status = 'ESCALATED';
+
         await instance.save();
 
         // Notify new active approver of SLA breach escalation
