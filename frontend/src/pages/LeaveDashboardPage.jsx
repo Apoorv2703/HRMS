@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Calendar, Clock, UserCheck, UserX, AlertCircle, PlusCircle, CheckCircle2, ListTodo, Settings, Briefcase, RefreshCw, BadgeAlert, ShieldCheck } from 'lucide-react';
 import api from '../services/api';
+import { useToast } from '../context/ToastContext';
 
 const STATUS_BADGES = {
   PENDING: { label: 'Pending Review', color: 'bg-amber-50 border-amber-200 text-amber-700' },
@@ -11,6 +12,7 @@ const STATUS_BADGES = {
 };
 
 const LeaveDashboardPage = () => {
+  const { showToast } = useToast();
   const { user } = useSelector((state) => state.auth);
 
   const [activeTab, setActiveTab] = useState('my-leaves'); // 'my-leaves', 'approvals', 'hr-config'
@@ -131,9 +133,9 @@ const LeaveDashboardPage = () => {
         issuer: samlIssuer,
         cert: samlCert,
       });
-      alert(response.data.message || 'SAML settings updated successfully.');
+      showToast(response.data.message || 'SAML settings updated successfully.', 'success');
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update SAML configuration.');
+      showToast(err.response?.data?.error || 'Failed to update SAML configuration.', 'error');
     } finally {
       setSamlLoading(false);
     }
@@ -142,7 +144,7 @@ const LeaveDashboardPage = () => {
   const handleApplyLeave = async (e) => {
     e.preventDefault();
     if (!applyType || !applyStart || !applyEnd || !applyReason) {
-      alert('Please fill out all required fields.');
+      showToast('Please fill out all required fields.', 'warning');
       return;
     }
     setApplyLoading(true);
@@ -155,7 +157,7 @@ const LeaveDashboardPage = () => {
         halfDaySession: applyHalfDay ? applyHalfDaySession : null,
         reason: applyReason,
       });
-      alert(response.data.message || 'Leave requested successfully.');
+      showToast(response.data.message || 'Leave requested successfully.', 'success');
       setShowApplyModal(false);
       
       // Reset form
@@ -168,7 +170,7 @@ const LeaveDashboardPage = () => {
       // Reload
       fetchUserData();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to submit leave application.');
+      showToast(err.response?.data?.error || 'Failed to submit leave application.', 'error');
     } finally {
       setApplyLoading(false);
     }
@@ -178,13 +180,13 @@ const LeaveDashboardPage = () => {
     if (!window.confirm('Are you sure you want to cancel this leave request?')) return;
     try {
       const response = await api.post(`/leaves/requests/${id}/cancel`);
-      alert(response.data.message || 'Leave request cancelled successfully.');
+      showToast(response.data.message || 'Leave request cancelled successfully.', 'success');
       fetchUserData();
       if (user?.role === 'HR_ADMIN' || user?.role === 'MANAGER') {
         fetchManagerData();
       }
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to cancel request.');
+      showToast(err.response?.data?.error || 'Failed to cancel request.', 'error');
     }
   };
 
@@ -193,7 +195,7 @@ const LeaveDashboardPage = () => {
     setReviewLoading(prev => ({ ...prev, [id]: true }));
     try {
       const response = await api.post(`/leaves/requests/${id}/review`, { action, comment });
-      alert(response.data.message || `Leave request successfully ${action.toLowerCase()}d.`);
+      showToast(response.data.message || `Leave request successfully ${action.toLowerCase()}d.`, 'success');
       
       // Clear review input state
       setReviewComments(prev => {
@@ -206,7 +208,7 @@ const LeaveDashboardPage = () => {
       fetchUserData();
       fetchManagerData();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to review request.');
+      showToast(err.response?.data?.error || 'Failed to review request.', 'error');
     } finally {
       setReviewLoading(prev => ({ ...prev, [id]: false }));
     }
@@ -215,7 +217,7 @@ const LeaveDashboardPage = () => {
   const handleCreatePolicy = async (e) => {
     e.preventDefault();
     if (!newTypeName || !newTypeCode) {
-      alert('Name and Code are required.');
+      showToast('Name and Code are required.', 'warning');
       return;
     }
     setPolicyLoading(true);
@@ -228,7 +230,7 @@ const LeaveDashboardPage = () => {
         allowNegativeBalance: newTypeNegative,
         carryForwardLimit: newTypeCarry,
       });
-      alert(response.data.message || 'Leave policy created successfully.');
+      showToast(response.data.message || 'Leave policy created successfully.', 'success');
       
       // Reset form
       setNewTypeName('');
@@ -241,7 +243,7 @@ const LeaveDashboardPage = () => {
       // Reload
       fetchUserData();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to create leave policy.');
+      showToast(err.response?.data?.error || 'Failed to create leave policy.', 'error');
     } finally {
       setPolicyLoading(false);
     }
@@ -250,7 +252,7 @@ const LeaveDashboardPage = () => {
   const handleAdjustBalance = async (e) => {
     e.preventDefault();
     if (!adjEmpId || !adjTypeId || !adjAmount || !adjReason) {
-      alert('All fields are required.');
+      showToast('All fields are required.', 'warning');
       return;
     }
     setAdjLoading(true);
@@ -262,7 +264,7 @@ const LeaveDashboardPage = () => {
         amount: adjAmount,
         reason: adjReason,
       });
-      alert(response.data.message || 'Balance adjusted successfully.');
+      showToast(response.data.message || 'Balance adjusted successfully.', 'success');
 
       // Reset form
       setAdjEmpId('');
@@ -274,7 +276,7 @@ const LeaveDashboardPage = () => {
       // Reload
       fetchUserData();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to adjust balance.');
+      showToast(err.response?.data?.error || 'Failed to adjust balance.', 'error');
     } finally {
       setAdjLoading(false);
     }

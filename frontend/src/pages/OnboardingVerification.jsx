@@ -4,8 +4,10 @@ import { useDispatch } from 'react-redux';
 import { ShieldCheck, UserCheck, KeyRound, AlertTriangle, CheckCircle, ShieldAlert } from 'lucide-react';
 import api from '../services/api';
 import { loginSuccess } from '../store/authSlice';
+import { useToast } from '../context/ToastContext';
 
 const OnboardingVerification = () => {
+  const { showToast } = useToast();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -92,7 +94,7 @@ const OnboardingVerification = () => {
         user: response.data.user
       }));
 
-      alert('Account setup completed successfully! Welcome aboard.');
+      showToast('Account setup completed successfully! Welcome aboard.', 'success');
       navigate('/dashboard');
     } catch (err) {
       setPassError(err.response?.data?.error || 'Failed to complete registration setup.');

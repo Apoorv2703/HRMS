@@ -5,8 +5,10 @@ import { User, Briefcase, Landmark, ShieldAlert, Check, X, ClipboardList, AlertC
 import api, { BASE_BACKEND_URL } from '../services/api';
 import DelegationSettings from '../components/DelegationSettings';
 import NotificationPreferences from '../components/NotificationPreferences';
+import { useToast } from '../context/ToastContext';
 
 const ESSProfilePage = () => {
+  const { showToast } = useToast();
   const { user } = useSelector((state) => state.auth);
   const [searchParams] = useSearchParams();
 
@@ -194,7 +196,7 @@ const ESSProfilePage = () => {
   const handleGeneratePayslip = async (e) => {
     e.preventDefault();
     if (!genMonth || !genYear || !genBasic) {
-      alert('Month, Year, and Basic Salary are required.');
+      showToast('Month, Year, and Basic Salary are required.', 'warning');
       return;
     }
     setGenLoading(true);
@@ -207,7 +209,7 @@ const ESSProfilePage = () => {
         allowances: Number(genAllowances) || 0,
         deductions: Number(genDeductions) || 0,
       });
-      alert(response.data.message || 'Payslip generated successfully.');
+      showToast(response.data.message || 'Payslip generated successfully.', 'success');
       fetchPayslips(employee._id);
       
       // Reset inputs
@@ -215,7 +217,7 @@ const ESSProfilePage = () => {
       setGenAllowances('');
       setGenDeductions('');
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to generate payslip.');
+      showToast(err.response?.data?.error || 'Failed to generate payslip.', 'error');
     } finally {
       setGenLoading(false);
     }
@@ -298,23 +300,23 @@ const ESSProfilePage = () => {
       }
 
       const response = await api.put(`/employees/${profileId}`, payload);
-      alert(response.data.message);
+      showToast(response.data.message, 'success');
       fetchProfile();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update profile.');
+      showToast(err.response?.data?.error || 'Failed to update profile.', 'error');
     }
   };
 
   const handleReviewRequest = async (empId, action) => {
     try {
       const response = await api.post(`/employees/${empId}/review-edits`, { action });
-      alert(response.data.message);
+      showToast(response.data.message, 'success');
       fetchPendingRequests();
       if (empId === employee?._id || profileId === 'me') {
         fetchProfile();
       }
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to process pending request.');
+      showToast(err.response?.data?.error || 'Failed to process pending request.', 'error');
     }
   };
 
@@ -327,7 +329,7 @@ const ESSProfilePage = () => {
   const handleDocumentUpload = async (e) => {
     e.preventDefault();
     if (!docFile) {
-      alert('Please select a file to upload.');
+      showToast('Please select a file to upload.', 'warning');
       return;
     }
     setUploadingDoc(true);
@@ -343,13 +345,13 @@ const ESSProfilePage = () => {
         },
       });
 
-      alert(response.data.message || 'Document uploaded successfully.');
+      showToast(response.data.message || 'Document uploaded successfully.', 'success');
       setDocFile(null);
       setDocName('');
       setDocType('ID_PROOF');
       fetchProfile();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to upload document.');
+      showToast(err.response?.data?.error || 'Failed to upload document.', 'error');
     } finally {
       setUploadingDoc(false);
     }
@@ -361,10 +363,10 @@ const ESSProfilePage = () => {
     }
     try {
       const response = await api.delete(`/employees/${profileId}/documents/${docId}`);
-      alert(response.data.message || 'Document deleted successfully.');
+      showToast(response.data.message || 'Document deleted successfully.', 'success');
       fetchProfile();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to delete document.');
+      showToast(err.response?.data?.error || 'Failed to delete document.', 'error');
     }
   };
 
@@ -828,7 +830,7 @@ const ESSProfilePage = () => {
                             setNewStartYr('');
                             setNewEndYr('');
                           } else {
-                            alert('Please fill Institution, Degree, and Field of Study.');
+                            showToast('Please fill Institution, Degree, and Field of Study.', 'warning');
                           }
                         }}
                         className="w-1/3 rounded-xl bg-slate-950 hover:bg-slate-900 px-4 py-2.5 text-white text-xs font-bold cursor-pointer flex items-center justify-center gap-1 shadow-sm"
@@ -931,7 +933,7 @@ const ESSProfilePage = () => {
                             setNewExpEnd('');
                             setNewDesc('');
                           } else {
-                            alert('Please fill Company and Designation.');
+                            showToast('Please fill Company and Designation.', 'warning');
                           }
                         }}
                         className="rounded-xl bg-slate-950 hover:bg-slate-900 px-5 py-2.5 text-white text-xs font-bold cursor-pointer flex items-center gap-1 shadow-sm"
@@ -1034,7 +1036,7 @@ const ESSProfilePage = () => {
                               setNewExpiryDate('');
                               setNewCredId('');
                             } else {
-                              alert('Please fill Certification Name and Issuer.');
+                              showToast('Please fill Certification Name and Issuer.', 'warning');
                             }
                           }}
                           className="w-full rounded-xl bg-slate-950 hover:bg-slate-900 px-4 py-2.5 text-white text-xs font-bold cursor-pointer flex items-center justify-center gap-1 shadow-sm"

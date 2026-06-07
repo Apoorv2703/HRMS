@@ -7,15 +7,19 @@ import { store } from './store';
 import { injectStore } from './services/api';
 import './index.css';
 
+import { ToastProvider } from './context/ToastContext.jsx';
+
 // Inject store into api client to allow automated logout/token refresh state synchronizations
 injectStore(store);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ToastProvider>
     </Provider>
   </React.StrictMode>
 );

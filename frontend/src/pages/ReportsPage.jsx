@@ -17,8 +17,10 @@ import {
   Trash2,
 } from 'lucide-react';
 import api from '../services/api';
+import { useToast } from '../context/ToastContext';
 
 const ReportsPage = () => {
+  const { showToast } = useToast();
   const { user } = useSelector((state) => state.auth);
 
   // Filter States
@@ -139,7 +141,7 @@ const ReportsPage = () => {
       link.remove();
     } catch (err) {
       console.error('Export failed:', err);
-      alert('Failed to export CSV file.');
+      showToast('Failed to export CSV file.', 'error');
     }
   };
 
@@ -184,7 +186,6 @@ const ReportsPage = () => {
       case 'headcount':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Designation</th>
@@ -196,7 +197,6 @@ const ReportsPage = () => {
       case 'attendance':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Location</th>
@@ -210,7 +210,6 @@ const ReportsPage = () => {
       case 'leaves':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Leave Type</th>
@@ -223,7 +222,6 @@ const ReportsPage = () => {
       case 'late-absent':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Location</th>
@@ -235,7 +233,6 @@ const ReportsPage = () => {
       case 'overtime':
         return (
           <>
-            <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Emp ID</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Name</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Department</th>
             <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Location</th>
@@ -273,7 +270,6 @@ const ReportsPage = () => {
         case 'headcount':
           return (
             <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
               <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.designation}</td>
@@ -291,7 +287,6 @@ const ReportsPage = () => {
         case 'attendance':
           return (
             <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
               <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.location}</td>
@@ -305,7 +300,6 @@ const ReportsPage = () => {
         case 'leaves':
           return (
             <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
               <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.leaveType}</td>
@@ -318,7 +312,6 @@ const ReportsPage = () => {
         case 'late-absent':
           return (
             <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
               <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.location}</td>
@@ -336,7 +329,6 @@ const ReportsPage = () => {
         case 'overtime':
           return (
             <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-              <td className="px-6 py-4 text-sm font-semibold text-slate-800">{row.employeeId}</td>
               <td className="px-6 py-4 text-sm font-bold text-slate-900">{row.name}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.department}</td>
               <td className="px-6 py-4 text-sm text-slate-600">{row.location}</td>

@@ -67,20 +67,7 @@ const LoginPage = () => {
     window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
   };
 
-  const handleMicrosoftLogin = (clientId) => {
-    localStorage.setItem('workspaceSubdomain', subdomain.trim());
-    if (clientId === 'MOCK_CLIENT_ID') {
-      const mockEmail = prompt("Enter mock Microsoft email address to authenticate:", `admin@${subdomain.trim()}.com`);
-      if (mockEmail) {
-        navigate(`/auth/callback/microsoft?code=${encodeURIComponent(mockEmail)}&state=${encodeURIComponent(subdomain.trim())}`);
-      }
-      return;
-    }
-    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/callback/microsoft`);
-    const scope = encodeURIComponent('openid email profile User.Read');
-    const state = encodeURIComponent(subdomain.trim());
-    window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
-  };
+
 
   const handleSamlLogin = (entryPoint) => {
     localStorage.setItem('workspaceSubdomain', subdomain.trim());
@@ -441,7 +428,7 @@ const LoginPage = () => {
         )}
 
         {/* SSO Options */}
-        {ssoConfig && (ssoConfig.googleEnabled || ssoConfig.microsoftEnabled || ssoConfig.samlEnabled) && (
+        {ssoConfig && (ssoConfig.googleEnabled || ssoConfig.samlEnabled) && (
           <div className="space-y-3 pt-1">
             {ssoConfig.googleEnabled && (
               <button
@@ -456,21 +443,6 @@ const LoginPage = () => {
                   />
                 </svg>
                 Sign in with Google
-              </button>
-            )}
-            {ssoConfig.microsoftEnabled && (
-              <button
-                type="button"
-                onClick={() => handleMicrosoftLogin(ssoConfig.microsoftClientId)}
-                className="w-full flex items-center justify-center gap-2.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-sm font-semibold text-[#344054] py-3 shadow-sm transition duration-150 cursor-pointer"
-              >
-                <svg className="h-5 w-5 shrink-0" viewBox="0 0 23 23">
-                  <path fill="#f25022" d="M1 1h10v10H1z" />
-                  <path fill="#7fba00" d="M12 1h10v10H12z" />
-                  <path fill="#00a4ef" d="M1 12h10v10H1z" />
-                  <path fill="#ffb900" d="M12 12h10v10H12z" />
-                </svg>
-                Sign in with Microsoft
               </button>
             )}
             {ssoConfig.samlEnabled && (

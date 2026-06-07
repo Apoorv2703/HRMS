@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Search, MapPin, Briefcase, FileSpreadsheet, UserPlus, Upload, ShieldAlert, ArrowLeft, ArrowRight, UserCheck, FileText, ExternalLink } from 'lucide-react';
 import api, { BASE_BACKEND_URL } from '../services/api';
+import { useToast } from '../context/ToastContext';
 
 const DirectoryPage = () => {
+  const { showToast } = useToast();
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -85,7 +87,7 @@ const DirectoryPage = () => {
       const response = await api.get(`/employees/${empId}`);
       setSelectedEmp(response.data);
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to fetch employee profile details.');
+      showToast(err.response?.data?.error || 'Failed to fetch employee profile details.', 'error');
     } finally {
       setDetailLoading(false);
     }
@@ -104,7 +106,7 @@ const DirectoryPage = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-      alert('Failed to export employee directory CSV.');
+      showToast('Failed to export employee directory CSV.', 'error');
     }
   };
 
@@ -117,7 +119,7 @@ const DirectoryPage = () => {
       setImportResult(response.data);
       fetchDirectory();
     } catch (err) {
-      alert(err.response?.data?.error || 'CSV Bulk Import failed.');
+      showToast(err.response?.data?.error || 'CSV Bulk Import failed.', 'error');
     } finally {
       setImportLoading(false);
     }
@@ -128,12 +130,12 @@ const DirectoryPage = () => {
     if (!exitDate || !exitReason) return;
     try {
       await api.post(`/employees/${selectedEmp._id}/terminate`, { exitDate, exitReason });
-      alert('Employee status updated to EXITED.');
+      showToast('Employee status updated to EXITED.', 'success');
       setShowExitModal(false);
       setSelectedEmp(null);
       fetchDirectory();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to exit employee.');
+      showToast(err.response?.data?.error || 'Failed to exit employee.', 'error');
     }
   };
 

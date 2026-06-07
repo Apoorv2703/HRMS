@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Calendar, Clock, UserCheck, UserX, AlertCircle, Download, Search, BarChart3, HelpCircle } from 'lucide-react';
 import api from '../services/api';
+import { useToast } from '../context/ToastContext';
 
 const STATUS_MAP = {
   PRESENT: { short: 'P', label: 'Present', color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
@@ -17,6 +18,7 @@ const STATUS_MAP = {
 };
 
 const MusterPage = () => {
+  const { showToast } = useToast();
   const { user } = useSelector((state) => state.auth);
   
   const [year, setYear] = useState(new Date().getFullYear());
@@ -120,11 +122,11 @@ const MusterPage = () => {
   const handleBulkAssign = async (e) => {
     e.preventDefault();
     if (!bulkShiftId) {
-      alert('Please select a shift.');
+      showToast('Please select a shift.', 'warning');
       return;
     }
     if (!bulkDept && !bulkLoc) {
-      alert('Please select either a department or a location.');
+      showToast('Please select either a department or a location.', 'warning');
       return;
     }
     setBulkLoading(true);
@@ -134,14 +136,14 @@ const MusterPage = () => {
         location: bulkLoc || undefined,
         shiftId: bulkShiftId,
       });
-      alert(response.data.message);
+      showToast(response.data.message, 'success');
       // Reset form & reload grid stats
       setBulkDept('');
       setBulkLoc('');
       setBulkShiftId('');
       fetchMusterData();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to bulk assign shift.');
+      showToast(err.response?.data?.error || 'Failed to bulk assign shift.', 'error');
     } finally {
       setBulkLoading(false);
     }
@@ -150,15 +152,15 @@ const MusterPage = () => {
   const handleRotationalAssign = async (e) => {
     e.preventDefault();
     if (!rotationalShiftId) {
-      alert('Please select a shift.');
+      showToast('Please select a shift.', 'warning');
       return;
     }
     if (!rotationalStart || !rotationalEnd) {
-      alert('Please select start and end dates.');
+      showToast('Please select start and end dates.', 'warning');
       return;
     }
     if (selectedEmpIds.length === 0) {
-      alert('Please select at least one employee.');
+      showToast('Please select at least one employee.', 'warning');
       return;
     }
     setRotationalLoading(true);
@@ -169,7 +171,7 @@ const MusterPage = () => {
         endDate: rotationalEnd,
         shiftId: rotationalShiftId,
       });
-      alert(response.data.message);
+      showToast(response.data.message, 'success');
       // Reset form & reload grid stats
       setRotationalShiftId('');
       setRotationalStart('');
@@ -177,7 +179,7 @@ const MusterPage = () => {
       setSelectedEmpIds([]);
       fetchMusterData();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to assign rotational shift.');
+      showToast(err.response?.data?.error || 'Failed to assign rotational shift.', 'error');
     } finally {
       setRotationalLoading(false);
     }

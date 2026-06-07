@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, Calendar, Clock } from 'lucide-react';
 import api from '../services/api';
+import { useToast } from '../context/ToastContext';
 
 const RegularizationModal = ({ isOpen, onClose, onSuccess }) => {
+  const { showToast } = useToast();
   const [date, setDate] = useState('');
   const [timeIn, setTimeIn] = useState('09:00');
   const [timeOut, setTimeOut] = useState('17:00');
@@ -15,7 +17,7 @@ const RegularizationModal = ({ isOpen, onClose, onSuccess }) => {
     e.preventDefault();
 
     if (!date || !timeIn || !timeOut || !reason.trim()) {
-      alert('Please fill out all fields.');
+      showToast('Please fill out all fields.', 'warning');
       return;
     }
 
@@ -23,7 +25,7 @@ const RegularizationModal = ({ isOpen, onClose, onSuccess }) => {
     const tOut = new Date(`${date}T${timeOut}:00`);
 
     if (tIn >= tOut) {
-      alert('Clock-in time must be before clock-out time.');
+      showToast('Clock-in time must be before clock-out time.', 'warning');
       return;
     }
 
@@ -36,11 +38,11 @@ const RegularizationModal = ({ isOpen, onClose, onSuccess }) => {
         reason,
       });
 
-      alert(response.data.message || 'Regularization request submitted.');
+      showToast(response.data.message || 'Regularization request submitted.', 'success');
       if (onSuccess) onSuccess();
       onClose();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to submit regularization request.');
+      showToast(err.response?.data?.error || 'Failed to submit regularization request.', 'error');
     } finally {
       setSubmitting(false);
     }

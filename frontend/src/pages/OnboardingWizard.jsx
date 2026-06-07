@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Briefcase, CheckCircle2, Copy, Check, ChevronRight, ChevronLeft, UserPlus, ArrowLeft } from 'lucide-react';
 import api from '../services/api';
+import { useToast } from '../context/ToastContext';
 
 const OnboardingWizard = () => {
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   // Wizard active step: 1 (Personal), 2 (Employment), 3 (Completed)
@@ -80,7 +82,7 @@ const OnboardingWizard = () => {
   const handleNext = () => {
     if (step === 1) {
       if (!firstName || !lastName || !personalEmail) {
-        alert('Please fill in First Name, Last Name, and Personal Email.');
+        showToast('Please fill in First Name, Last Name, and Personal Email.', 'warning');
         return;
       }
       setStep(2);
@@ -90,7 +92,7 @@ const OnboardingWizard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!workEmail || !department || !location) {
-      alert('Please fill in Work Email, Department, and Location.');
+      showToast('Please fill in Work Email, Department, and Location.', 'warning');
       return;
     }
 
@@ -131,10 +133,11 @@ const OnboardingWizard = () => {
       };
 
       const response = await api.post('/employees/invite', payload);
+      showToast('Onboarding invitation submitted successfully.', 'success');
       setInviteResult(response.data);
       setStep(3);
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to submit onboarding invitation.');
+      showToast(err.response?.data?.error || 'Failed to submit onboarding invitation.', 'error');
     } finally {
       setLoading(false);
     }
