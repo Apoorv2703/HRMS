@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">
+  <!-- Background Rounded Square (Modern Tech Feel) -->
+  <rect width="32" height="32" rx="6" fill="#4F46E5" />
+  
+  <!-- HR Connection / Org Structure Icon -->
+  <!-- Top Node (The Leader/HR) -->
+  <circle cx="16" cy="9" r="2.5" fill="#FFFFFF" />
+  
+  <!-- Connecting Lines -->
+  <path d="M16 11.5 V17 M11 20 V17 H21 V20" stroke="#E0E7FF" stroke-width="1.5" stroke-linecap="round" />
+  
+  <!-- Bottom Left Node (Employee) -->
+  <circle cx="11" cy="22" r="2.5" fill="#38BDF8" />
+  
+  <!-- Bottom Right Node (Employee) -->
+  <circle cx="21" cy="22" r="2.5" fill="#38BDF8" />
+</svg>
