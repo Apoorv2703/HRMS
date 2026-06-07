@@ -22,14 +22,28 @@ import ReportsPage from './pages/ReportsPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 
+let checkSessionPromise = null;
+
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const checkSession = async () => {
+      if (!checkSessionPromise) {
+        checkSessionPromise = api.post('/auth/refresh-token', {}, { withCredentials: true })
+          .then((res) => {
+            checkSessionPromise = null;
+            return res.data;
+          })
+          .catch((err) => {
+            checkSessionPromise = null;
+            throw err;
+          });
+      }
+
       try {
-        const response = await api.post('/auth/refresh-token', {}, { withCredentials: true });
-        dispatch(loginSuccess(response.data));
+        const data = await checkSessionPromise;
+        dispatch(loginSuccess(data));
       } catch (err) {
         dispatch(logout());
       }

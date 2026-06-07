@@ -36,6 +36,8 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let refreshTokenPromise = null;
+
 // Response Interceptor: Handle token expiration and auto-refresh
 api.interceptors.response.use(
   (response) => response,
@@ -51,14 +53,21 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        // Call refresh token endpoint
-        const response = await axios.post(
-          `${BASE_BACKEND_URL}/api/v1/auth/refresh-token`,
-          {},
-          { withCredentials: true }
-        );
-        
-        const newToken = response.data.token;
+        if (!refreshTokenPromise) {
+          refreshTokenPromise = axios.post(
+            `${BASE_BACKEND_URL}/api/v1/auth/refresh-token`,
+            {},
+            { withCredentials: true }
+          ).then((response) => {
+            refreshTokenPromise = null;
+            return response.data.token;
+          }).catch((err) => {
+            refreshTokenPromise = null;
+            throw err;
+          });
+        }
+
+        const newToken = await refreshTokenPromise;
         setAccessToken(newToken);
         
         // Update store state if store instance is injected
