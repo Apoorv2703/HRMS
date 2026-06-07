@@ -400,15 +400,7 @@ const LoginPage = () => {
               </div>
             </div>
 
-            {/* Forgot Password Link */}
-            <div className="flex justify-start">
-              <Link
-                to={`/forgot-password${subdomain ? `?subdomain=${encodeURIComponent(subdomain)}` : ''}`}
-                className="text-sm font-semibold text-[#101828] hover:underline transition duration-150"
-              >
-                Forgot password
-              </Link>
-            </div>
+
 
             {/* Submit Button */}
             <div className="pt-2">
